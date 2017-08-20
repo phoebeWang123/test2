@@ -6,6 +6,7 @@
 
 #include "IObject.h"
 
+// FIXME: introduce a porper serializable guid class
 typedef unsigned guid_t;
 
 struct ITrade : IObject
