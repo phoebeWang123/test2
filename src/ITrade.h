@@ -5,6 +5,8 @@
 
 #include "IObject.h"
 
+typedef unsigned guid_t;
+
 struct ITrade : IObject
 {
     // return the list of underlyings the trade depends on
@@ -12,4 +14,7 @@ struct ITrade : IObject
 
     // return the quantity of the trade (the sign determines if it is a buy or sell
     virtual double quantity() const = 0;
+
+    // returns the global unique identfier assigned to this trade
+    virtual const guid_t& id() const = 0;
 };
