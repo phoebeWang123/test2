@@ -21,7 +21,7 @@ private:
     unsigned short m_m;
 };
 
-long operator-(const Date& d1, const Date& d2)
+inline long operator-(const Date& d1, const Date& d2)
 {
     NOT_IMPLEMENTED;
 }
