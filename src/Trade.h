@@ -27,6 +27,7 @@ struct Trade : ITrade
     }
 
 
+
 private:
     std::vector<std::string> m_underlyings;
     double m_quantity;

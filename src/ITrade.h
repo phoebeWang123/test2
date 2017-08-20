@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 
 #include "IObject.h"
 
@@ -17,4 +18,7 @@ struct ITrade : IObject
 
     // returns the global unique identfier assigned to this trade
     virtual const guid_t& id() const = 0;
+
+    // serialization funcions
+    virtual void save(std::ostream& os) const = 0;
 };

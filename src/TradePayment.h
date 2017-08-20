@@ -20,6 +20,13 @@ struct TradePayment : Trade
         return m_id;
     }
 
+    virtual void save(std::ostream& os) const
+    {
+        // FIXME: save the entir vector object
+        // FIXME: make the Date class serializable
+        os << m_id << ";" << underlyings()[0] << ";" << quantity() << "\n";
+    }
+
 private:
     Date m_delivery_date;
 };
