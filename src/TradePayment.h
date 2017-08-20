@@ -6,6 +6,7 @@
 struct TradePayment : Trade
 {
     static const guid_t m_id;
+    static const std::string m_name;
 
     TradePayment() {}
 
@@ -25,6 +26,11 @@ struct TradePayment : Trade
         // FIXME: save the entir vector object
         // FIXME: make the Date class serializable
         os << m_id << ";" << underlyings()[0] << ";" << quantity() << "\n";
+    }
+
+    virtual const std::string& idname() const
+    {
+        return m_name;
     }
 
 private:
