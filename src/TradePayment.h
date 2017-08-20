@@ -23,6 +23,7 @@ struct TradePayment : Trade
 
     virtual void save(std::ostream& os) const
     {
+        // FIXME: use the base class as in print
         // FIXME: save the entir vector object
         // FIXME: make the Date class serializable
         os << m_id << ";" << underlyings()[0] << ";" << quantity() << "\n";
@@ -31,6 +32,12 @@ struct TradePayment : Trade
     virtual const std::string& idname() const
     {
         return m_name;
+    }
+
+    virtual void print(std::ostream& os) const
+    {
+        Trade::inner_print(os);
+        // FIXME: print date
     }
 
 private:

@@ -26,7 +26,14 @@ struct Trade : ITrade
         m_quantity = quantity;
     }
 
-
+protected:
+    void inner_print(std::ostream& os) const
+    {
+        os << "Id:         " << id()                << std::endl;
+        os << "Name:       " << idname()            << std::endl;
+        os << "Underlying: " << underlyings()[0]    << std::endl;
+        os << "Quantity:   " << quantity()          << std::endl;
+    }
 
 private:
     std::vector<std::string> m_underlyings;

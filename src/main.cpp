@@ -27,24 +27,30 @@ portfolio_t createPortfolio()
 
 void printPortfolio(const portfolio_t& portfolio)
 {
-    for (portfolio_t::const_iterator i = portfolio.begin(); i != portfolio.end(); ++i)
-    {
-        cout << "Id:         " << (*i)->id() << endl;
-        cout << "Name:       " << (*i)->idname() << endl;
-        cout << "Underlying: " << (*i)->underlyings()[0] << endl;
-        cout << "Quantity:   " << (*i)->quantity() << endl;
-    }
+    std::for_each(portfolio.begin(), portfolio.end(), [](const ptrade_t& pt){ pt->print(std::cout); });
 }
 
 int main()
 {
+    // create portfolio
     portfolio_t portfolio = createPortfolio();
 
+    // display portfolio
     printPortfolio(portfolio);
 
     // test saving to file
     std::ofstream of("portfolio.txt");
     std::for_each(portfolio.begin(), portfolio.end(), [&of](const ptrade_t &pt){ pt->save(of); });
+    of.close();
+
+    // reset portfolio
+    portfolio.clear();
+
+    // test reloading the portfolio
+    // FIXME: implement
+
+    // display portfolio
+    printPortfolio(portfolio);
 
     return 0;
 }

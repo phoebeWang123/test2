@@ -25,4 +25,7 @@ struct ITrade : IObject
 
     // return option type in human readable format
     virtual const std::string& idname() const = 0;
+
+    // print trade attributes
+    virtual void print(std::ostream& os) const  = 0;
 };
