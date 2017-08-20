@@ -2,8 +2,15 @@
 
 using namespace std;
 
+#include "TradePayment.h"
+
 int main()
 {
-    cout << "hello World" << endl;
+    TradePayment p;
+    p.init("USD", 10, Date(2020,2,1));
+
+    cout << "Underlying: " << p.underlyings()[0] << endl;
+    cout << "Quantity: " << p.quantity() << endl;
+
     return 0;
 }
