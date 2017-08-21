@@ -7,6 +7,10 @@ std::string padding_dates(const unsigned short&);
 
 struct Date
 {
+    friend long operator-(const Date& d1, const Date& d2);
+
+    static std::vector<short> month_with_thirty_days;
+
     Date() : m_y(1970), m_m(1), m_d(1) {}
 
     Date(unsigned short year, unsigned short month, unsigned short day)
@@ -34,7 +38,7 @@ struct Date
 
     bool operator>(const Date& d) const
     {
-        return m_y > d.m_y || (m_y == d.m_y && m_m > d.m_m) || (m_m == d.m_m && m_d > d.m_d);
+        return d < (*this);
     }
 
     std::string serialize_date() const
@@ -48,8 +52,4 @@ private:
     unsigned short m_d;
 };
 
-inline long operator-(const Date& d1, const Date& d2)
-{
-    NOT_IMPLEMENTED;
-}
-
+long operator-(const Date& d1, const Date& d2);
