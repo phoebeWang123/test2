@@ -2,11 +2,13 @@
 
 #include "Macros.h"
 
-bool is_leap_year(const unsigned short& year);
+bool is_leap_year(const unsigned short& );
+std::string padding_dates(const unsigned short&);
 
 struct Date
 {
     Date() : m_y(1970), m_m(1), m_d(1) {}
+
     Date(unsigned short year, unsigned short month, unsigned short day)
         : m_y(year), m_m(month), m_d(day)
     {
@@ -29,10 +31,21 @@ struct Date
     {
         return m_y < d.m_y || (m_y == d.m_y && m_m < d.m_m) || (m_m == d.m_m && m_d < d.m_d);
     }
+
+    bool operator>(const Date& d) const
+    {
+        return m_y > d.m_y || (m_y == d.m_y && m_m > d.m_m) || (m_m == d.m_m && m_d > d.m_d);
+    }
+
+    std::string serialize_date() const
+    {
+        return std::to_string(m_y) + padding_dates(m_m) + padding_dates(m_d);
+    }
+
 private:
     unsigned short m_y;
-    unsigned short m_d;
     unsigned short m_m;
+    unsigned short m_d;
 };
 
 inline long operator-(const Date& d1, const Date& d2)
