@@ -2,9 +2,15 @@
 
 #include "Macros.h"
 
+// Leap year must be a multiple of 4, and cannot be divisible by 100 without also being divisible by 400.
+bool is_leap_year(const unsigned short& year)
+{
+    return ((year % 4 != 0) ? false : (year % 100 != 0) ? true : (year % 400 != 0) ? false : true);
+}
+
 struct Date
 {
-    Date() : m_d(1), m_m(1), m_y(1970) {}
+    Date() : m_y(1970), m_m(1), m_d(1) {}
     Date(unsigned short year, unsigned short month, unsigned short day)
         : m_y(year), m_m(month), m_d(day)
     {
