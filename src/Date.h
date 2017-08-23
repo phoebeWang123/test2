@@ -55,7 +55,7 @@ struct Date
     }
 
     // In YYYYMMDD format
-    std::string serialize_date() const
+    std::string to_string() const
     {
         return std::to_string(m_y) + padding_dates(m_m) + padding_dates(m_d);
     }
