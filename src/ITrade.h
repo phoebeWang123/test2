@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <fstream>
 
 #include "IObject.h"
 
@@ -21,7 +22,7 @@ struct ITrade : IObject
     virtual const guid_t& id() const = 0;
 
     // serialization funcions
-    virtual void save(std::ostream& os) const = 0;
+    virtual void save(std::ofstream& os) const = 0;
 
     // return option type in human readable format
     virtual const std::string& idname() const = 0;

@@ -1,4 +1,3 @@
-#pragma once
 #include "TradePayment.h"
 
 //Buy/Sell/REC/PAY_QTY_Type_"Underlying + DeliveryDate + C/P + strike"_(other attributes)_TypeID
