@@ -26,7 +26,7 @@ endif
 
 TARGETS=$(patsubst %, %$(EXE), main)
 
-CFLAGS=-std=c++11 -Iinclude
+CFLAGS=-std=c++14 -Iinclude
 LFLAGS=
 
 ifdef DEBUG
