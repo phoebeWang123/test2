@@ -26,12 +26,15 @@ struct TradePayment : Trade
         return m_name;
     }
 
-
+private:
     virtual void save_details(std::ofstream& os) const
     {
-        // FIXME: save the entire vector object
-        // FIXME: make the Date class serializable
         os << m_delivery_date;
+    }
+
+    virtual void load_details(my_ifstream& is)
+    {
+        is >> m_delivery_date;
     }
 
     virtual void print_details(std::ostream& os) const

@@ -1,24 +1,19 @@
 #pragma once
 
-#include <iostream>
-
 #include "TradePayment.h"
 
-#if 0
-
-// FIXME: define ptrade in a header file (types.h)
-inline ptrade_t load_trade(std::istream& is)
+inline ptrade_t load_trade(const string& s)
 {
-    // |FIXME: just pseudo-code
+    my_ifstream is(s);
 
-    const strint_t name;
-
+    string name;
     ptrade_t p;
 
-    // read name from stream is
-    // ..
+    // read trade identifier
+    guid_t id;
+    getToken(is) >> id;
 
-    if (id == TradePayment::name))
+    if (id == TradePayment::m_id)
         p.reset(new TradePayment);
     else
         THROW( "Unknown trade type:" << id );
@@ -29,4 +24,3 @@ inline ptrade_t load_trade(std::istream& is)
 }
 
 
-#endif

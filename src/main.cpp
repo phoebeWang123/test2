@@ -1,14 +1,10 @@
 #include <iostream>
-#include <memory>
 #include <algorithm>
 #include <fstream>
 
 using namespace std;
 
-#include "TradePayment.h"
-
-typedef std::shared_ptr<ITrade> ptrade_t;
-typedef std::vector<ptrade_t> portfolio_t;
+#include "TradeLoader.h"
 
 portfolio_t createPortfolio()
 {
@@ -19,7 +15,7 @@ portfolio_t createPortfolio()
     pmt.init("USD", 10, Date(2020,2,1));
     portfolio.push_back(ptrade_t(new TradePayment(pmt)));
 
-    pmt.init("USD", 20, Date(2020,2,1));
+    pmt.init("EUR", 20, Date(2020,2,2));
     portfolio.push_back(ptrade_t(new TradePayment(pmt)));
 
     return portfolio;
@@ -32,14 +28,17 @@ void printPortfolio(const portfolio_t& portfolio)
 
 int main()
 {
+    const char *fn = "portfolio.txt";
+
     // create portfolio
     portfolio_t portfolio = createPortfolio();
 
     // display portfolio
     printPortfolio(portfolio);
 
+    std::cout << "save\n";
     // test saving to file
-    std::ofstream of("portfolio.txt");
+    std::ofstream of(fn);
     std::for_each(portfolio.begin(), portfolio.end(), [&of](const ptrade_t &pt){ pt->save(of); });
     of.close();
 
@@ -47,7 +46,14 @@ int main()
     portfolio.clear();
 
     // test reloading the portfolio
-    // FIXME: implement
+    std::ifstream is(fn);
+    string tmp;
+    while(true) {
+        getline(is, tmp);
+        if (is.eof())
+            break;
+        portfolio.push_back(load_trade(tmp));
+    }
 
     // display portfolio
     printPortfolio(portfolio);

@@ -1,11 +1,10 @@
 #pragma once
 
 #include <vector>
-#include <string>
-#include <iostream>
-#include <fstream>
+#include <memory>
 
 #include "IObject.h"
+#include "Streamer.h"
 
 // FIXME: introduce a porper serializable guid class
 typedef unsigned guid_t;
@@ -23,6 +22,7 @@ struct ITrade : IObject
 
     // serialization funcions
     virtual void save(std::ofstream& os) const = 0;
+    virtual void load(my_ifstream& is) = 0;
 
     // return option type in human readable format
     virtual const std::string& idname() const = 0;
@@ -30,3 +30,7 @@ struct ITrade : IObject
     // print trade attributes
     virtual void print(std::ostream& os) const  = 0;
 };
+
+typedef std::shared_ptr<ITrade> ptrade_t;
+typedef std::vector<ptrade_t> portfolio_t;
+
