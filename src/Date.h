@@ -55,9 +55,11 @@ struct Date
     }
 
     // In YYYYMMDD format
-    std::string to_string() const
+    std::string to_string(bool pretty = true) const
     {
-        return std::to_string(m_y) + padding_dates(m_m) + padding_dates(m_d);
+        return pretty
+                ? std::to_string(m_d) + "-" + std::to_string(m_m) + "-" + std::to_string(m_y)
+                : std::to_string(m_y) + padding_dates(m_m) + padding_dates(m_d);
     }
 
     /* The function calculates the YTD days (first element) and the count of rest of days in the year (second element)
