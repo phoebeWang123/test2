@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Date.h"
 
 const std::vector<short> Date::months_with_thirty_days = {2,4,6,9,11};
