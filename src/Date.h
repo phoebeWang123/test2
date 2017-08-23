@@ -25,16 +25,29 @@ struct Date
     Date(unsigned short year, unsigned short month, unsigned short day)
         : m_y(year), m_m(month), m_d(day), is_leap(is_leap_year(year))
     {
-        MYASSERT(year >= 1970, "The year must be no earlier than year 1970");
-        MYASSERT(month >= 1 && month <= 12, "The month must be a integer between 1 and 12");
-        MYASSERT(day >= 1 && day <= 31, "The day must be a integer between 1 and 31");
-        switch (month)
+        check_valid();
+    }
+
+    void init(unsigned short year, unsigned short month, unsigned short day)
+    {
+        m_y = year;
+        m_m = month;
+        m_d = day;
+        check_valid();
+    }
+
+    void check_valid()
+    {
+        MYASSERT(m_y >= 1970, "The year must be no earlier than year 1970");
+        MYASSERT(m_m >= 1 && m_m <= 12, "The month must be a integer between 1 and 12");
+        MYASSERT(m_d >= 1 && m_d <= 31, "The day must be a integer between 1 and 31");
+        switch (m_m)
         {
             case 4: case 6: case 9: case 11:
-                MYASSERT(day != 31, "This month only has 30 days");
+                MYASSERT(m_d != 31, "This month only has 30 days");
                 break;
             case 2:
-                MYASSERT(is_leap || (!is_leap && day != 29), "Non-leap-year February only has 28 days.");
+                MYASSERT(is_leap || (!is_leap && m_d != 29), "Non-leap-year February only has 28 days.");
                 break;
         }
     }
