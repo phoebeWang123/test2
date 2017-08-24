@@ -1,0 +1,6 @@
+1) make market streamable (every object must be saved only once)
+2) add a new market object
+3) add new tradeables forward
+4) support creation fo forward on crosses
+5) support multiple pricing methos (configuration)
+
