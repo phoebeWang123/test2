@@ -26,6 +26,8 @@ struct TradePayment : Trade
         return m_name;
     }
 
+    virtual ppricer_t pricer() const;
+
 private:
     virtual void save_details(std::ofstream& os) const
     {
