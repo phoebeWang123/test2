@@ -7,7 +7,7 @@
 
 struct CurveDiscount : ICurveDiscount
 {
-    string name() const { return m_name; }
+    virtual string name() const { return m_name; }
 
     CurveDiscount(const MarketDataServer *mds, const Date& today, const string& ccyname)
         : m_today(today)

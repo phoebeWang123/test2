@@ -11,6 +11,7 @@ struct MarketDataServer;
 
 struct ICurve : IObject
 {
+    virtual string name() const = 0;
     virtual Date today() const = 0;
 };
 
