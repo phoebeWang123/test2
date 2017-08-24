@@ -27,8 +27,7 @@ public:
 
 private:
     // for simplicity, assumes market data can only have type double
-    typedef std::map<string,double> map_t;
-    map_t m_data;
+    std::map<string,double> m_data;
 };
 
 

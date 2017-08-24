@@ -14,8 +14,7 @@ private:
     template <typename PT>
     const PT& get_curve(const string& name, std::map<string, PT>& m, PT(Market::*fun)(const string&) const) const
     {
-        typedef typename std::map<string, PT>::iterator iter_t;
-        std::pair<iter_t, bool> iter = m.insert(std::make_pair(name, PT()));
+        auto iter = m.insert(std::make_pair(name, PT()));
         if (iter.second)
             iter.first->second = (this->*fun)(name);
         return iter.first->second;

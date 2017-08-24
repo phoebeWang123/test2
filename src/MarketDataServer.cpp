@@ -36,7 +36,7 @@ MarketDataServer::MarketDataServer()
 
 double MarketDataServer::get(const string& name) const
 {
-    map_t::const_iterator iter = m_data.find(name);
+    auto iter = m_data.find(name);
     MYASSERT(iter != m_data.end(), "Market data not found: " << name);
     return iter->second;
 }
