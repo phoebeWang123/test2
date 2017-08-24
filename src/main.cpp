@@ -5,6 +5,7 @@
 using namespace std;
 
 #include "TradeLoader.h"
+#include "MarketDataServer.h"
 
 portfolio_t createPortfolio()
 {
@@ -29,6 +30,10 @@ void printPortfolio(const portfolio_t& portfolio)
 int main()
 {
     const char *fn = "portfolio.txt";
+
+    // initialize market data server
+    const MarketDataServer *mkt = MarketDataServer::instance();
+    //std::cout << "FX.SPOT.EUR.USD: " << mkt->get("FX.SPOT.EUR.USD") << "\n";
 
     // create portfolio
     portfolio_t portfolio = createPortfolio();

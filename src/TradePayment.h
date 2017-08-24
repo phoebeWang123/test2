@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Trade.h"
-#include "Date.h"
+
 
 struct TradePayment : Trade
 {
