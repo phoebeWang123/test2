@@ -58,4 +58,4 @@ $(TARGETS) : $(OBJS)
 # clean
 .PHONY: clean
 clean:
-	rm -f *.o *.i *.ii *.exe *.asm *.stackdump
+	rm -f *.o *.i *.ii *.exe *.asm *.stackdump $(TARGETS)
