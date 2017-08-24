@@ -3,9 +3,11 @@
 #include <memory>
 
 #include "IObject.h"
+#include "Market.h"
 
 struct IPricer : IObject
 {
+    virtual double price(const Market& m) const = 0;
 };
 
 
