@@ -4,7 +4,7 @@
 
 inline ptrade_t load_trade(const string& s)
 {
-    my_ifstream is(s);
+    std::istringstream is(s);
 
     string name;
     ptrade_t p;

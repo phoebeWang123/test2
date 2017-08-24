@@ -16,13 +16,6 @@ using std::size_t;
 // Auxiliary functions
 //
 
-struct my_ifstream
-{
-    std::istringstream m_is;
-    my_ifstream(const std::string& is) : m_is(is) {}
-    operator std::istream&() { return m_is; }
-};
-
 inline std::istringstream getToken(std::istream& is)
 {
     std::string tmp;
@@ -36,7 +29,7 @@ inline std::istringstream getToken(std::istream& is)
 //
 
 template <typename T>
-inline my_ifstream& operator>>(my_ifstream& is, T& v)
+inline std::istringstream& operator>>(std::istringstream& is, T& v)
 {
     getToken(is) >> v;
     return is;
@@ -79,13 +72,13 @@ inline std::ofstream& operator<<(std::ofstream& os, const std::vector<T,A>& v)
 
 
 template <typename T, typename A>
-inline my_ifstream& operator>>(my_ifstream& is, std::vector<T,A>& v)
+inline std::istringstream& operator>>(std::istringstream& is, std::vector<T,A>& v)
 {
     size_t sz;
-    is >> sz;
+    is >> sz; // read size (this will call getToken)
     v.resize(sz);
     for(size_t i = 0; i < sz; ++i)
-        is >> v[i];  // read value
+        is >> v[i];  // read i-th value (this will call getToken)
     getToken(is);
     return is;
 }
@@ -107,7 +100,7 @@ inline std::ostream& operator<<(std::ostream& os, const Date& d)
     return os;
 }
 
-inline my_ifstream& operator>>(my_ifstream& is, Date& v)
+inline std::istringstream& operator>>(std::istringstream& is, Date& v)
 {
     string tmp;
     getToken(is) >> tmp;

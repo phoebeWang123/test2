@@ -22,7 +22,7 @@ struct ITrade : IObject
 
     // serialization funcions
     virtual void save(std::ofstream& os) const = 0;
-    virtual void load(my_ifstream& is) = 0;
+    virtual void load(std::istringstream& is) = 0;
 
     // return option type in human readable format
     virtual const std::string& idname() const = 0;

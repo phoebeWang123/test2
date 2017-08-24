@@ -32,7 +32,7 @@ private:
         os << m_delivery_date;
     }
 
-    virtual void load_details(my_ifstream& is)
+    virtual void load_details(std::istringstream& is)
     {
         is >> m_delivery_date;
     }
