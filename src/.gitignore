@@ -2,4 +2,5 @@ main
 *.o
 *.obj
 *.exe
+*.bak
 portfolio.txt
