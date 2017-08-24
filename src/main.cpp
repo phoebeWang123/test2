@@ -36,7 +36,6 @@ int main()
     // display portfolio
     printPortfolio(portfolio);
 
-    std::cout << "save\n";
     // test saving to file
     std::ofstream of(fn);
     std::for_each(portfolio.begin(), portfolio.end(), [&of](const ptrade_t &pt){ pt->save(of); });

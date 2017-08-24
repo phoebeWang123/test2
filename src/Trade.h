@@ -47,7 +47,7 @@ protected:
     {
         os << id()                << separator
         // FIXME: streaming of underlying does not work. It picks the version with ostream instead of ofstream
-//           << m_underlyings       << separator
+           << m_underlyings       << separator
            << quantity()          << separator;
         save_details(os);
         os << std::endl;
@@ -56,7 +56,7 @@ protected:
     virtual void load(my_ifstream& is)
     {
         // read everything but id
-        is //>> m_underlyings
+        is >> m_underlyings
            >> m_quantity;
         load_details(is);
     }
