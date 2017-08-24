@@ -32,7 +32,7 @@ int main()
     const char *fn = "portfolio.txt";
 
     // initialize market data server
-    const MarketDataServer *mktsrv = MarketDataServer::instance();
+    const MarketDataServer *mds = MarketDataServer::instance();
     //std::cout << "FX.SPOT.EUR.USD: " << mkt->get("FX.SPOT.EUR.USD") << "\n";
 
     // create portfolio
@@ -65,13 +65,14 @@ int main()
     // get pricers
     std::vector<ppricer_t> pricers(portfolio.size());
     std::transform( portfolio.begin(), portfolio.end(), pricers.begin()
-                  , [](const ptrade_t &pt) -> ppricer_t { pt->pricer(); } );
+                  , [](const ptrade_t &pt) -> ppricer_t { return pt->pricer(); } );
 
     // price all products
-    Market mkt;
+    Date today(2017,8,5);
+    Market mkt(mds, today);
     std::vector<double> prices(portfolio.size());
     std::transform( pricers.begin(), pricers.end(), prices.begin()
-                  , [&mkt](const ppricer_t &pp) -> double { pp->price(mkt); } );
+                  , [&mkt](const ppricer_t &pp) -> double { return pp->price(mkt); } );
 
     return 0;
 }

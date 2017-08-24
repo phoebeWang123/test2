@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <memory>
 #include "Global.h"
 
 // This is a dummy object that in a real system should be replaced by a server providing
@@ -29,6 +30,7 @@ private:
     typedef std::map<string,double> map_t;
     map_t m_data;
 };
+
 
 
 

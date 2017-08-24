@@ -8,5 +8,10 @@ struct PaymentPricer : IPricer
     PaymentPricer(const TradePayment& trd);
 
     virtual double price(const Market& m) const;
+
+private:
+    double m_amt;
+    Date   m_dt;
+    string m_curve;
 };
 

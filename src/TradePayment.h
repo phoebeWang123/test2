@@ -28,6 +28,11 @@ struct TradePayment : Trade
 
     virtual ppricer_t pricer() const;
 
+    const Date& delivery_date() const
+    {
+        return m_delivery_date;
+    }
+
 private:
     virtual void save_details(std::ofstream& os) const
     {
