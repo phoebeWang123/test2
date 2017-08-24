@@ -1,10 +1,10 @@
 #pragma once
 
+#include <cstddef>
 #include <string>
 
-//using std::size;
 using std::string;
+using std::size_t;
 
-const char separator = ';';
 
 

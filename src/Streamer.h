@@ -10,7 +10,8 @@
 #include "Date.h"
 #include "Macros.h"
 
-using std::size_t;
+// streaming separator
+const char separator = ';';
 
 //
 // Auxiliary functions
