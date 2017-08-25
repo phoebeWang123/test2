@@ -3,4 +3,4 @@
 3) add new tradeables forward
 4) support creation fo forward on crosses
 5) support multiple pricing methos (configuration)
-
+6) populate methods pricer class and insert in between PricerPayment and IPricer (handle fx conversion and qty)
