@@ -4,3 +4,6 @@ main
 *.exe
 *.bak
 portfolio.txt
+*.exe
+*.stackdump
+
