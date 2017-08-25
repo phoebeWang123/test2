@@ -53,3 +53,4 @@ long operator-(const Date& d1, const Date& d2)
     unsigned short l = count_leap_years(d2.m_y, d1.m_y, d1.is_leap + d2.is_leap);
     return (year_interval * Date::days_in_normal_year + jan_to_first_date + second_date_to_dec + l);
 }
+

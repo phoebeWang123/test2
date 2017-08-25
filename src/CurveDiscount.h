@@ -19,7 +19,7 @@ struct CurveDiscount : ICurveDiscount
     // compute the discount factor
     double df(const Date& t) const
     {
-        double dt = (t-m_today) / 365.0;
+        double dt = time_frac(m_today,t);
         return std::exp(-m_rate * dt);
     }
 

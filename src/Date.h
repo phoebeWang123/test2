@@ -99,3 +99,8 @@ private:
 };
 
 long operator-(const Date& d1, const Date& d2);
+
+inline double time_frac(const Date& d1, const Date& d2)
+{
+    return static_cast<double>(d2-d1) / Date::days_in_normal_year;
+}
