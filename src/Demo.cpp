@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <numeric>
 #include <fstream>
+#include <memory>
 
 using namespace std;
 
@@ -50,7 +51,7 @@ int main()
     const char *fn = "portfolio.txt";
 
     // initialize market data server
-    const MarketDataServer *mds = MarketDataServer::instance();
+    std::shared_ptr<const MarketDataServer> mds(new MarketDataServer);
     //std::cout << "FX.SPOT.EUR.USD: " << mkt->get("FX.SPOT.EUR.USD") << "\n";
 
     // create portfolio

@@ -4,8 +4,6 @@
 
 #include <limits>
 
-const MarketDataServer *MarketDataServer::p = NULL;
-
 MarketDataServer::MarketDataServer()
 {
     const string filename("risk_factors.txt");
@@ -63,5 +61,4 @@ std::pair<double,bool> MarketDataServer::lookup(const string& name) const
         return std::make_pair(iter->second, true);
     else
         return std::make_pair(std::numeric_limits<double>::quiet_NaN(), false);
-
 }

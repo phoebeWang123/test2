@@ -29,7 +29,7 @@ public:
     typedef std::pair<string, double> risk_factor_t;
     typedef std::vector<std::pair<string, double>> vec_risk_factor_t;
 
-    Market(const MarketDataServer *mds, const Date& today)
+    Market(const std::shared_ptr<const MarketDataServer>& mds, const Date& today)
         : m_today(today)
         , m_mds(mds)
     {
@@ -52,7 +52,7 @@ public:
     // new data points from the market data server
     void disconnect()
     {
-        m_mds = 0;
+        m_mds.reset();
     }
 
     // returns risk factor with a specified prefix and their value
@@ -70,7 +70,7 @@ public:
 
 private:
     Date m_today;
-    const MarketDataServer *m_mds;
+    std::shared_ptr<const MarketDataServer> m_mds;
 
     // market curves
     std::map<string, ptr_disc_curve_t> m_disc_curves;
