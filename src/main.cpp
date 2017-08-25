@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <numeric>
 #include <fstream>
 
 using namespace std;
@@ -73,6 +74,7 @@ int main()
     std::vector<double> prices(portfolio.size());
     std::transform( pricers.begin(), pricers.end(), prices.begin()
                   , [&mkt](const ppricer_t &pp) -> double { return pp->price(mkt); } );
+    std::cout << "Total book PV: " << std::accumulate(prices.begin(), prices.end(), 0.0) << " USD\n";
 
     return 0;
 }
