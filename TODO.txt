@@ -1,6 +1,14 @@
 1) make market streamable (every object must be saved only once)
 2) add a new market object
-3) add new tradeables forward
+3) add new tradeables forward using composition in Pricer, but not in Trade
 4) support creation fo forward on crosses
 5) support multiple pricing methos (configuration)
 6) populate methods pricer class and insert in between PricerPayment and IPricer (handle fx conversion and qty)
+7) support for base ccy different from USD (configuration)
+8) implement more Greeks
+9) extract of first level dependnencies from the portfolio
+10) extract of low level depdndencies from the portfolio
+11) split market construction from on-demand pricing (first collect all dependencies, then create the market, then price using a const object)
+
+
+
