@@ -54,7 +54,7 @@ struct Date
 
     bool operator<(const Date& d) const
     {
-        return (m_y < d.m_y) || (m_y == d.m_y && m_m < d.m_m) || (m_m == d.m_m && m_d < d.m_d);
+        return (m_y < d.m_y) || (m_y == d.m_y && (m_m < d.m_m || (m_m == d.m_m && m_d < d.m_d) ) );
     }
 
     bool operator==(const Date& d) const
