@@ -11,22 +11,17 @@ MarketDataServer::MarketDataServer()
 
         // all spot are against USD, some are in direct quotation, some in invesre quotation
         // cross spots, if needed can be constructed using the triangle rule via USD
-        "FX.SPOT.EUR.USD"] = 1.12
-        "FX.SPOT.GBP.USD"] = 1.52
+        FX.SPOT.EUR.USD=1.12
+        FX.SPOT.GBP.USD=1.52
 
     */
 
 
-    // all spot are against USD, some are in direct quotation, some in invesre quotation
+    // all spot are against USD, some are in direct quotation, i.e. price of the currency in USD
     // cross spots, if needed can be constructed using the triangle rule via USD
-    m_data["FX.SPOT.EUR.USD"] = 1.12;
-    m_data["FX.SPOT.GBP.USD"] = 1.52;
-    m_data["FX.SPOT.USD.JPY"] = 101.8;
-
-    // volatilities, quotes in the same direction as the spot (assumed flat)
-    m_data["FX.VOL.EUR.USD"] = 0.22;
-    m_data["FX.VOL.GBP.USD"] = 0.24;
-    m_data["FX.VOL.USD.JPY"] = 0.18;
+    m_data["FX.SPOT.EUR"] = 1.12;
+    m_data["FX.SPOT.GBP"] = 1.52;
+    m_data["FX.SPOT.JPY"] = 1.0/101.8;
 
     // interest rates (assumed flat)
     m_data["IR.USD"] = 0.03;

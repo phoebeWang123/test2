@@ -25,7 +25,7 @@ const double Market::get_yield(const string& ccyname) const
 
 const double Market::get_fx_spot(const string& ccy) const
 {
-    string name("FX.SPOT." + ccy + ".USD");
+    string name("FX.SPOT." + ccy);
     return from_mds("fx spot", name);
 }
 
