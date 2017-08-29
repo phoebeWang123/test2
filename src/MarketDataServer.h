@@ -24,6 +24,7 @@ public:
     }
 
     double get(const string& name) const;
+    std::pair<double, bool> lookup(const string& name) const;
 
 private:
     // for simplicity, assumes market data can only have type double

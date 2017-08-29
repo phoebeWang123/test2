@@ -1,5 +1,6 @@
 #include "MarketDataServer.h"
 #include "Macros.h"
+#include <limits>
 
 const MarketDataServer *MarketDataServer::p = NULL;
 
@@ -39,4 +40,14 @@ double MarketDataServer::get(const string& name) const
     auto iter = m_data.find(name);
     MYASSERT(iter != m_data.end(), "Market data not found: " << name);
     return iter->second;
+}
+
+std::pair<double,bool> MarketDataServer::lookup(const string& name) const
+{
+    auto iter = m_data.find(name);
+    if(iter != m_data.end()) // found?
+        return std::make_pair(iter->second, true);
+    else
+        return std::make_pair(std::numeric_limits<double>::quiet_NaN(), false);
+
 }

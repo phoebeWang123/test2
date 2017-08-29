@@ -9,10 +9,10 @@ struct CurveDiscount : ICurveDiscount
 {
     virtual string name() const { return m_name; }
 
-    CurveDiscount(const MarketDataServer *mds, const Date& today, const string& ccyname)
+    CurveDiscount(const Market *mkt, const Date& today, const string& ccyname)
         : m_today(today)
         , m_name("IR.DISCOUNT." + ccyname)
-        , m_rate(mds->get("IR." + ccyname))
+        , m_rate(mkt->getYield(ccyname))
     {
     }
 

@@ -36,9 +36,14 @@ public:
         return get_curve(name, m_disc_curves, &Market::build_discount_curve);
     }
 
+    const double getYield(const string& name) const;
+
 private:
     Date m_today;
     const MarketDataServer *m_mds;
     mutable std::map<string, ptr_disc_curve_t> m_disc_curves;
+
+    // raw risk factors
+    mutable std::map<string, double> m_data_points;
 };
 
