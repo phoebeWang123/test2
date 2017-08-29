@@ -19,6 +19,7 @@ struct CurveDiscount : ICurveDiscount
     // compute the discount factor
     double df(const Date& t) const
     {
+        MYASSERT(!(t < m_today), "cannot get discount factor for date in the past: " << t);
         double dt = time_frac(m_today,t);
         return std::exp(-m_rate * dt);
     }
