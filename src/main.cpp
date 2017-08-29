@@ -68,13 +68,16 @@ int main()
     std::transform( portfolio.begin(), portfolio.end(), pricers.begin()
                   , [](const ptrade_t &pt) -> ppricer_t { return pt->pricer(); } );
 
-    // price all products
+    // Price all products. The market is automatically constructed on demand
     Date today(2017,8,5);
     Market mkt(mds, today);
     std::vector<double> prices(portfolio.size());
     std::transform( pricers.begin(), pricers.end(), prices.begin()
                   , [&mkt](const ppricer_t &pp) -> double { return pp->price(mkt); } );
     std::cout << "Total book PV: " << std::accumulate(prices.begin(), prices.end(), 0.0) << " USD\n";
+
+    // Compute PV01 (i.e. sensitivity with respect to interest rate)
+
 
     return 0;
 }

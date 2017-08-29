@@ -12,7 +12,7 @@ struct CurveDiscount : ICurveDiscount
     CurveDiscount(const Market *mkt, const Date& today, const string& ccyname)
         : m_today(today)
         , m_name("IR.DISCOUNT." + ccyname)
-        , m_rate(mkt->getYield(ccyname))
+        , m_rate(mkt->get_yield(ccyname))
     {
     }
 

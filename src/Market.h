@@ -20,6 +20,7 @@ private:
         return iter.first->second;
     }
 
+    double from_mds(const string& objtype, const string& name) const;
 
 public:
 
@@ -36,11 +37,35 @@ public:
         return get_curve(name, m_disc_curves, &Market::build_discount_curve);
     }
 
-    const double getYield(const string& name) const;
+    // yeild rate for currency name
+    const double get_yield(const string& name) const;
+
+    // fx exchange rate to convert 1 unit of ccy1 into USD
+    const double get_fx_spot(const string& ccy) const;
+
+    const std::map<string, double>& data_points() const
+    {
+        return m_data_points;
+    }
+
+    // after the market has been disconnected, it is no more possible to fetch
+    // new data points from the market data server
+    void disconnect()
+    {
+        m_mds = 0;
+    }
+
+    // clear all market curves execpt for the data points
+    void clear()
+    {
+        m_disc_curves.clear();
+    }
 
 private:
     Date m_today;
     const MarketDataServer *m_mds;
+
+    // market curves
     mutable std::map<string, ptr_disc_curve_t> m_disc_curves;
 
     // raw risk factors
