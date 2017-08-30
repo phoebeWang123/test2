@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 
 #include "Global.h"
 #include "Date.h"
@@ -48,6 +49,13 @@ template <typename T>
 inline std::ofstream& operator<<(std::ofstream& os, const T& v)
 {
     static_cast<std::ostream&>(os) << v;
+    return os;
+}
+
+// when saving a double to a file in text format, use the meximum possible precision
+inline std::ofstream& operator<<(std::ofstream& os, double v)
+{
+    static_cast<std::ostream&>(os) << std::scientific << std::setprecision(16) << v;
     return os;
 }
 
