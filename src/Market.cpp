@@ -3,6 +3,18 @@
 
 #include <vector>
 
+
+static bool is_prefix(const string& s1, const string& s2)
+{
+    const char*p = s1.c_str();
+    const char*q = s2.c_str();
+    while (*p && *q)
+        if (*p++ != *q++)
+            return false;
+    return true;
+}
+
+
 ptr_disc_curve_t Market::build_discount_curve(const string& name)
 {
     string ccyname(name.substr(name.length()-3, 3));
@@ -31,7 +43,7 @@ const double Market::get_fx_spot(const string& ccy)
     return from_mds("fx spot", name);
 }
 
-void Market::set_data_points(const std::vector<std::pair<string, double>>& data_points)
+void Market::set_data_points(const vec_risk_factor_t& data_points)
 {
     clear();
     for (auto d = data_points.begin(); d != data_points.end(); ++d) {
@@ -41,3 +53,11 @@ void Market::set_data_points(const std::vector<std::pair<string, double>>& data_
     }
 }
 
+Market::vec_risk_factor_t Market::get_risk_factors(const std::string& prefix) const
+{
+    vec_risk_factor_t result;
+    for (auto d = m_data_points.begin(), e = m_data_points.end(); d != e; ++d)
+        if (is_prefix(prefix, d->first))
+            result.push_back(*d);
+    return result;
+}

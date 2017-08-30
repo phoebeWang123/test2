@@ -24,6 +24,9 @@ private:
 
 public:
 
+    typedef std::pair<string, double> risk_factor_t;
+    typedef std::vector<std::pair<string, double>> vec_risk_factor_t;
+
     Market(const MarketDataServer *mds, const Date& today)
         : m_today(today)
         , m_mds(mds)
@@ -43,17 +46,16 @@ public:
     // fx exchange rate to convert 1 unit of ccy1 into USD
     const double get_fx_spot(const string& ccy);
 
-    const std::map<string, double>& data_points() const
-    {
-        return m_data_points;
-    }
-
     // after the market has been disconnected, it is no more possible to fetch
     // new data points from the market data server
     void disconnect()
     {
         m_mds = 0;
     }
+
+    // returns risk factor with a specified prefix and their value
+    // (if the prefix is "" all risk factor are returned)
+    vec_risk_factor_t get_risk_factors(const std::string& prefix) const;
 
     // clear all market curves execpt for the data points
     void clear()
@@ -62,7 +64,7 @@ public:
     }
 
     // destroy all existing objects and modify a selected number of data points
-    void set_data_points(const std::vector<std::pair<string, double>>& data_points);
+    void set_data_points(const vec_risk_factor_t& data_points);
 
 private:
     Date m_today;
