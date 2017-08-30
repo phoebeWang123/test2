@@ -128,7 +128,7 @@ int main()
         for (auto d = base.begin(); d != base.end(); ++d) {
             std::vector<double> pv_up, pv_dn;
             std::vector<std::pair<string, double>> bumped(1, *d);
-            pv01.push_back(std::make_pair(d->first.substr(ir_rate_prefix.length(), 3), std::vector<double>(n_trades)));
+            pv01.push_back(std::make_pair(d->first, std::vector<double>(n_trades)));
 
             // bump down and price
             bumped[0].second = d->second - bump_size;
@@ -151,7 +151,7 @@ int main()
         }
 
         // display cumulated PV01 per currency
-        std::cout << "PV01 (exposure per currency):\n";
+        std::cout << "PV01 (exposure per IR risk factor):\n";
         for (auto g = pv01.begin(); g != pv01.end(); ++g)
             std::cout << g->first << ": " << total(g->second) << " USD\n";
         std::cout << "\n";

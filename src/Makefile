@@ -24,7 +24,7 @@ else
   LIB=.lib
 endif
 
-TARGETS=$(patsubst %, %$(EXE), main)
+TARGETS=$(patsubst %, %$(EXE), Demo)
 
 CFLAGS=-std=c++14 -Iinclude
 LFLAGS=
@@ -58,4 +58,4 @@ $(TARGETS) : $(OBJS)
 # clean
 .PHONY: clean
 clean:
-	rm -f *.o *.i *.ii *.exe *.asm *.stackdump $(TARGETS)
+	rm -f *$(OBJ)  *.i *.ii *.asm *.stackdump $(TARGETS)
