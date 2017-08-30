@@ -1,6 +1,8 @@
 #include "Market.h"
 #include "CurveDiscount.h"
 
+#include <vector>
+
 ptr_disc_curve_t Market::build_discount_curve(const string& name)
 {
     string ccyname(name.substr(name.length()-3, 3));
@@ -27,5 +29,15 @@ const double Market::get_fx_spot(const string& ccy)
 {
     string name("FX.SPOT." + ccy);
     return from_mds("fx spot", name);
+}
+
+void Market::set_data_points(const std::vector<std::pair<string, double>>& data_points)
+{
+    clear();
+    for (auto d = data_points.begin(); d != data_points.end(); ++d) {
+        auto i = m_data_points.find(d->first);
+        MYASSERT((i != m_data_points.end()), "Risk factor not found " << d->first);
+        i->second = d->second;
+    }
 }
 

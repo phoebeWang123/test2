@@ -61,6 +61,9 @@ public:
         m_disc_curves.clear();
     }
 
+    // destroy all existing objects and modify a selected number of data points
+    void set_data_points(const std::vector<std::pair<string, double>>& data_points);
+
 private:
     Date m_today;
     const MarketDataServer *m_mds;
