@@ -1,3 +1,5 @@
+#include <iomanip>
+
 #include "Date.h"
 
 const std::vector<short> Date::months_with_thirty_days = {2,4,6,9,11};
@@ -14,7 +16,9 @@ bool is_leap_year(const unsigned short& year)
 // The function pads a zero before the month or day if it has only one digit.
 std::string padding_dates(const unsigned short& month_or_day)
 {
-    return ((month_or_day < 10) ? "0" : "" )+ std::to_string(month_or_day);
+    std::ostringstream os;
+    os << std::setw(2) << std::setfill('0') << month_or_day;
+    return os.str();
 }
 
 /* The function counts the number of leap years between two given years.
