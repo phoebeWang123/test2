@@ -7,7 +7,7 @@
 
 struct IPricer : IObject
 {
-    virtual double price(const Market& m) const = 0;
+    virtual double price(Market& m) const = 0;
 };
 
 

@@ -1,13 +1,13 @@
 #include "Market.h"
 #include "CurveDiscount.h"
 
-ptr_disc_curve_t Market::build_discount_curve(const string& name) const
+ptr_disc_curve_t Market::build_discount_curve(const string& name)
 {
     string ccyname(name.substr(name.length()-3, 3));
     return ptr_disc_curve_t(new CurveDiscount(this, m_today, name.substr()));
 }
 
-double Market::from_mds(const string& objtype, const string& name) const
+double Market::from_mds(const string& objtype, const string& name)
 {
     auto ins = m_data_points.emplace(name, std::numeric_limits<double>::quiet_NaN());
     if (ins.second) { // just inserted, need to be populated
@@ -17,13 +17,13 @@ double Market::from_mds(const string& objtype, const string& name) const
     return ins.first->second;
 }
 
-const double Market::get_yield(const string& ccyname) const
+const double Market::get_yield(const string& ccyname)
 {
     string name("IR." + ccyname);
     return from_mds("yield curve", name);
 };
 
-const double Market::get_fx_spot(const string& ccy) const
+const double Market::get_fx_spot(const string& ccy)
 {
     string name("FX.SPOT." + ccy);
     return from_mds("fx spot", name);

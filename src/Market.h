@@ -8,11 +8,11 @@
 struct Market : IObject
 {
 private:
-    ptr_disc_curve_t build_discount_curve(const string& name) const;
+    ptr_disc_curve_t build_discount_curve(const string& name);
 
     // NOTE: this function is not thread safe
     template <typename PT>
-    const PT& get_curve(const string& name, std::map<string, PT>& m, PT(Market::*fun)(const string&) const) const
+    const PT& get_curve(const string& name, std::map<string, PT>& m, PT(Market::*fun)(const string&))
     {
         auto iter = m.emplace(name, PT());
         if (iter.second)
@@ -20,7 +20,7 @@ private:
         return iter.first->second;
     }
 
-    double from_mds(const string& objtype, const string& name) const;
+    double from_mds(const string& objtype, const string& name);
 
 public:
 
@@ -32,16 +32,16 @@ public:
 
     virtual Date today() const { return m_today; }
 
-    const ptr_disc_curve_t& get_discount_curve(const string& name) const
+    const ptr_disc_curve_t& get_discount_curve(const string& name)
     {
         return get_curve(name, m_disc_curves, &Market::build_discount_curve);
     }
 
     // yeild rate for currency name
-    const double get_yield(const string& name) const;
+    const double get_yield(const string& name);
 
     // fx exchange rate to convert 1 unit of ccy1 into USD
-    const double get_fx_spot(const string& ccy) const;
+    const double get_fx_spot(const string& ccy);
 
     const std::map<string, double>& data_points() const
     {
@@ -66,9 +66,9 @@ private:
     const MarketDataServer *m_mds;
 
     // market curves
-    mutable std::map<string, ptr_disc_curve_t> m_disc_curves;
+    std::map<string, ptr_disc_curve_t> m_disc_curves;
 
     // raw risk factors
-    mutable std::map<string, double> m_data_points;
+    std::map<string, double> m_data_points;
 };
 

@@ -10,7 +10,7 @@ PaymentPricer::PaymentPricer(const TradePayment& trd)
 {
 }
 
-double PaymentPricer::price(const Market& mkt) const
+double PaymentPricer::price(Market& mkt) const
 {
     ptr_disc_curve_t disc = mkt.get_discount_curve(m_ccy);
     double df = disc->df(m_dt);
