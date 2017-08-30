@@ -29,8 +29,8 @@ struct Trade : ITrade
 
 private:
     virtual void print_details(std::ostream& os) const = 0;
-    virtual void save_details(std::ofstream& os) const = 0;
-    virtual void load_details(std::istringstream& is) = 0;
+    virtual void save_details(my_ofstream& os) const = 0;
+    virtual void load_details(my_ifstream& is) = 0;
 
 protected:
     virtual void print(std::ostream& os) const
@@ -43,17 +43,15 @@ protected:
         os << std::endl;
     }
 
-    virtual void save(std::ofstream& os) const
+    virtual void save(my_ofstream& os) const
     {
-        os << id()                << separator
-        // FIXME: streaming of underlying does not work. It picks the version with ostream instead of ofstream
-           << m_underlyings       << separator
-           << quantity()          << separator;
+        os << id()
+           << m_underlyings
+           << quantity();
         save_details(os);
-        os << std::endl;
     }
 
-    virtual void load(std::istringstream& is)
+    virtual void load(my_ifstream& is)
     {
         // read everything but id
         is >> m_underlyings

@@ -15,50 +15,73 @@
 const char separator = ';';
 
 //
-// Auxiliary functions
+// Overload classes
 //
 
-inline std::istringstream getToken(std::istream& is)
+struct my_ofstream
 {
-    std::string tmp;
-    std::getline(is, tmp, separator);
-    return std::istringstream(tmp);
-}
+    my_ofstream(const string& fn)
+        : m_of(fn)
+    {
+    }
+    void endl() { m_of << std::endl; }
+    void close() { m_of.close(); }
+    std::ofstream m_of;
+};
 
+struct my_ifstream
+{
+    my_ifstream(const string& fn)
+        : m_if(fn)
+    {
+    }
+
+    bool read_line()
+    {
+        std::getline(m_if, m_line);  // read a line and store it in m_line
+        m_line_stream.str(m_line);   // associate a string stream with m_line
+        return m_line.length() > 0;
+    }
+
+    inline string read_token()
+    {
+        string tmp;
+        std::getline(m_line_stream, tmp, separator);
+        return tmp;
+    }
+
+private:
+    string m_line;
+    std::istringstream m_line_stream;
+    std::ifstream m_if;
+};
 
 //
 // Generic file streamer
 //
 
 template <typename T>
-inline std::istringstream& operator>>(std::istringstream& is, T& v)
+inline my_ifstream& operator>>(my_ifstream& is, T& v)
 {
-    getToken(is) >> v;
+    string tmp = is.read_token();
+    std::istringstream(tmp) >> v;
     return is;
 }
 
-// Note:
-// By default << is defined only for ostream with the signature
-//    template <typename T> inline std::ostream& operator<<(std::ostream& os, const T& v)
-// so when we write:
-//    os << "hi" << d;
-// since I do not porvide an explicit overload for (const char *) the result of (os << "hi")
-// is an ostream even if os is an ofstream, and all overloads I provide for ofstream
-// would not be considererd
-template <typename T>
-inline std::ofstream& operator<<(std::ofstream& os, const T& v)
-{
-    static_cast<std::ostream&>(os) << v;
-    return os;
-}
 
 // when saving a double to a file in text format, use the meximum possible precision
-inline std::ofstream& operator<<(std::ofstream& os, double v)
+inline my_ofstream& operator<<(my_ofstream& os, double v)
 {
-    static_cast<std::ostream&>(os) << std::scientific << std::setprecision(16) << v;
+    os.m_of << std::scientific << std::setprecision(16) << v << separator;
     return os;
 }
 
+template <typename T>
+inline my_ofstream& operator<<(my_ofstream& os, const T& v)
+{
+    os.m_of << v << separator;
+    return os;
+}
 
 //
 // Vector streamer overloads
@@ -67,28 +90,27 @@ inline std::ofstream& operator<<(std::ofstream& os, double v)
 template <typename T, typename A>
 inline std::ostream& operator<<(std::ostream& os, const std::vector<T,A>& v)
 {
-    std::for_each(v.begin(), v.end(), [&os](auto i){ os << i << separator; });
+    std::for_each(v.begin(), v.end(), [&os](auto i){ os << i << " "; });
     return os;
 }
 
-template <typename T, typename A>
-inline std::ofstream& operator<<(std::ofstream& os, const std::vector<T,A>& v)
+template <typename T>
+inline my_ofstream& operator<<(my_ofstream& os, const std::vector<T>& v)
 {
-    os << v.size() << separator;
-    std::for_each(v.begin(), v.end(), [&os](auto i){ os << i << separator; });
+    os << v.size();
+    std::for_each(v.begin(), v.end(), [&os](auto i){ os << i; });
     return os;
 }
 
 
 template <typename T, typename A>
-inline std::istringstream& operator>>(std::istringstream& is, std::vector<T,A>& v)
+inline my_ifstream& operator>>(my_ifstream& is, std::vector<T,A>& v)
 {
     size_t sz;
-    is >> sz; // read size (this will call getToken)
+    is >> sz; // read size (this will call the general overload for >>)
     v.resize(sz);
     for(size_t i = 0; i < sz; ++i)
-        is >> v[i];  // read i-th value (this will call getToken)
-    getToken(is);
+        is >> v[i];  // read i-th value
     return is;
 }
 
@@ -97,22 +119,22 @@ inline std::istringstream& operator>>(std::istringstream& is, std::vector<T,A>& 
 // Date streamer overloads
 //
 
-inline std::ofstream& operator<<(std::ofstream& os, const Date& d)
-{
-    os << d.to_string(false);
-    return os;
-}
-
 inline std::ostream& operator<<(std::ostream& os, const Date& d)
 {
     os << d.to_string(true);
     return os;
 }
 
-inline std::istringstream& operator>>(std::istringstream& is, Date& v)
+inline my_ofstream& operator<<(my_ofstream& os, const Date& d)
+{
+    os << d.to_string(false);
+    return os;
+}
+
+inline my_ifstream& operator>>(my_ifstream& is, Date& v)
 {
     string tmp;
-    getToken(is) >> tmp;
+    is >> tmp;
     unsigned y = std::atoi(tmp.substr(0,4).c_str());
     unsigned m = std::atoi(tmp.substr(4,2).c_str());
     unsigned d = std::atoi(tmp.substr(6,2).c_str());

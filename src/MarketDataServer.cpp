@@ -1,22 +1,15 @@
 #include "MarketDataServer.h"
 #include "Macros.h"
+#include "Streamer.h"
+
 #include <limits>
 
 const MarketDataServer *MarketDataServer::p = NULL;
 
 MarketDataServer::MarketDataServer()
 {
-
-    /* FIXME: move this to a txt file. When reading the file with format:
-
-        // all spot are against USD, some are in direct quotation, some in invesre quotation
-        // cross spots, if needed can be constructed using the triangle rule via USD
-        FX.SPOT.EUR.USD=1.12
-        FX.SPOT.GBP.USD=1.52
-
-    */
-
-
+    const string filename("risk_factors.txt");
+#if 1
     // all spot are against USD, some are in direct quotation, i.e. price of the currency in USD
     // cross spots, if needed can be constructed using the triangle rule via USD
     m_data["FX.SPOT.EUR"] = 1.12;
@@ -28,6 +21,26 @@ MarketDataServer::MarketDataServer()
     m_data["IR.EUR"] = 0.06;
     m_data["IR.GBP"] = 0.04;
     m_data["IR.JPY"] = 0.01;
+
+    my_ofstream of(filename);
+    std::for_each(m_data.begin(), m_data.end(),
+        [&of](auto rf)
+        {
+            of << rf.first << rf.second;
+            of.endl();
+        });
+#else
+    my_ifstream is(filename);
+    string tmp;
+    while(read_line(is)) {
+        string name;
+        double value;
+        is >> name >> value;
+        std::cout << tmp << " " << name << " " << value << "\n";
+        auto ins = m_data.emplace(name,value);
+        MYASSERT(ins.second, "Duplicated risk factor: " << name);
+    }
+#endif
 }
 
 double MarketDataServer::get(const string& name) const

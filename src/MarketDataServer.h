@@ -5,7 +5,7 @@
 #include "Global.h"
 
 // This is a dummy object that in a real system should be replaced by a server providing
-// with real time (or historical) market data on demand.
+// with real time (or historical) market data on demand and capable to produce snapshots of data.
 // For the purpose of this example this is simply a singleton (see singleton pattern) object
 // containing some stale pre-loaded market info.
 struct MarketDataServer

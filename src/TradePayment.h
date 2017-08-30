@@ -34,12 +34,12 @@ struct TradePayment : Trade
     }
 
 private:
-    virtual void save_details(std::ofstream& os) const
+    virtual void save_details(my_ofstream& os) const
     {
         os << m_delivery_date;
     }
 
-    virtual void load_details(std::istringstream& is)
+    virtual void load_details(my_ifstream& is)
     {
         is >> m_delivery_date;
     }
