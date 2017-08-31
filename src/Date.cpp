@@ -42,12 +42,22 @@ unsigned Date::day_of_year() const
 */
 unsigned Date::count_leap_years(unsigned y1, unsigned y2)
 {
-    MYASSERT(y1 <= y2, "First year must be no less than the second year");
+#if 0  // not sure how this works
+    if (y1 < y2)
+        return 0;
     double d_y1 = static_cast<double> (y1);
     short div_by_4 = y2 / 4 - short(ceil(d_y1 / 4)) + 1;
     short div_by_100 = y2 / 100 - short(ceil(d_y1 / 100)) + 1;
     short div_by_400 = y2 / 400 - short(ceil(d_y1 / 400)) + 1;
     return (y1 == y2)? 0: div_by_4 - (div_by_100 - div_by_400);
+#else
+    // FIXME: very inefficient
+    unsigned n = 0;
+    for (unsigned i = y1 + 1; i <= y2 - 1; ++i) {
+        if (is_leap_year(i))
+            ++n;
+    }
+#endif
 }
 
 /*  The function calculates the distance between two Dates.
@@ -71,6 +81,7 @@ long operator-(const Date& d1, const Date& d2)
     if (d1.m_y == d2.m_y)
         return day_of_year_1 - day_of_year_2;
     unsigned day_to_year_end2 = 365 + ((d2.m_m > 2 && d2.m_is_leap) ? 1 : 0) - day_of_year_2;
-    return day_to_year_end2 + day_of_year_1 + (d1.m_y - d2.m_y - 1) * 365 + Date::count_leap_years(d2.m_y, d1.m_y);
+    unsigned n_leap = Date::count_leap_years(d2.m_y, d1.m_y);
+    return day_to_year_end2 + day_of_year_1 + (d1.m_y - d2.m_y - 1) * 365 + n_leap;
 }
 
