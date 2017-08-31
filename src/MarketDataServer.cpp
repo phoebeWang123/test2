@@ -9,7 +9,9 @@ const MarketDataServer *MarketDataServer::p = NULL;
 MarketDataServer::MarketDataServer()
 {
     const string filename("risk_factors.txt");
-#if 1
+
+#if 0  // use hardcoded market data
+
     // all spot are against USD, some are in direct quotation, i.e. price of the currency in USD
     // cross spots, if needed can be constructed using the triangle rule via USD
     m_data["FX.SPOT.EUR"] = 1.12;
@@ -22,6 +24,7 @@ MarketDataServer::MarketDataServer()
     m_data["IR.GBP"] = 0.04;
     m_data["IR.JPY"] = 0.01;
 
+    // save to file
     my_ofstream of(filename);
     std::for_each(m_data.begin(), m_data.end(),
         [&of](auto rf)
@@ -29,10 +32,12 @@ MarketDataServer::MarketDataServer()
             of << rf.first << rf.second;
             of.endl();
         });
-#else
+
+#else // read market data from file
+
     my_ifstream is(filename);
     string tmp;
-    while(read_line(is)) {
+    while(is.read_line()) {
         string name;
         double value;
         is >> name >> value;
@@ -40,6 +45,7 @@ MarketDataServer::MarketDataServer()
         auto ins = m_data.emplace(name,value);
         MYASSERT(ins.second, "Duplicated risk factor: " << name);
     }
+
 #endif
 }
 

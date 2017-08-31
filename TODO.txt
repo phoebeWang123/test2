@@ -12,6 +12,9 @@
 12) on market bump, re-price only affected trades
 13) change serialization of double
 14) change Date rep
+15) binary stream?
+6) add a streamer for map
+
 
 -- Evaluation:
 1) load our portfolio and market prices and compare results (correctness)
