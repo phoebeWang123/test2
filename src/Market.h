@@ -5,6 +5,8 @@
 #include "ICurve.h"
 #include "MarketDataServer.h"
 
+#include <vector>
+
 struct Market : IObject
 {
 private:
