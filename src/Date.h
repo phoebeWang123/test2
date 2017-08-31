@@ -15,7 +15,7 @@ private:
     static unsigned count_leap_years(unsigned y1, unsigned y2);
 
     // number of days elapsed from beginning of the year
-    unsigned doy() const;
+    unsigned day_of_year() const;
 
     friend long operator-(const Date& d1, const Date& d2);
 

@@ -29,7 +29,7 @@ void Date::check_valid()
     MYASSERT(m_d >= 1 && m_d <= 31, "The day must be a integer between 1 and 31, got " << m_d);
 }
 
-unsigned Date::doy() const
+unsigned Date::day_of_year() const
 {
     return days_ytd[m_m - 1] + ((m_m > 2 && m_is_leap) ? 1 : 0) + (m_d - 1);
 }
@@ -66,8 +66,8 @@ long operator-(const Date& d1, const Date& d2)
     if (d1 == d2) return 0;
     if (d2 > d1) return -(d2 - d1);
     int year_interval = static_cast<int>(d1.m_y - d2.m_y) - 1;
-    unsigned day_of_year_1 = d1.doy();
-    unsigned day_of_year_2 = d2.doy();
+    unsigned day_of_year_1 = d1.day_of_year();
+    unsigned day_of_year_2 = d2.day_of_year();
     if (d1.m_y == d2.m_y)
         return day_of_year_1 - day_of_year_2;
     unsigned day_to_year_end2 = 365 + ((d2.m_m > 2 && d2.m_is_leap) ? 1 : 0) - day_of_year_2;
