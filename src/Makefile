@@ -1,6 +1,6 @@
 #
 # Possible options
-# DEBUG=1                                          # default is DEBUG=0
+# DEBUG=1                (default is DEBUG=0)
 #
 
 # compiler
@@ -66,4 +66,4 @@ all : $(TARGETS)
 # clean
 .PHONY: clean
 clean:
-	rm -f *$(OBJ)  *.i *.ii *.asm *.stackdump *$(EXE) $(TARGETS)
+	rm -f *$(OBJ)  *.i *.ii *.asm *.stackdump *$(EXE)
