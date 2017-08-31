@@ -4,26 +4,33 @@
 #include <math.h>
 #include <algorithm>
 #include <string>
-#include <vector>
-
-bool is_leap_year(const unsigned short& );
-std::string padding_dates(const unsigned short&);
-unsigned short count_leap_years(const unsigned short& y1, const unsigned short& y2, const char& number_of_leap_years_at_ends);
+#include <array>
 
 
 struct Date
 {
+private:
+    static bool is_leap_year(unsigned);
+    static std::string padding_dates(unsigned);
+    static unsigned count_leap_years(unsigned y1, unsigned y2);
+
+    // number of days elapsed from beginning of the year
+    unsigned doy() const;
+
     friend long operator-(const Date& d1, const Date& d2);
 
-    static const std::vector<short> months_with_thirty_days;
-    static const unsigned short days_in_normal_year;
+    static const std::array<unsigned,12> days_in_month;
+    static const std::array<unsigned, 12> days_ytd;
+
+public:
+    static const unsigned short days_in_normal_year = 365;
 
     // Default constructor
-    Date() : m_y(1970), m_m(1), m_d(1) {}
+    Date() : m_y(1970), m_m(1), m_d(1), m_is_leap(false) {}
 
     // Constructor where the input value is checked.
     Date(unsigned short year, unsigned short month, unsigned short day)
-        : m_y(year), m_m(month), m_d(day), is_leap(is_leap_year(year))
+        : m_y(year), m_m(month), m_d(day), m_is_leap(is_leap_year(year))
     {
         check_valid();
     }
@@ -36,21 +43,7 @@ struct Date
         check_valid();
     }
 
-    void check_valid()
-    {
-        MYASSERT(m_y >= 1970, "The year must be no earlier than year 1970");
-        MYASSERT(m_m >= 1 && m_m <= 12, "The month must be a integer between 1 and 12");
-        MYASSERT(m_d >= 1 && m_d <= 31, "The day must be a integer between 1 and 31");
-        switch (m_m)
-        {
-            case 4: case 6: case 9: case 11:
-                MYASSERT(m_d != 31, "This month only has 30 days");
-                break;
-            case 2:
-                MYASSERT(is_leap || (!is_leap && m_d != 29), "Non-leap-year February only has 28 days.");
-                break;
-        }
-    }
+    void check_valid();
 
     bool operator<(const Date& d) const
     {
@@ -75,27 +68,11 @@ struct Date
                 : std::to_string(m_y) + padding_dates(m_m) + padding_dates(m_d);
     }
 
-    /* The function calculates the YTD days (first element) and the count of rest of days in the year (second element)
-
-       We assume that the interval is left inclusive and right exclusive.
-    */
-    std::pair<unsigned short, unsigned short> count_YTD_days() const
-    {
-        // The lower bound will calculate how many 30-day months are there before the current month
-        auto low = std::lower_bound(months_with_thirty_days.cbegin(), months_with_thirty_days.cend(), m_m);
-        auto number_of_months_with_thirty_days = low - months_with_thirty_days.cbegin();
-        // We need to minus 1 when calculating the number of 31-day months to exclude the current month
-        unsigned short total = number_of_months_with_thirty_days * 30 + (m_m - number_of_months_with_thirty_days - 1) * 31 + m_d - 1;
-        // If current month is later than Feb, then we need to minus 1 or 2
-        unsigned short YTD = (m_m <= 2) ? total : (is_leap) ? (total - 1) : (total - 2);
-        return (is_leap) ? std::make_pair(YTD, Date::days_in_normal_year + 1 - YTD) : std::make_pair(YTD, Date::days_in_normal_year - YTD);
-    }
-
 private:
     unsigned short m_y;
     unsigned short m_m;
     unsigned short m_d;
-    bool is_leap;
+    bool m_is_leap;
 };
 
 long operator-(const Date& d1, const Date& d2);
