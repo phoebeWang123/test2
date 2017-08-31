@@ -8,12 +8,12 @@ CC=g++
 
 # platform
 PLATFORM := $(shell uname -s)
-$(warning platform=$(PLATFORM))
+$(info platform=$(PLATFORM))
 
 # file extensions
 ifeq ($(PLATFORM), Linux)
   OBJ=.o
-  EXE=
+  EXE=.out
   DLL=.so
   LIB=.a
 else
@@ -24,7 +24,17 @@ else
   LIB=.lib
 endif
 
-TARGETS=$(patsubst %, %$(EXE), Demo)
+MAINS := $(wildcard Demo*.cpp) $(wildcard Test*.cpp)
+#$(info sources=$(MAINS))
+TARGETS := $(patsubst %.cpp,%.out,$(MAINS))
+#$(info targets=$(TARGETS))
+
+OBJS := $(patsubst %.cpp,%$(OBJ),$(filter-out $(MAINS), $(wildcard *.cpp)))
+#$(info objs=$(OBJS))
+
+HEADERS=$(wildcard *.h)
+ALLDEPS=$(HEADERS) Makefile
+
 
 CFLAGS=-std=c++14 -Iinclude
 LFLAGS=
@@ -35,27 +45,25 @@ else
    CFLAGS += -O3
 endif
 
-HEADERS=$(wildcard *.h)
-SRC=$(basename $(notdir $(wildcard *.cpp)))
-
-OBJS += $(patsubst %, %$(OBJ), $(SRC))
 
 all : $(TARGETS)
 
-%$(OBJ) : %.cpp $(HEADERS) Makefile
+%$(OBJ) : %.cpp $(ALLDEPS)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-%.i : %.cpp $(HEADERS) Makefile
+.SECONDARY: $(patsubst %.cpp,%$(OBJ),$(MAINS))
+
+%.i : %.cpp $(ALLDEPS)
 	$(CC) -E -c $(CFLAGS) $< -o $@
 
-%.asm : %.cpp $(HEADERS) Makefile
+%.asm : %.cpp $(ALLDEPS)
 	$(CC) -c -g -Wa,-adhln -masm=intel $(CFLAGS) $< > $@
 
 
-$(TARGETS) : $(OBJS)
-	$(CC) $(LFLAGS) -o $@ $(OBJS)
+%$(EXE) : %$(OBJ) $(OBJS)
+	$(CC) $(LFLAGS) $(OBJS) $< -o $@
 
 # clean
 .PHONY: clean
 clean:
-	rm -f *$(OBJ)  *.i *.ii *.asm *.stackdump $(TARGETS)
+	rm -f *$(OBJ)  *.i *.ii *.asm *.stackdump *$(EXE) $(TARGETS)
