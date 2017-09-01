@@ -1,4 +1,5 @@
 \documentclass[10pt]{article}
+\usepackage{listings}
 %\usepackage{fontspec}
 %\setmainfont{Linux Libertine O}
 %\usepackage{amsfonts}
@@ -58,7 +59,47 @@ The \textit{PV01} risk scenario needs to be modified into 2 different scenarios,
 
 To test, you can use the file of risk factors provided: \textit{risk-factors-tenors.txt}.
 
+\section{Add a new market object \textit{CurveFXForward}}
+The new market object should implement the interface \textit{ICurveFXForward}.
 
+The forward price of currency $ccy_1$ expressed in currency $ccy_2$ for delivery at time $T$ can be computed as
+$$F_T=S_t \frac{B_{T,1}}{B_{T,2}}$$
+where $S_t$ is the spot price of currency $ccy_1$ expressed in currency $ccy_2$, $B_{T,i}$ is the discount factor in currency $ccy_i$ for time $T$.
+
+The class must support direct, inverse and cross currency pairs (e.g. EURUSD, USDJPY, EURGBP).
+
+You need to add an additional members to the \textit{Market} class as appropriate.
+
+\section{Add new trade type \textit{TradeFXForward}}
+At time $T$ it pays the following amount of $ccy_2$
+$$
+payoff=N[S_T-K]
+$$
+where $S_T$ is the spot price of currency $ccy_1$ expressed in currency $ccy_2$ for observed at time $T$, $K$ is a predefined strike price and $N$ is the notional amount.
+
+Assign to the trade ID=3 and the following serialized representation:\\
+ID;CCY1;CCY2;NOTIONAL;STRIKE;
+
+Serialization example:\\
+3;EUR;USD;1.000e6;1.150e0;
+
+The currency pair $ccy_1ccy_2$ can be any direct, inverse or cross pair.
+
+You must be able to load the file portfolio2.txt, which contains some trades of this type.
+
+Implement the corresponding pricer object. The price in $ccy_2$ can be computed as:
+$$
+price=B_{T,2}[F_T-K]
+$$
+Do not forget to convert this into USD.
+
+\section{Add Monte Carlo pricing}
+
+\section{Minimize market objects recalculations}
+
+\section{Implement query which returns risk factor for a trade}
+
+\section{Minimize trade price recomputations}
 
 \end{document}
 
