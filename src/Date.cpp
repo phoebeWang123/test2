@@ -2,8 +2,20 @@
 
 #include "Date.h"
 
-const std::array<unsigned, 12> Date::days_in_month = {31,28,31,30,31,30,31,31,30,31,30,31};
-const std::array<unsigned, 12> Date::days_ytd = {0,31,59,90,120,151,181,212,243,273,304,334};
+struct DateInitializer : std::array<unsigned, Date::n_years>
+{
+    DateInitializer()
+    {
+        for (size_t i = 0, s = 0, y = Date::first_year; i < size(); ++i, ++y) {
+            (*this)[i] = s;
+            s += 365 + (Date::is_leap_year(y) ? 1 : 0);
+        }
+    }
+};
+
+const std::array<unsigned, 12> Date::days_in_month = {{31,28,31,30,31,30,31,31,30,31,30,31}};
+const std::array<unsigned, 12> Date::days_ytd{{0,31,59,90,120,151,181,212,243,273,304,334}};
+const std::array<unsigned, Date::n_years> Date::days_epoch(static_cast<const std::array<unsigned, Date::n_years>&>(DateInitializer()));
 
 /* The function checks if a given year is a leap year.
    Leap year must be a multiple of 4, but it cannot be a multiple of 100 without also being a multiple of 400.
@@ -23,7 +35,8 @@ std::string Date::padding_dates(unsigned month_or_day)
 
 void Date::check_valid()
 {
-    MYASSERT(m_y >= 1970, "The year must be no earlier than year 1970, got " << m_y);
+    MYASSERT(m_y >= first_year, "The year must be no earlier than year " << first_year << ", got " << m_y);
+    MYASSERT(m_y < last_year, "The year must be smaller than year " << last_year << ", got " << m_y);
     MYASSERT(m_m >= 1 && m_m <= 12, "The month must be a integer between 1 and 12, got " << m_m);
     unsigned dmax = days_in_month[m_m - 1] + ((m_m == 2 && m_is_leap) ? 1 : 0);
     MYASSERT(m_d >= 1 && m_d <= 31, "The day must be a integer between 1 and 31, got " << m_d);
@@ -34,31 +47,6 @@ unsigned Date::day_of_year() const
     return days_ytd[m_m - 1] + ((m_m > 2 && m_is_leap) ? 1 : 0) + (m_d - 1);
 }
 
-
-/* The function counts the number of leap years between two given years.
-   Not inclusive in both ends, because the fractional part will be taken care by the member function count_YTD_days().
-   We count multiple of 4 first, then count years which are multiples of 100 but not 400.
-   Not implemented for the situation where y1 > y2.
-*/
-unsigned Date::count_leap_years(unsigned y1, unsigned y2)
-{
-#if 0  // not sure how this works
-    if (y1 < y2)
-        return 0;
-    double d_y1 = static_cast<double> (y1);
-    short div_by_4 = y2 / 4 - short(ceil(d_y1 / 4)) + 1;
-    short div_by_100 = y2 / 100 - short(ceil(d_y1 / 100)) + 1;
-    short div_by_400 = y2 / 400 - short(ceil(d_y1 / 400)) + 1;
-    return (y1 == y2)? 0: div_by_4 - (div_by_100 - div_by_400);
-#else
-    // FIXME: very inefficient
-    unsigned n = 0;
-    for (unsigned i = y1 + 1; i <= y2 - 1; ++i) {
-        if (is_leap_year(i))
-            ++n;
-    }
-#endif
-}
 
 /*  The function calculates the distance between two Dates.
     d1 > d2 is allowed, which returns the negative of d2-d1. We will illustrate by considering the case d1 < d2 below.
@@ -73,15 +61,8 @@ unsigned Date::count_leap_years(unsigned y1, unsigned y2)
 */
 long operator-(const Date& d1, const Date& d2)
 {
-    if (d1 == d2) return 0;
-    if (d2 > d1) return -(d2 - d1);
-    int year_interval = static_cast<int>(d1.m_y - d2.m_y) - 1;
-    unsigned day_of_year_1 = d1.day_of_year();
-    unsigned day_of_year_2 = d2.day_of_year();
-    if (d1.m_y == d2.m_y)
-        return day_of_year_1 - day_of_year_2;
-    unsigned day_to_year_end2 = 365 + ((d2.m_m > 2 && d2.m_is_leap) ? 1 : 0) - day_of_year_2;
-    unsigned n_leap = Date::count_leap_years(d2.m_y, d1.m_y);
-    return day_to_year_end2 + day_of_year_1 + (d1.m_y - d2.m_y - 1) * 365 + n_leap;
+    unsigned s1 = d1.serial();
+    unsigned s2 = d2.serial();
+    return static_cast<long>(s1) - static_cast<long>(s2);
 }
 
