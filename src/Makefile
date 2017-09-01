@@ -51,7 +51,7 @@ all : $(TARGETS)
 %$(OBJ) : %.cpp $(ALLDEPS)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-.SECONDARY: $(patsubst %.cpp,%$(OBJ),$(MAINS))
+.SECONDARY: $(patsubst %.cpp,%$(OBJ),$(wildcard *.cpp))
 
 %.i : %.cpp $(ALLDEPS)
 	$(CC) -E -c $(CFLAGS) $< -o $@
