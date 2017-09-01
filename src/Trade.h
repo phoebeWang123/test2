@@ -10,20 +10,8 @@ struct Trade : ITrade
         return m_quantity;
     }
 
-    virtual std::vector<std::string> underlyings() const
+    void init(double quantity = 1.0)
     {
-        return m_underlyings;
-    }
-
-    void init(const std::string& underlying, double quantity)
-    {
-        m_underlyings.assign(1, underlying);
-        m_quantity = quantity;
-    }
-
-    void init(const std::vector<std::string>& underlyings, double quantity)
-    {
-        m_underlyings = underlyings;
         m_quantity = quantity;
     }
 
@@ -37,7 +25,6 @@ protected:
     {
         os << "Id:         " << id()                << std::endl;
         os << "Name:       " << idname()            << std::endl;
-        os << "Underlying: " << m_underlyings       << std::endl;
         os << "Quantity:   " << quantity()          << std::endl;
         print_details(os);
         os << std::endl;
@@ -46,7 +33,6 @@ protected:
     virtual void save(my_ofstream& os) const
     {
         os << id()
-           << m_underlyings
            << quantity();
         save_details(os);
     }
@@ -54,12 +40,10 @@ protected:
     virtual void load(my_ifstream& is)
     {
         // read everything but id
-        is >> m_underlyings
-           >> m_quantity;
+        is >> m_quantity;
         load_details(is);
     }
 
 private:
-    std::vector<std::string> m_underlyings;
     double m_quantity;
 };

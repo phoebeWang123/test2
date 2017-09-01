@@ -5,7 +5,7 @@
 PaymentPricer::PaymentPricer(const TradePayment& trd)
     : m_amt(trd.quantity())
     , m_dt(trd.delivery_date())
-    , m_ccy(trd.underlyings()[0])
+    , m_ccy(trd.ccy())
     , m_fx_ccy(m_ccy == "USD"? "":  m_ccy)
 {
 }
