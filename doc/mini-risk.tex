@@ -1,0 +1,64 @@
+\documentclass[10pt]{article}
+%\usepackage{fontspec}
+%\setmainfont{Linux Libertine O}
+%\usepackage{amsfonts}
+%\usepackage{multirow}
+%\usepackage{amsmath, amssymb}
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage[margin=0.8in]{geometry}
+
+\title{Foundations of a Risk Management System \\
+\large FE5226 Class Project
+}
+\author{Fabio Cannizzo}
+\date{2017-9-1}
+\begin{document}
+\maketitle
+
+\section{Improving the \textit{Date} class}
+The most common operations performed with the \textit{Date} class when pricing are comparison (e.g. $<$, ==, $>$) and computation of distance between two dates. The current internal representation of the date class is not optimal for these operations.
+
+Refactor the \textit{Date} class so that the internal representation is just an \textit{unsigned} data member named \textit{serial} representing the number of days elapsed since 1-Jan-1900, which simplifies the above operations. Remove the existing member variables (day, month and year), which reduces memory footprint but requires extra work when constructing a \textit{Date} from the arguments day, month and year, because \textit{serial} needs to be computed, and when converting to a string in calendar format for display to the screen, because \textit{serial} needs to be decomposed on-the-fly into day, month and year.
+
+Change the serialization format to be based directly on \textit{serial}, so that no extra work is necessary when saving or loading from a file.
+
+\section{Write a test for the \textit{Date} class}
+Write a test program with with filename \textit{TestDate.cpp}, which test the correctness of the \textit{Date} class. It should include the following checks:
+\begin{itemize}
+\item Construction of an invalid date should generate an error: generate intentionally 1000 random invalid date arguments and verify that the \textit{Date} class constructor throws an error (use \textit{try...catch})
+\item Verify that converting a date in calendar format to serial format and converting back generate the original date. Repeat for all dates in the valid range (1-Jan-1900, 31-Dec-2199).
+\item Verify that the serial number generated for 2 contiguos dates are contiguos. Repeat for all dates in the valid range (1-Jan-1900, 31-Dec-2199).
+\item Verify that the \textit{Date::operator-} is correctly implemented. Generate 1000 random pair of dates and compare the output of \textit{Date::operator-} with some alternative method to compute such difference implemented by you in the test.
+\end{itemize}
+If the test fail, the program should throw an exception. At the begin of the test, randomize the random number generator.
+
+\section{Remove streaming inaccuracy for type \textit{double}}
+Currently when a floating point number in double precision saved to a file it is transformed from IEEE-754 format to a decimal representation with a finite number of decimals in scientific notation. The conversion from IEEE-754 to decimal (when saving) and then back to IEEE-754 (when reading) involves rounding and can cause accuracy loss.
+
+Change the streaming representation of a \textit{double} to the hexadecimal image of its binary representation with letters in lowercase (see \textit{DemoHex.cpp} as an example).
+
+If $x$ is a variable of type $double$, then \textit{reinterpret\_cast$<$unsigned char*$>$}(\&$x$) returns a pointer of type \textit{unsigned char*} to the individual bytes of $x$. This allows to read (or write) the bytes composing the double one by one. So you can take each byte, convert it to its hexadecimal representation. When reading, you can take each pair of hexadecimal digit, convert them to a char and write it into the double.
+
+You need to modify the implementation of the \textit{operator$<<$} for \textit{double} and implement the overload the \textit{operator$>>$} (you may draw inspiration from the ones implemented for the \textit{Date} class).
+
+\section{Improve the \textit{CurveDiscount} class}
+The current \textit{CurveDiscount} curve assumes that the interest rate curve is constant.
+
+Modify so that it takes a set of rates related to different maturity and modify it so that when querying for a discount factor, the value returned is correctly interpolated.
+
+For example, given the data points {IR.USD.1W, IR.USD.2W, IR.USD.1M, IR.USD.2M, IR.USD.3M, IR.USD.6M, IR.USD.9M, IR.USD.1Y, IR.USD.18M, IR.USD.2Y, ...}, you need to resolve each of them to an actual date with respect to the anchor date, construct a stepwise constant interpolation scheme, modify the function which returns discount factor. Since you do not know which points are available in advance, you need to modify the market data server to be able to return the array of risk factors starting with the prefix IR.USD.
+
+The interpolation scheme requires computation of the local rates. If $r_i$ and $r_{i+1}$ are the absolute rates for tenor $T_i$ and $T_{i+1}$, as returned from the market data server, the local rate sought $r_{i,i+1}$ is such that the following relation holds:
+ $$e^{-r_iT_i-r_{i,i+1}(T_{i+1}-T_i)}=e^{-r_{i+1}T_{i+1}}$$.
+Then the discount factor for any date $t \in [T_i,T_{i+1}]$ is $$e^{-r_i T_i-r_{i,i+1}(t-T_i)}$$
+
+The \textit{PV01} risk scenario needs to be modified into 2 different scenarios, one that computes risk with respect to parallel shift of the yield curve (all risk factor move simultaneously) and one that computes risk with respect to individual yield curves (the yeild curve for each tenor $T_i$ change, with all the rest remaining constant).
+
+To test, you can use the file of risk factors provided: \textit{risk-factors-tenors.txt}.
+
+
+
+\end{document}
+
