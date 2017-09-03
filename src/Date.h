@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Macros.h"
-#include <math.h>
-#include <algorithm>
 #include <string>
 #include <array>
 
