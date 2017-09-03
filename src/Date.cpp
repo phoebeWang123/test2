@@ -49,15 +49,7 @@ unsigned Date::day_of_year() const
 
 
 /*  The function calculates the distance between two Dates.
-    d1 > d2 is allowed, which returns the negative of d2-d1. We will illustrate by considering the case d1 < d2 below.
-
-    The distance of two dates consist of four parts:
-    1. Complete years: all treated as 365 days.
-    2. YTD days to d1
-    3. The rest of days in d2.m_y (i.e., 365 or 366 - YTD days to d1)
-    4. Leap years: both ends are not included (they are taken care in count_YTD_days()). Every leap year will add 1 towards the total count
-
-    We assume that the interval is left inclusive and right exclusive.
+    d1 > d2 is allowed, which returns the negative of d2-d1.
 */
 long operator-(const Date& d1, const Date& d2)
 {

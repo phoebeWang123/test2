@@ -15,7 +15,6 @@ public:
 
 private:
     static std::string padding_dates(unsigned);
-    static unsigned count_leap_years(unsigned y1, unsigned y2);
 
     // number of days elapsed from beginning of the year
     unsigned day_of_year() const;
