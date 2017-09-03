@@ -3,12 +3,17 @@
 
 using namespace std;
 
+int out_char_as_hex(int c)
+{
+    cout << hex << setw(2) << setfill('0') << c;
+}
+
 int main()
 {
-    double x = 0.15625;
+    double x = -0.15625;
     unsigned char *c = reinterpret_cast<unsigned char *>(&x);
-    cout << hex << (int) c[0] << hex << (int) c[1] << hex << (int) c[2] << hex << (int) c[3]
-         << hex << (int) c[4] << hex << (int) c[5] << hex << (int) c[6] << hex << (int) c[7]
-         << endl;
+    for (unsigned i = 0; i < 8; ++i)
+        out_char_as_hex(c[i]);
+    cout << endl;
     return 0;
 }
