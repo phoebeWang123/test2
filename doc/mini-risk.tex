@@ -19,7 +19,7 @@
 \maketitle
 
 \abstract{
-	The source provided contains the skeleton of  risk management system. You are supposed to carry out various improvements and extensions as specified below.
+	The source provided contains the skeleton of risk management system. You are supposed to carry out various improvements and extensions as specified below.
 }
 
 \section{Improving the \textit{Date} class}
@@ -44,11 +44,11 @@ At the begin of the test, randomize the random number generator. If the test fai
 \section{Remove streaming inaccuracy for type \textit{double}}
 Currently when a floating point number in double precision saved to a file it is transformed from IEEE-754 format to a decimal representation with a finite number of decimals in scientific notation. The conversion from IEEE-754 to decimal (when saving) and then back to IEEE-754 (when reading) involves rounding and can cause accuracy loss.
 
-Change the streaming representation of a \textit{double} to the hexadecimal image of its binary representation with letters in lowercase. For example, the double number -0.15625 should be saved to file as the sequence of 16 characters 000000000000c4bf (see \textit{DemoHex.cpp}).
+Change the streaming representation of a \textit{double} to the hexadecimal image of its binary representation with letters in lowercase.
 
-If $x$ is a variable of type $double$, then \textit{reinterpret\_cast$<$unsigned char*$>$}(\&$x$) returns a pointer of type \textit{unsigned char*} to the individual bytes of $x$. This allows to read (or write) the bytes composing the double one by one. So you can take each byte, convert it to its hexadecimal representation. When reading, you can take each pair of hexadecimal digit, convert them to a char and write it into the double.
+If $x$ is a variable of type $double$, then \textit{reinterpret\_cast$<$unsigned char*$>$}(\&$x$) returns a pointer of type \textit{unsigned char*} to the individual bytes of $x$. This allows to read (or write) the bytes composing the double one by one. So you can take each byte, convert it to its hexadecimal representation. For example, the double number -0.15625 should be saved to file as the sequence of 16 characters 000000000000c4bf (see \textit{DemoHex.cpp}). When reading, you can take each pair of characters, convert each into a char and write it into the corresponding byte in the memory space allocated to the variable of type double.
 
-You need to modify the implementation of the \textit{operator$<<$} for \textit{double} and implement the overload the \textit{operator$>>$} (you may draw inspiration from the ones implemented for the \textit{Date} class).
+You need to modify the implementation of the \textit{operator$<<$} for \textit{double} and implement the overload of the \textit{operator$>>$} (you may draw inspiration from the ones implemented for the \textit{Date} class).
 
 \section{Improve the \textit{CurveDiscount} class}
 The current \textit{CurveDiscount} curve assumes that the interest rate curve is constant.
