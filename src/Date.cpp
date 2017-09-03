@@ -39,7 +39,7 @@ void Date::check_valid()
     MYASSERT(m_y < last_year, "The year must be smaller than year " << last_year << ", got " << m_y);
     MYASSERT(m_m >= 1 && m_m <= 12, "The month must be a integer between 1 and 12, got " << m_m);
     unsigned dmax = days_in_month[m_m - 1] + ((m_m == 2 && m_is_leap) ? 1 : 0);
-    MYASSERT(m_d >= 1 && m_d <= 31, "The day must be a integer between 1 and 31, got " << m_d);
+    MYASSERT(m_d >= 1 && m_d <= dmax, "The day must be a integer between 1 and " << dmax << ", got " << m_d);
 }
 
 unsigned Date::day_of_year() const
