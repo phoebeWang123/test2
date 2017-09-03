@@ -26,7 +26,7 @@ endif
 
 MAINS := $(wildcard Demo*.cpp) $(wildcard Test*.cpp)
 #$(info sources=$(MAINS))
-TARGETS := $(patsubst %.cpp,%.out,$(MAINS))
+TARGETS := $(patsubst %.cpp,%$(EXE),$(MAINS))
 #$(info targets=$(TARGETS))
 
 OBJS := $(patsubst %.cpp,%$(OBJ),$(filter-out $(MAINS), $(wildcard *.cpp)))
