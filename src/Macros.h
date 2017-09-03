@@ -9,11 +9,11 @@
         std::string str; \
         { \
             std::ostringstream os; \
-            os  << "File name: " << __FILE__ << "\n" \
-                << "Line: "<< __LINE__ << "\n" \
-                << "Error message: " << msg << "\n"; \
+            os  << "\n" << __FILE__ << ":" \
+                << __LINE__ << "\n" \
+                << msg << "\n"; \
             str = os.str(); \
-            std::cerr << msg; \
+            std::cerr << str; \
         }
 
 #define MYASSERT(cond, msg) \
