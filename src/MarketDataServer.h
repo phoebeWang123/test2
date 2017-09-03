@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <regex>
 #include "Global.h"
 
 // This is a dummy object that in a real system should be replaced by a server providing
@@ -11,8 +12,10 @@ struct MarketDataServer
 public:
     MarketDataServer();
 
+    // queries
     double get(const string& name) const;
     std::pair<double, bool> lookup(const string& name) const;
+    std::vector<std::pair<double, bool>> match(const std::regex&) const;
 
 private:
     // for simplicity, assumes market data can only have type double
