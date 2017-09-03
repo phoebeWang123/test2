@@ -15,10 +15,9 @@ static bool is_prefix(const string& s1, const string& s2)
 }
 
 
-ptr_disc_curve_t Market::build_discount_curve(const string& name)
+ptr_disc_curve_t Market::build_discount_curve(const string& ccy)
 {
-    string ccyname(name.substr(name.length()-3, 3));
-    return ptr_disc_curve_t(new CurveDiscount(this, m_today, name.substr()));
+    return ptr_disc_curve_t(new CurveDiscount(this, m_today, ccy));
 }
 
 double Market::from_mds(const string& objtype, const string& name)
