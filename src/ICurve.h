@@ -30,6 +30,13 @@ struct ICurveDiscount : ICurve
 struct ICurveFXForward : ICurve
 {
     // compute the FX forward price of currency ccy1 deniminated in ccy2 for delivery at time t
-    // ignore the fact that the FX spot is a t+2 forward price itself, and assume it is the istantaneous exchange rate
     virtual double fwd(const Date& t) const = 0;
 };
+
+struct ICurveFXSpot : ICurve
+{
+    // return the FX spot price of currency ccy1 deniminated in ccy2 for delivery at time t
+    // ignore the fact that the FX spot is a t+2 forward price itself, and assume it is the istantaneous exchange rate
+    virtual double spot() const = 0;
+};
+
