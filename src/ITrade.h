@@ -7,7 +7,7 @@
 #include "IPricer.h"
 #include "Streamer.h"
 
-// FIXME: introduce a porper serializable guid class
+// FIXME: introduce a proper serializable guid class
 typedef unsigned guid_t;
 
 struct ITrade : IObject
