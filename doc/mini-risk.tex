@@ -18,6 +18,10 @@
 \begin{document}
 \maketitle
 
+\abstract{
+	The source provided contains the skeleton of  risk management system. You are supposed to carry out various improvements and extensions as specified below.
+}
+
 \section{Improving the \textit{Date} class}
 The most common operations performed with the \textit{Date} class when pricing are comparison (e.g. $<$, ==, $>$) and computation of distance between two dates. The current internal representation of the date class is not optimal for these operations.
 
@@ -108,7 +112,7 @@ $$
 Do not forget to convert this into USD.\\
 
 \section{Add Configuration}
-Modify the function \textit{ITrade::Pricer} adding an argument \textit{configuration} of type \textit{string}. In a real risk management system the configuration argument could be very complex and allow for instance to select a pricing model (e.g. Black Scholes or Heston) or a numerical framework (e.g. PDE or Monte Carlo). In this project the configuration string is simply the base currency in which all risk is to be computed. At the moment, by default everything is computed in USD. For instance, \textit{pricer("EUR")} should return a pricer that computes the price in EUR.\\
+Modify the function \textit{ITrade::Pricer} adding an argument \textit{configuration} of type \textit{string}. In a real risk management system the configuration argument could be very complex and allow for instance to select a pricing model (e.g. Black Scholes or Heston) or a numerical framework (e.g. PDE or Monte Carlo). In this project the configuration string is simply the base currency in which all risk is to be computed. At the moment, by default everything is computed in USD. After your changes, \textit{pricer("EUR")} should return a pricer that computes the price in EUR.\\
 
 You need to modify the pricers accordingly.
 
