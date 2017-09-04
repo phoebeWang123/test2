@@ -32,13 +32,13 @@ double Market::from_mds(const string& objtype, const string& name)
 
 const double Market::get_yield(const string& ccyname)
 {
-    string name("IR." + ccyname);
+    string name(ir_rate_prefix + ccyname);
     return from_mds("yield curve", name);
 };
 
 const double Market::get_fx_spot(const string& ccy)
 {
-    string name("FX.SPOT." + ccy);
+    string name(fx_spot_prefix + ccy);
     return from_mds("fx spot", name);
 }
 
