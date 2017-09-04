@@ -8,7 +8,7 @@
 struct Market;
 
 // get pricer for each trade
-std::vector<ppricer_t> get_pricers(const std::vector<ptrade_t>& portfolio);
+std::vector<ppricer_t> get_pricers(const portfolio_t& portfolio);
 
 // compute prices
 std::vector<double> compute_prices(const std::vector<ppricer_t>& pricers, Market& mkt);
@@ -22,3 +22,7 @@ void save_portfolio(const string& filename, const std::vector<ptrade_t>& portfol
 
 // load portfolio from file
 std::vector<ptrade_t>  load_portfolio(const string& filename);
+
+// print portfolio to cout
+void print_portfolio(const portfolio_t& portfolio);
+

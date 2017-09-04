@@ -2,6 +2,11 @@
 #include "PortfolioUtils.h"
 #include "TradePayment.h"
 
+void print_portfolio(const portfolio_t& portfolio)
+{
+    std::for_each(portfolio.begin(), portfolio.end(), [](const ptrade_t& pt){ pt->print(std::cout); });
+}
+
 std::vector<ppricer_t> get_pricers(const std::vector<ptrade_t>& portfolio)
 {
     std::vector<ppricer_t> pricers(portfolio.size());

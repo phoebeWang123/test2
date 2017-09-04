@@ -25,11 +25,6 @@ portfolio_t createPortfolio()
     return portfolio;
 }
 
-void print_portfolio(const portfolio_t& portfolio)
-{
-    std::for_each(portfolio.begin(), portfolio.end(), [](const ptrade_t& pt){ pt->print(std::cout); });
-}
-
 double total(const std::vector<double>& values)
 {
     return std::accumulate(values.begin(), values.end(), 0.0);
