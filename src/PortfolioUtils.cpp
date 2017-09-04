@@ -30,7 +30,7 @@ double portfolio_total(const portfolio_values_t& values)
     return std::accumulate(values.begin(), values.end(), 0.0);
 }
 
-std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vector<ppricer_t>& pricers, Market& mkt)
+std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vector<ppricer_t>& pricers, const Market& mkt)
 {
     std::vector<std::pair<string, portfolio_values_t>> pv01;  // PV01 per trade
 
@@ -39,6 +39,10 @@ std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vecto
 
     // filter risk factors related to IR
     auto base = mkt.get_risk_factors(ir_rate_prefix);
+
+    // Make a local copy of the Market object, because we will modify it applying bumps
+    // Note that the actual market objects are shared, as they are referred to via pointers
+    Market tmpmkt(mkt);
 
     // compute prices for perturbated markets and aggregate results
     pv01.reserve(base.size());
@@ -49,17 +53,13 @@ std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vecto
 
         // bump down and price
         bumped[0].second = d->second - bump_size;
-        mkt.set_data_points(bumped);
-        pv_dn = compute_prices(pricers, mkt);
+        tmpmkt.set_data_points(bumped);
+        pv_dn = compute_prices(pricers, tmpmkt);
 
         // bump up and price
         bumped[0].second = d->second + bump_size; // bump up
-        mkt.set_data_points(bumped);
-        pv_up = compute_prices(pricers, mkt);
-
-        // reset market to its original state
-        bumped[0].second = d->second;
-        mkt.set_data_points(bumped);
+        tmpmkt.set_data_points(bumped);
+        pv_up = compute_prices(pricers, tmpmkt);
 
         // compute estimator of the derivative via central finite differences
         std::transform(pv_up.begin(), pv_up.end(), pv_dn.begin(), pv01.back().second.begin()

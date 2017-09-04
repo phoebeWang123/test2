@@ -20,7 +20,7 @@ double portfolio_total(const portfolio_values_t& values);
 
 // Compute PV01 (i.e. sensitivity with respect to interest rate dV/dr)
 // Use central differences, absolute bump of 0.01%, rescale result for rate movement of 0.01%
-std::vector<std::pair<string, std::vector<double>>> compute_pv01(const std::vector<ppricer_t>& pricers, Market& mkt);
+std::vector<std::pair<string, std::vector<double>>> compute_pv01(const std::vector<ppricer_t>& pricers, const Market& mkt);
 
 // save portfolio to file
 void save_portfolio(const string& filename, const std::vector<ptrade_t>& portfolio);
