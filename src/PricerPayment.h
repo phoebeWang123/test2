@@ -13,7 +13,7 @@ struct PaymentPricer : IPricer
 private:
     double m_amt;
     Date   m_dt;
-    string m_ccy;
+    string m_ir_curve;
     string m_fx_ccy;
 };
 }

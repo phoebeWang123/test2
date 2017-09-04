@@ -14,12 +14,14 @@ private:
 
     // NOTE: this function is not thread safe
     template <typename I>
-    const std::shared_ptr<const I> get_curve(const string& name, ptr_curve_t(Market::*fun)(const string&))
+    std::shared_ptr<const I> get_curve(const string& name, ptr_curve_t(Market::*fun)(const string&))
     {
         ptr_curve_t& curve_ptr = m_curves.emplace(name, ptr_curve_t()).first->second;
         if (!curve_ptr.get())
             curve_ptr = (this->*fun)(name);
-        return std::dynamic_pointer_cast<const I>(curve_ptr);
+        std::shared_ptr<const I> res = std::dynamic_pointer_cast<const I>(curve_ptr);
+        MYASSERT(res, "Cannot cast object with name " << name << " to type " << typeid(I).name());
+        return res;
     }
 
     double from_mds(const string& objtype, const string& name);
