@@ -10,16 +10,16 @@
 struct Market : IObject
 {
 private:
-    ptr_disc_curve_t build_discount_curve(const string& name);
+    ptr_curve_t build_discount_curve(const string& name);
 
     // NOTE: this function is not thread safe
-    template <typename PT>
-    const PT& get_curve(const string& name, std::map<string, PT>& m, PT(Market::*fun)(const string&))
+    template <typename I>
+    const std::shared_ptr<const I> get_curve(const string& name, ptr_curve_t(Market::*fun)(const string&))
     {
-        auto iter = m.emplace(name, PT());
-        if (iter.second)
-            iter.first->second = (this->*fun)(name);
-        return iter.first->second;
+        ptr_curve_t& curve_ptr = m_curves.emplace(name, ptr_curve_t()).first->second;
+        if (!curve_ptr.get())
+            curve_ptr = (this->*fun)(name);
+        return std::dynamic_pointer_cast<const I>(curve_ptr);
     }
 
     double from_mds(const string& objtype, const string& name);
@@ -37,9 +37,9 @@ public:
 
     virtual Date today() const { return m_today; }
 
-    const ptr_disc_curve_t& get_discount_curve(const string& name)
+    const ptr_disc_curve_t get_discount_curve(const string& name)
     {
-        return get_curve(name, m_disc_curves, &Market::build_discount_curve);
+        return get_curve<ICurveDiscount>(name, &Market::build_discount_curve);
     }
 
     // yeild rate for currency name
@@ -62,7 +62,7 @@ public:
     // clear all market curves execpt for the data points
     void clear()
     {
-        m_disc_curves.clear();
+        std::for_each(m_curves.begin(), m_curves.end(), [](auto& p) { p.second.reset(); });
     }
 
     // destroy all existing objects and modify a selected number of data points
@@ -73,7 +73,7 @@ private:
     std::shared_ptr<const MarketDataServer> m_mds;
 
     // market curves
-    std::map<string, ptr_disc_curve_t> m_disc_curves;
+    std::map<string, ptr_curve_t> m_curves;
 
     // raw risk factors
     std::map<string, double> m_data_points;
