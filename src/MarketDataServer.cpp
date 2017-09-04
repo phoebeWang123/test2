@@ -4,10 +4,8 @@
 
 #include <limits>
 
-MarketDataServer::MarketDataServer()
+MarketDataServer::MarketDataServer(const string& filename)
 {
-    const string filename("risk_factors.txt");
-
 #if 0  // use hardcoded market data
 
     // all spot are against USD, some are in direct quotation, i.e. price of the currency in USD
@@ -34,12 +32,11 @@ MarketDataServer::MarketDataServer()
 #else // read market data from file
 
     my_ifstream is(filename);
-    string tmp;
     while(is.read_line()) {
         string name;
         double value;
         is >> name >> value;
-//        std::cout << tmp << " " << name << " " << value << "\n";
+//        std::cout << name << " " << value << "\n";
         auto ins = m_data.emplace(name,value);
         MYASSERT(ins.second, "Duplicated risk factor: " << name);
     }

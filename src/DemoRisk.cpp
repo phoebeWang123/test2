@@ -7,11 +7,19 @@
 
 int main(int argc, const char **argv)
 {
-    MYASSERT(argc > 1, "This demo requires the name of the file where the portfolio is to be read from.");
+    if(argc != 3) {
+        std::cout << "This demo requires the name of the file where the portfolio is to read from and the name of the file containing market data.\n"
+                  << "Example:\n"
+                  << "DemoRisk portfolio.txt risk_factors.txt\n";
+        return -1;
+    }
+
+    // filenames
+    const char *portfolio_file    = argv[1];
+    const char *risk_factors_file = argv[2];
 
     // load the portfolio from file
-    const char *filename = argv[1];
-    portfolio_t portfolio = load_portfolio(filename);
+    portfolio_t portfolio = load_portfolio(portfolio_file);
 
     // display portfolio
     print_portfolio(portfolio);
@@ -20,7 +28,7 @@ int main(int argc, const char **argv)
     std::vector<ppricer_t> pricers(get_pricers(portfolio));
 
     // initialize market data server
-    std::shared_ptr<const MarketDataServer> mds(new MarketDataServer);
+    std::shared_ptr<const MarketDataServer> mds(new MarketDataServer(risk_factors_file));
     //std::cout << "FX.SPOT.EUR.USD: " << mkt->get("FX.SPOT.EUR.USD") << "\n";
 
     // Init market object

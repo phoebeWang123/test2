@@ -10,7 +10,7 @@
 struct MarketDataServer
 {
 public:
-    MarketDataServer();
+    MarketDataServer(const string& filename);
 
     // queries
     double get(const string& name) const;

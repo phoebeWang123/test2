@@ -4,7 +4,12 @@
 
 int main(int argc, const char **argv)
 {
-    MYASSERT(argc > 1, "This demo requires the name of the file where the portfolio is to be saved to.");
+    if(argc != 2) {
+        std::cout << "This demo requires the name of the file where the portfolio is to be saved to.\n"
+                  << "Example:\n"
+                  << "DemoCreatePortfolio portfolio.txt\n";
+        return -1;
+    }
 
     const char *filename = argv[1];
 
