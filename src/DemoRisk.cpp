@@ -1,63 +1,33 @@
 #include <iostream>
 #include <algorithm>
 #include <numeric>
-#include <fstream>
-#include <memory>
 
-using namespace std;
-
-#include "TradePayment.h"
 #include "MarketDataServer.h"
 #include "PortfolioUtils.h"
 
-portfolio_t createPortfolio()
-{
-    portfolio_t portfolio;
-
-    TradePayment pmt;
-
-    pmt.init("USD", 10, Date(2020,2,1));
-    portfolio.push_back(ptrade_t(new TradePayment(pmt)));
-
-    pmt.init("EUR", 20, Date(2020,2,2));
-    portfolio.push_back(ptrade_t(new TradePayment(pmt)));
-
-    return portfolio;
-}
 
 double total(const std::vector<double>& values)
 {
     return std::accumulate(values.begin(), values.end(), 0.0);
 }
 
-int main()
+int main(int argc, const char **argv)
 {
-    const char *fn = "portfolio.txt";
+    MYASSERT(argc > 1, "This demo requires the name of the file where the portfolio is to be read from.");
+
+    // load the portfolio from file
+    const char *filename = argv[1];
+    portfolio_t portfolio = load_portfolio(filename);
+
+    // display portfolio
+    print_portfolio(portfolio);
+
+    // get pricers
+    std::vector<ppricer_t> pricers(get_pricers(portfolio));
 
     // initialize market data server
     std::shared_ptr<const MarketDataServer> mds(new MarketDataServer);
     //std::cout << "FX.SPOT.EUR.USD: " << mkt->get("FX.SPOT.EUR.USD") << "\n";
-
-    // create portfolio
-    portfolio_t portfolio = createPortfolio();
-
-    // display portfolio
-    print_portfolio(portfolio);
-
-    // test saving to file
-    save_portfolio(fn, portfolio);
-
-    // test reloading the portfolio
-    portfolio = load_portfolio(fn);
-
-    // display portfolio
-    print_portfolio(portfolio);
-
-    // convenience variables
-    const size_t n_trades = portfolio.size();
-
-    // get pricers
-    std::vector<ppricer_t> pricers(get_pricers(portfolio));
 
     // Init market object
     Date today(2017,8,5);
