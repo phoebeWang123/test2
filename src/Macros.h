@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-// store the message in str
+    // store the message in str
 #define BUILDMSG(msg) \
         std::string str; \
         { \

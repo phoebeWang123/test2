@@ -11,6 +11,7 @@
 #include "Date.h"
 #include "Macros.h"
 
+namespace minirisk {
 // streaming separator
 const char separator = ';';
 
@@ -88,9 +89,9 @@ inline my_ofstream& operator<<(my_ofstream& os, const T& v)
 //
 
 template <typename T, typename A>
-inline std::ostream& operator<<(std::ostream& os, const std::vector<T,A>& v)
+inline std::ostream& operator<<(std::ostream& os, const std::vector<T, A>& v)
 {
-    std::for_each(v.begin(), v.end(), [&os](auto i){ os << i << " "; });
+    std::for_each(v.begin(), v.end(), [&os](auto i) { os << i << " "; });
     return os;
 }
 
@@ -98,18 +99,18 @@ template <typename T>
 inline my_ofstream& operator<<(my_ofstream& os, const std::vector<T>& v)
 {
     os << v.size();
-    std::for_each(v.begin(), v.end(), [&os](auto i){ os << i; });
+    std::for_each(v.begin(), v.end(), [&os](auto i) { os << i; });
     return os;
 }
 
 
 template <typename T, typename A>
-inline my_ifstream& operator>>(my_ifstream& is, std::vector<T,A>& v)
+inline my_ifstream& operator>>(my_ifstream& is, std::vector<T, A>& v)
 {
     size_t sz;
     is >> sz; // read size (this will call the general overload for >>)
     v.resize(sz);
-    for(size_t i = 0; i < sz; ++i)
+    for (size_t i = 0; i < sz; ++i)
         is >> v[i];  // read i-th value
     return is;
 }
@@ -135,10 +136,11 @@ inline my_ifstream& operator>>(my_ifstream& is, Date& v)
 {
     string tmp;
     is >> tmp;
-    unsigned y = std::atoi(tmp.substr(0,4).c_str());
-    unsigned m = std::atoi(tmp.substr(4,2).c_str());
-    unsigned d = std::atoi(tmp.substr(6,2).c_str());
-    v.init(y,m,d);
+    unsigned y = std::atoi(tmp.substr(0, 4).c_str());
+    unsigned m = std::atoi(tmp.substr(4, 2).c_str());
+    unsigned d = std::atoi(tmp.substr(6, 2).c_str());
+    v.init(y, m, d);
     return is;
+}
 }
 

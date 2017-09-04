@@ -2,6 +2,7 @@
 
 #include "Date.h"
 
+namespace minirisk {
 struct DateInitializer : std::array<unsigned, Date::n_years>
 {
     DateInitializer()
@@ -13,12 +14,12 @@ struct DateInitializer : std::array<unsigned, Date::n_years>
     }
 };
 
-const std::array<unsigned, 12> Date::days_in_month = {{31,28,31,30,31,30,31,31,30,31,30,31}};
-const std::array<unsigned, 12> Date::days_ytd{{0,31,59,90,120,151,181,212,243,273,304,334}};
+const std::array<unsigned, 12> Date::days_in_month = { {31,28,31,30,31,30,31,31,30,31,30,31} };
+const std::array<unsigned, 12> Date::days_ytd{ {0,31,59,90,120,151,181,212,243,273,304,334} };
 const std::array<unsigned, Date::n_years> Date::days_epoch(static_cast<const std::array<unsigned, Date::n_years>&>(DateInitializer()));
 
 /* The function checks if a given year is a leap year.
-   Leap year must be a multiple of 4, but it cannot be a multiple of 100 without also being a multiple of 400.
+    Leap year must be a multiple of 4, but it cannot be a multiple of 100 without also being a multiple of 400.
 */
 bool Date::is_leap_year(unsigned year)
 {
@@ -56,5 +57,6 @@ long operator-(const Date& d1, const Date& d2)
     unsigned s1 = d1.serial();
     unsigned s2 = d2.serial();
     return static_cast<long>(s1) - static_cast<long>(s2);
+}
 }
 

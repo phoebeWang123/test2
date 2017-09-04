@@ -3,7 +3,7 @@
 #include "TradePayment.h"
 
 #include <numeric>
-
+namespace minirisk {
 void print_portfolio(const portfolio_t& portfolio)
 {
     std::for_each(portfolio.begin(), portfolio.end(), [](auto& pt){ pt->print(std::cout); });
@@ -63,8 +63,8 @@ std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vecto
 
         // compute estimator of the derivative via central finite differences
         std::transform(pv_up.begin(), pv_up.end(), pv_dn.begin(), pv01.back().second.begin()
-            , [bump_size, scaler] (double hi, double lo)
-                -> double { return (hi - lo) / (2.0 * bump_size) * scaler; });
+            , [bump_size, scaler](double hi, double lo)
+            -> double { return (hi - lo) / (2.0 * bump_size) * scaler; });
     }
 
     return pv01;
@@ -83,7 +83,7 @@ ptrade_t load_trade(my_ifstream& is)
     if (id == TradePayment::m_id)
         p.reset(new TradePayment);
     else
-        THROW( "Unknown trade type:" << id );
+        THROW("Unknown trade type:" << id);
 
     p->load(is);
 
@@ -109,8 +109,9 @@ std::vector<ptrade_t> load_portfolio(const string& filename)
 
     // test reloading the portfolio
     my_ifstream is(filename);
-    while(is.read_line())
+    while (is.read_line())
         portfolio.push_back(load_trade(is));
 
     return portfolio;
+}
 }

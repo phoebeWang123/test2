@@ -1,7 +1,7 @@
 #include "TradePayment.h"
 #include "PortfolioUtils.h"
 
-
+using namespace minirisk;
 int main(int argc, const char **argv)
 {
     if(argc != 2) {
@@ -32,3 +32,4 @@ int main(int argc, const char **argv)
 
     return 0;
 }
+

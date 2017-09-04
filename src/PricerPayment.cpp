@@ -2,11 +2,12 @@
 #include "TradePayment.h"
 #include "CurveDiscount.h"
 
+namespace minirisk {
 PaymentPricer::PaymentPricer(const TradePayment& trd)
     : m_amt(trd.quantity())
     , m_dt(trd.delivery_date())
     , m_ccy(trd.ccy())
-    , m_fx_ccy(m_ccy == "USD"? "":  m_ccy)
+    , m_fx_ccy(m_ccy == "USD" ? "" : m_ccy)
 {
 }
 
@@ -20,5 +21,6 @@ double PaymentPricer::price(Market& mkt) const
         df *= mkt.get_fx_spot(m_fx_ccy);
 
     return m_amt * df;
+}
 }
 

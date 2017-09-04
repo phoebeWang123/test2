@@ -4,7 +4,7 @@
 #include "MarketDataServer.h"
 #include "PortfolioUtils.h"
 
-
+using namespace::minirisk;
 int main(int argc, const char **argv)
 {
     if(argc != 3) {
@@ -65,3 +65,4 @@ int main(int argc, const char **argv)
 
     return 0;
 }
+

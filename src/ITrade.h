@@ -7,6 +7,7 @@
 #include "IPricer.h"
 #include "Streamer.h"
 
+namespace minirisk {
 // FIXME: introduce a proper serializable guid class
 typedef unsigned guid_t;
 
@@ -26,7 +27,7 @@ struct ITrade : IObject
     virtual const std::string& idname() const = 0;
 
     // print trade attributes
-    virtual void print(std::ostream& os) const  = 0;
+    virtual void print(std::ostream& os) const = 0;
 
     // Get pricer
     virtual ppricer_t pricer() const = 0;
@@ -34,4 +35,5 @@ struct ITrade : IObject
 
 typedef std::shared_ptr<ITrade> ptrade_t;
 typedef std::vector<ptrade_t> portfolio_t;
+}
 
