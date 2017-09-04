@@ -23,7 +23,37 @@
 	The source provided contains the skeleton of risk management system. You are supposed to carry out various improvements and extensions as specified below.
 }
 
-\section{Improving the \textit{Date} class}
+\section{License}
+The license for the source code is in the main durectory. Please read the license file.
+\section{Source code organization}
+All source code files are in the subdirectory \textit{src}. Source files with names matchine the patterns \textit{Demo*.cpp} or \textit{Test*.cpp} contain the \textit{main} routine for separate programs. Other cpp files are components used by the programs.
+
+The directory also contains a Makefile for gcc compilation. If you use Visual Studio, you need to create a new solution. In the solution add one console project for each cpp file with name Demo*.cpp or Test*.cpp. In each project add also all other cpp files (except the ones with name Demo*.cpp or Test*.cpp).
+
+A number of txt files are given. \textit{portfolio\_0.txt} and \textit{risk\_factors\_0.txt} work with the program in its current state. \textit{portfolio\_$i$.txt} and \textit{risk\_factors\_$i$.txt} work after completion of the first $i$ tasks.
+
+To run the program type from the command line:\\
+\textit{DemoRisk portfolio.txt risk\_factors.txt}
+
+To run the program directly from inside Visual Studio, you can specify the working directory where your txt files are located and the command line arguments (\textit{portfolio.txt risk\_factors.txt}) in the \textit{Debugging} section of the project configuration.
+
+\section{What to do}
+You have to complete sequentially all tasks mentioned in the section \ref{sec:task}. After completing each task you should be able to succesfully run the command\\
+\textit{DemoRisk portfolio\_i.txt risk\_factors\_i.txt}
+
+After completing all tasks you need to zip and submit all files with extension *.h and *.cpp. Do not submit any other file (e.g. txt files, project files, object files, executable files).
+
+\section{Marking criteria}
+Correctness
+indentation
+style
+comments
+minimal changes (git diff)
+
+\section{Tasks}
+\label{sec:task}
+
+\subsection{Improving the \textit{Date} class}
 The most common operations performed with the \textit{Date} class when pricing are comparison (e.g. $<$, ==, $>$) and computation of distance between two dates. The current internal representation of the date class is not optimal for these operations.
 
 Refactor the \textit{Date} class by modifying the current internal representation, which entails of the 4 data members \textit{day}, \textit{month}, \textit{year} and \textit{is\_leap}, to a single data member of type \textit{unsigned} with name \textit{serial}, representing the number of days elapsed since 1-Jan-1900. This allows to speed up the operations mentioned above and reduce memory footprint.
@@ -33,7 +63,7 @@ Change the serialization format to be based directly on \textit{serial}, so that
 When the \textit{Date} class is constructed from the arguments \textit{day}, \textit{month} and \textit{year}, you need to generate the equivalent serial \textit{number}. When converting to a string in calendar format for display to the screen, you need to convert \textit{serial} on-the-fly into day, month and year.
 
 
-\section{Write a test for the \textit{Date} class}
+\subsection{Write a test for the \textit{Date} class}
 Complete the program in \textit{TestDate.cpp}, so that it tests the correctness of the \textit{Date} class. It should perform the following tests:
 \begin{enumerate}
 \item Construction of an invalid date should generate an error: generate intentionally 1000 random invalid dates (e.g. 31-Apr-2010) and verify that the \textit{Date} class constructor throws an error (use \textit{try...catch}).
@@ -42,7 +72,7 @@ Complete the program in \textit{TestDate.cpp}, so that it tests the correctness 
 \end{enumerate}
 At the begin of the test, randomize the random number generator. If the test fails, the program should throw an exception, if it succeeds it should just print the message "SUCCESS".
 
-\section{Remove streaming inaccuracy for type \textit{double}}
+\subsection{Remove streaming inaccuracy for type \textit{double}}
 Currently when a floating point number in double precision saved to a file it is transformed from IEEE-754 format to a decimal representation with a finite number of decimals in scientific notation. The conversion from IEEE-754 to decimal (when saving) and then back to IEEE-754 (when reading) involves rounding and can cause accuracy loss.
 
 Change the streaming representation of a \textit{double} to the hexadecimal image of its binary representation with letters in lowercase.
@@ -51,24 +81,24 @@ If $x$ is a variable of type $double$, then \textit{reinterpret\_cast$<$unsigned
 
 You need to modify the implementation of the \textit{operator$<<$} for \textit{double} and implement the overload of the \textit{operator$>>$} (you may draw inspiration from the ones implemented for the \textit{Date} class).
 
-\section{Improve the \textit{CurveDiscount} class}
+\subsection{Improve the \textit{CurveDiscount} class}
 The current \textit{CurveDiscount} curve assumes that the interest rate curve is constant.
 
 Modify it so that it takes a set of rates related to different tenors and modify it so that when querying for a discount factor, the value returned is correctly interpolated.
 
 For example, given the data points {IR.1W.USD, IR.2W.USD, IR.1M.USD, IR.2M.USD, IR.3M.USD, IR.6M.USD, IR.9M.USD, IR.1Y.USD, IR.18M.USD, IR.2Y.USD, ...}, you need to resolve each of them to an actual date with respect to the anchor date, construct a stepwise constant interpolation scheme, modify the function which returns discount factor.
 
-Since you do not know which points are available in advance in the market, if you want all the available points for the currency EUR, you need to modify the market data server to be able to return the array of risk factors with pattern IR.*.EUR. Use the $<$regex$>$ STL library to search for a string pattern and implemented the method \textit{MarketDataServer::matching}, whose header is already defined in \textit{MarketDataServer.h}. Note that "IR.*.EUR" is not the correct regular expression string to be used here, you need to read about regular expressions and figure out what is the most appropriate string to use.
+Since you do not know which points are available in advance in the market, if you want all the available points for the currency EUR, you need to modify the market data server to be able to return the array of risk factors with pattern IR.*.EUR. Use the $<$regex$>$ STL library to search for a string pattern and implemented the method \textit{MarketDataServer::matching}, whose header is already defined in \textit{MarketDataServer.h}. Note that "IR.*.EUR" is not the correct regular expression string to be used here, you need to read about regular expressions and figure out what is the most appropriate string to use, i.e. it should match "just" what needed. For instance, "IR.*EUR" would match "IR.1W.EUR", but also "IRwhateverEUR", which is undesirable.
 
 The interpolation scheme requires computation of the local rates. If $r_i$ and $r_{i+1}$ are the absolute rates for tenor $T_i$ and $T_{i+1}$, as returned from the market data server, the local rate sought $r_{i,i+1}$ is such that the following relation holds:
  $$e^{-r_iT_i-r_{i,i+1}(T_{i+1}-T_i)}=e^{-r_{i+1}T_{i+1}}$$
 Then the discount factor for any date $t \in [T_i,T_{i+1}]$ is $$e^{-r_i T_i-r_{i,i+1}(t-T_i)}$$
 
-The \textit{PV01} risk scenario needs to be modified into 2 different scenarios: \textit{PV01Parallel} that computes risk with respect to parallel shift of the yield curve (all risk factor move simultaneously); and \textit{PV01Bucketed} that computes risk with respect to individual yield curves (the yield curve for each tenor $T_i$ change, with all the rest remaining constant). In both cases uses central differences, with the same bump size as currently defined in \textit{Demo.cpp}.\\
+The \textit{PV01} risk function needs to be modified into 2 different risk functions: \textit{PV01Parallel} that computes risk with respect to parallel shift of the yield curve (all risk factor move simultaneously); and \textit{PV01Bucketed} that computes risk with respect to individual yield curves (the yield curve for each tenor $T_i$ change, with all the rest remaining constant). In both cases use central differences, with the same bump size as currently defined in \textit{Demo.cpp}. The 2 new functions must have the same signature as the existing one. \\
 
 To test, you can use the file of risk factors provided: \textit{risk-factors-tenors.txt}.
 
-\section{Add a new market object \textit{CurveFXSpot}}
+\subsection{Add a new market object \textit{CurveFXSpot}}
 The new market object should implement the interface \textit{ICurveFXSpot}.
 
 Note that the risk factors contained by the market data server only include spot currencies in the format CCYUSD, i.e. the prices of CCY in USD. The class must support direct, inverse and cross currency pairs (e.g. EURUSD, USDJPY, EURGBP). It is up to you to make the correct queries to the market data server and construct the \textit{CurveFXSpot} appropriately.\\
@@ -77,7 +107,7 @@ You need to add an additional members to the \textit{Market} class as appropriat
 
 Modify the \textit{PricerPayment} class to use the new class \textit{CurveFXSpot}.
 
-\section{Add a new market object \textit{CurveFXForward}}
+\subsection{Add a new market object \textit{CurveFXForward}}
 The new market object should implement the interface \textit{ICurveFXForward}.\\
 
 The forward price of currency $ccy_1$ expressed in currency $ccy_2$ for delivery at time $T$ can be computed as
@@ -88,40 +118,58 @@ This class should use the \textit{CurveFXSpot} and \textit{CurveDiscount} classe
 
 You need to add an additional members to the \textit{Market} class as appropriate.
 
-\section{Add new trade type \textit{TradeFXForward}}
-At time $T$ it pays the following amount of $ccy_2$
+\subsection{Add new trade type \textit{TradeFXForward}}
+At time $T$ it pays the following amount of $ccy_2$ at time $T_2$
 $$
-payoff=N[S_T-K]
+payoff=N[S_{T_1}-K]
 $$
-where $S_T$ is the spot price of currency $ccy_1$ expressed in currency $ccy_2$ for observed at time $T$, $K$ is a predefined strike price and $N$ is the notional amount.\\
+where $S_{T_1}$ is the spot price of currency $ccy_1$ expressed in currency $ccy_2$ for observed at the fixing date $T_1$, $K$ is a predefined strike price, $N$ is the notional amount and $T_2$ is the settlement date (it must be $T_1<T_2$).\\
 
-Assign to the trade ID=3 and the following serialized representation:\\
-ID;CCY1;CCY2;NOTIONAL;STRIKE;
+Assign to the trade ID=3 (arbitrarily chosen) and the following serialized representation:\\
+ID;CCY1;CCY2;NOTIONAL;STRIKE;FIXINGDATE;SETTLEDATE;
 
 \noindent Example:\\
-3;EUR;USD;notional in hex;1.150e0;date in serial;\\
+3;EUR;USD;notional in hex;1.150e0;date in serial;date in serial;\\
 
 The currency pair $ccy_1ccy_2$ can be any direct, inverse or cross pair.\\
 
-You must be able to load the file portfolio2.txt, which contains some trades of this type.\\
+You must be able to load the file \textit{portfolio2.txt}, which contains some trades of this type.\\
 
 Implement the corresponding pricer object. The price in $ccy_2$ can be computed as:
 $$
-price=B_{T,2}[F_T-K]
+price=B_{T_2,2}[F_{T_1}-K]
 $$
+where $B_{T,2}$ is the discount factor in currency 2 for settlement date $T$ and $F_T$ is the currency forward price for date $T$. Do not forget to convert this price into USD.\\
 
-Do not forget to convert this into USD.\\
+Note that when the pricing date $T$ is between $T_1$ and $T_2$, you need to know the value of $S_{T_1}$, which is in the past, i.e. you need to know its fixed value. To achieve that, add to \textit{ITrade} a method\\
+\textit{vector$<$pair$<$string,Date$>>$ required\_fixings(condt Date$\&$ until)},\\
+which returns the fixings needed by the trade to price on pricing date \textit{until}. If a trade has no fixings, this should return an empty vector.
+Modify the \textit{IPrice::price} method to take an extra argument of type\\ $const\; map<string,map<Date,double>>\&\; fixings$\\ and use it in pricers to retrieve necessary fixings. In particular: fixings occurring in the past should be obtained from this argument and if not available an exception should be thrown; fixings occurring exactly on the pricing date should be taken from this argument if available, resolved through the Market otherwise; fixings occurring in the future should be resolved through the Market (e.g. forward prices).
 
-\section{Add Configuration}
+\subsection{Add pricer configuration}
 Modify the function \textit{ITrade::Pricer} adding an argument \textit{configuration} of type \textit{string}. In a real risk management system the configuration argument could be very complex and allow for instance to select a pricing model (e.g. Black Scholes or Heston) or a numerical framework (e.g. PDE or Monte Carlo). In this project the configuration string is simply the base currency in which all risk is to be computed. At the moment, by default everything is computed in USD. After your changes, \textit{pricer("EUR")} should return a pricer that computes the price in EUR.\\
 
-You need to modify the pricers accordingly.
+You need to modify all pricers accordingly.
 
-\section{Minimize market objects recalculations}
+\subsection{Recover from pricing failures}
+The function \textit{IPricer::price} fails and throws an exception when an error occurs. For instance, if the settlement date of a \textit{Payment} is in the past, pricing of the entire portfolio to fails. We would like instead that only problematic trades to fail to price and all remaining trades to price succesfully.
 
-\section{Implement query which returns risk factor for a trade}
+Modify the typedef \textit{portfolio\_values\_t} to \textit{vector$<$pair$<$double,string$>>$}. In the \textit{compute\_prices} function use \textit{try\{\}catch\{\}} to catch exceptions. If there is no error set the double to the price and the string to an empty string. If there is an error set the double to NaN (see header $<$numeric\_limits$>$) and the string to the error message embedded in the exception.
 
-\section{Minimize trade price recomputations}
+When computing thet total for the book (function \textit{portfolio\_total}), you should return a tuple containing the total for trades which price succesfully and an array of pairs with the index of the trades which price to fail and the associated error message. To identify trades which fail check is the value is a NaN, not if the error message string is empty, as a trade could potentially fail and still have an ampty error message.
+
+
+\subsection{Add FX Spot Greek function}
+
+\subsection{Customize bumps in Greeks}
+
+Add to the 2 functions constructed in section \ref{sec:}
+
+\subsection{Minimize market objects recalculations}
+
+\subsection{Implement query which returns risk factor for a trade}
+
+\subsection{Minimize trade price recomputations}
 
 \end{document}
 
