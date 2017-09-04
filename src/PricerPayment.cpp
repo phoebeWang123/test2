@@ -13,7 +13,7 @@ PaymentPricer::PaymentPricer(const TradePayment& trd)
 double PaymentPricer::price(Market& mkt) const
 {
     ptr_disc_curve_t disc = mkt.get_discount_curve(m_ccy);
-    double df = disc->df(m_dt);
+    double df = disc->df(m_dt); // this throws an exception if m_dt<today
 
     // This PV is expressed in m_ccy. It must be converted in USD.
     if (!m_fx_ccy.empty())
