@@ -36,10 +36,9 @@ const double Market::get_yield(const string& ccyname)
     return from_mds("yield curve", name);
 };
 
-const double Market::get_fx_spot(const string& ccy)
+const double Market::get_fx_spot(const string& name)
 {
-    string name(fx_spot_prefix + ccy);
-    return from_mds("fx spot", name);
+    return from_mds("fx spot", mds_spot_name(name));
 }
 
 void Market::set_data_points(const vec_risk_factor_t& data_points)

@@ -6,8 +6,8 @@ namespace minirisk {
 PaymentPricer::PaymentPricer(const TradePayment& trd)
     : m_amt(trd.quantity())
     , m_dt(trd.delivery_date())
-    , m_ir_curve(ir_curve_discount_prefix + trd.ccy())
-    , m_fx_ccy(trd.ccy() == "USD" ? "" : trd.ccy())
+    , m_ir_curve(ir_curve_discount_name(trd.ccy()))
+    , m_fx_ccy(trd.ccy() == "USD" ? "" : fx_spot_name(trd.ccy(),"USD"))
 {
 }
 

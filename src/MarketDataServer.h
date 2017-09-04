@@ -22,6 +22,9 @@ private:
     // for simplicity, assumes market data can only have type double
     std::map<string, double> m_data;
 };
+
+string mds_spot_name(const string& name);
+
 }
 
 
