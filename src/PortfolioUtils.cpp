@@ -2,6 +2,8 @@
 #include "PortfolioUtils.h"
 #include "TradePayment.h"
 
+#include <numeric>
+
 void print_portfolio(const portfolio_t& portfolio)
 {
     std::for_each(portfolio.begin(), portfolio.end(), [](const ptrade_t& pt){ pt->print(std::cout); });
@@ -15,17 +17,22 @@ std::vector<ppricer_t> get_pricers(const std::vector<ptrade_t>& portfolio)
     return pricers;
 }
 
-std::vector<double> compute_prices(const std::vector<ppricer_t>& pricers, Market& mkt)
+portfolio_values_t compute_prices(const std::vector<ppricer_t>& pricers, Market& mkt)
 {
-    std::vector<double> prices(pricers.size());
+    portfolio_values_t prices(pricers.size());
     std::transform(pricers.begin(), pricers.end(), prices.begin()
         , [&mkt](const ppricer_t &pp) -> double { return pp->price(mkt); });
     return prices;
 }
 
-std::vector<std::pair<string, std::vector<double>>> compute_pv01(const std::vector<ppricer_t>& pricers, Market& mkt)
+double portfolio_total(const portfolio_values_t& values)
 {
-    std::vector<std::pair<string, std::vector<double>>> pv01;  // PV01 per trade
+    return std::accumulate(values.begin(), values.end(), 0.0);
+}
+
+std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vector<ppricer_t>& pricers, Market& mkt)
+{
+    std::vector<std::pair<string, portfolio_values_t>> pv01;  // PV01 per trade
 
     const double bump_size = 0.01 / 100;
     const double scaler = 0.01 / 100;

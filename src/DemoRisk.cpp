@@ -1,15 +1,9 @@
 #include <iostream>
 #include <algorithm>
-#include <numeric>
 
 #include "MarketDataServer.h"
 #include "PortfolioUtils.h"
 
-
-double total(const std::vector<double>& values)
-{
-    return std::accumulate(values.begin(), values.end(), 0.0);
-}
 
 int main(int argc, const char **argv)
 {
@@ -37,7 +31,7 @@ int main(int argc, const char **argv)
     // fetching data as needed from the market data server.
     {
         auto prices = compute_prices(pricers, mkt);
-        std::cout << "Total book PV: " << total(prices) << " USD\n\n";
+        std::cout << "Total book PV: " << portfolio_total(prices) << " USD\n\n";
     }
 
     // disconnect the market (no more fetching from the market data server allowed)
@@ -52,12 +46,12 @@ int main(int argc, const char **argv)
     }
 
     {   // Compute PV01 (i.e. sensitivity with respect to interest rate dV/dr)
-        std::vector<std::pair<string, std::vector<double>>> pv01(compute_pv01(pricers,mkt));  // PV01 per trade
+        std::vector<std::pair<string, portfolio_values_t>> pv01(compute_pv01(pricers,mkt));  // PV01 per trade
 
         // display cumulated PV01 per currency
         std::cout << "PV01 (exposure per IR risk factor):\n";
         for (auto g = pv01.begin(); g != pv01.end(); ++g)
-            std::cout << g->first << ": " << total(g->second) << " USD\n";
+            std::cout << g->first << ": " << portfolio_total(g->second) << " USD\n";
         std::cout << "\n";
     }
 
