@@ -6,14 +6,14 @@
 
 void print_portfolio(const portfolio_t& portfolio)
 {
-    std::for_each(portfolio.begin(), portfolio.end(), [](const ptrade_t& pt){ pt->print(std::cout); });
+    std::for_each(portfolio.begin(), portfolio.end(), [](auto& pt){ pt->print(std::cout); });
 }
 
 std::vector<ppricer_t> get_pricers(const std::vector<ptrade_t>& portfolio)
 {
     std::vector<ppricer_t> pricers(portfolio.size());
     std::transform( portfolio.begin(), portfolio.end(), pricers.begin()
-                  , [](const ptrade_t &pt) -> ppricer_t { return pt->pricer(); } );
+                  , [](auto &pt) -> ppricer_t { return pt->pricer(); } );
     return pricers;
 }
 
@@ -21,7 +21,7 @@ portfolio_values_t compute_prices(const std::vector<ppricer_t>& pricers, Market&
 {
     portfolio_values_t prices(pricers.size());
     std::transform(pricers.begin(), pricers.end(), prices.begin()
-        , [&mkt](const ppricer_t &pp) -> double { return pp->price(mkt); });
+        , [&mkt](auto &pp) -> double { return pp->price(mkt); });
     return prices;
 }
 
@@ -94,7 +94,8 @@ void save_portfolio(const string& filename, const std::vector<ptrade_t>& portfol
 {
     // test saving to file
     my_ofstream of(filename);
-    std::for_each(portfolio.begin(), portfolio.end(), [&of](const ptrade_t &pt)
+    std::for_each(portfolio.begin(), portfolio.end(),
+        [&of](auto &pt)
         {
             pt->save(of);
             of.endl();
