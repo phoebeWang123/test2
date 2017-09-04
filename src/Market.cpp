@@ -3,7 +3,7 @@
 
 #include <vector>
 
-
+namespace minirisk {
 static bool is_prefix(const string& s1, const string& s2)
 {
     const char*p = s1.c_str();
@@ -59,4 +59,5 @@ Market::vec_risk_factor_t Market::get_risk_factors(const std::string& prefix) co
         if (is_prefix(prefix, d->first))
             result.push_back(*d);
     return result;
+}
 }

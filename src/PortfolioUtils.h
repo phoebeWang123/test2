@@ -5,6 +5,7 @@
 #include "ITrade.h"
 #include "IPricer.h"
 
+namespace minirisk {
 struct Market;
 
 typedef std::vector<double> portfolio_values_t;
@@ -30,4 +31,5 @@ std::vector<ptrade_t>  load_portfolio(const string& filename);
 
 // print portfolio to cout
 void print_portfolio(const portfolio_t& portfolio);
+}
 

@@ -4,14 +4,14 @@
 #include <string>
 #include <array>
 
-
+namespace minirisk {
 struct Date
 {
 public:
     static const unsigned days_in_normal_year = 365;
     static const unsigned first_year = 1900;
-    static const unsigned last_year  = 2200;
-    static const unsigned n_years  = last_year - first_year;
+    static const unsigned last_year = 2200;
+    static const unsigned n_years = last_year - first_year;
 
 private:
     static std::string padding_dates(unsigned);
@@ -21,7 +21,7 @@ private:
 
     friend long operator-(const Date& d1, const Date& d2);
 
-    static const std::array<unsigned,12> days_in_month;  // num of days in month M in a normal year
+    static const std::array<unsigned, 12> days_in_month;  // num of days in month M in a normal year
     static const std::array<unsigned, 12> days_ytd;      // num of days since 1-jan to 1-M in a normal year
     static const std::array<unsigned, n_years> days_epoch;   // num of days since 1-jan-1900 to 1-jan-yyyy (until 2200)
 
@@ -48,7 +48,7 @@ public:
 
     bool operator<(const Date& d) const
     {
-        return (m_y < d.m_y) || (m_y == d.m_y && (m_m < d.m_m || (m_m == d.m_m && m_d < d.m_d) ) );
+        return (m_y < d.m_y) || (m_y == d.m_y && (m_m < d.m_m || (m_m == d.m_m && m_d < d.m_d)));
     }
 
     bool operator==(const Date& d) const
@@ -73,8 +73,8 @@ public:
     std::string to_string(bool pretty = true) const
     {
         return pretty
-                ? std::to_string(m_d) + "-" + std::to_string(m_m) + "-" + std::to_string(m_y)
-                : std::to_string(m_y) + padding_dates(m_m) + padding_dates(m_d);
+            ? std::to_string(m_d) + "-" + std::to_string(m_m) + "-" + std::to_string(m_y)
+            : std::to_string(m_y) + padding_dates(m_m) + padding_dates(m_d);
     }
 
 private:
@@ -88,5 +88,6 @@ long operator-(const Date& d1, const Date& d2);
 
 inline double time_frac(const Date& d1, const Date& d2)
 {
-    return static_cast<double>(d2-d1) / Date::days_in_normal_year;
+    return static_cast<double>(d2 - d1) / Date::days_in_normal_year;
+}
 }

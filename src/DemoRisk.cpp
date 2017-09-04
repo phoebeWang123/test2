@@ -4,7 +4,7 @@
 #include "MarketDataServer.h"
 #include "PortfolioUtils.h"
 
-
+using namespace::minirisk;
 int main(int argc, const char **argv)
 {
     MYASSERT(argc > 1, "This demo requires the name of the file where the portfolio is to be read from.");
@@ -57,3 +57,4 @@ int main(int argc, const char **argv)
 
     return 0;
 }
+

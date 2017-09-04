@@ -3,6 +3,7 @@
 #include "IPricer.h"
 #include "TradePayment.h"
 
+namespace minirisk {
 struct PaymentPricer : IPricer
 {
     PaymentPricer(const TradePayment& trd);
@@ -15,4 +16,5 @@ private:
     string m_ccy;
     string m_fx_ccy;
 };
+}
 

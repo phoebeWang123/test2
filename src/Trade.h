@@ -3,6 +3,7 @@
 #include "ITrade.h"
 #include "Streamer.h"
 
+namespace minirisk {
 struct Trade : ITrade
 {
     virtual double quantity() const
@@ -23,9 +24,9 @@ private:
 protected:
     virtual void print(std::ostream& os) const
     {
-        os << "Id:         " << id()                << std::endl;
-        os << "Name:       " << idname()            << std::endl;
-        os << "Quantity:   " << quantity()          << std::endl;
+        os << "Id:         " << id() << std::endl;
+        os << "Name:       " << idname() << std::endl;
+        os << "Quantity:   " << quantity() << std::endl;
         print_details(os);
         os << std::endl;
     }
@@ -33,7 +34,7 @@ protected:
     virtual void save(my_ofstream& os) const
     {
         os << id()
-           << quantity();
+            << quantity();
         save_details(os);
     }
 
@@ -47,3 +48,4 @@ protected:
 private:
     double m_quantity;
 };
+}

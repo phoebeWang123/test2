@@ -6,6 +6,7 @@
 #include "MarketDataServer.h"
 #include "Streamer.h"
 
+namespace minirisk {
 struct CurveDiscount : ICurveDiscount
 {
     virtual string name() const { return m_name; }
@@ -21,7 +22,7 @@ struct CurveDiscount : ICurveDiscount
     double df(const Date& t) const
     {
         MYASSERT((!(t < m_today)), "cannot get discount factor for date in the past: " << t);
-        double dt = time_frac(m_today,t);
+        double dt = time_frac(m_today, t);
         return std::exp(-m_rate * dt);
     }
 
@@ -32,3 +33,4 @@ private:
     string m_name;
     double m_rate;
 };
+}

@@ -4,9 +4,9 @@
 #include "IObject.h"
 #include "ICurve.h"
 #include "MarketDataServer.h"
-
 #include <vector>
 
+namespace minirisk {
 struct Market : IObject
 {
 private:
@@ -78,4 +78,5 @@ private:
     // raw risk factors
     std::map<string, double> m_data_points;
 };
+}
 

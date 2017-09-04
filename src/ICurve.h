@@ -5,6 +5,7 @@
 #include "IObject.h"
 #include "Date.h"
 
+namespace minirisk {
 // forward declarations
 struct Market;
 struct MarketDataServer;
@@ -39,4 +40,5 @@ struct ICurveFXSpot : ICurve
     // ignore the fact that the FX spot is a t+2 forward price itself, and assume it is the istantaneous exchange rate
     virtual double spot() const = 0;
 };
+}
 
