@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int out_char_as_hex(int c)
+void out_char_as_hex(int c)
 {
     cout << hex << setw(2) << setfill('0') << c;
 }
