@@ -149,7 +149,15 @@ where $B_{T,2}$ is the discount factor in currency 2 for settlement date $T$ and
 Note that when the pricing date $T$ is between $T_1$ and $T_2$, you need to know the value of $S_{T_1}$, which is in the past, i.e. you need to know its fixed value. To achieve that, add to \textit{ITrade} a method\\
 \textit{vector$<$pair$<$string,Date$>>$ required\_fixings(condt Date$\&$ until)},\\
 which returns the fixings needed by the trade to price on pricing date \textit{until}. If a trade has no fixings, this should return an empty vector.
-Modify the \textit{IPrice::price} method to take an extra argument of type\\ $const\; map<string,map<Date,double>>\&\; fixings$\\ and use it in pricers to retrieve necessary fixings. In particular: fixings occurring in the past should be obtained from this argument and if not available an exception should be thrown; fixings occurring exactly on the pricing date should be taken from this argument if available, resolved through the Market otherwise; fixings occurring in the future should be resolved through the Market (e.g. forward prices).
+
+Run this function and collect fixing requirements before any pricing is done.
+
+Modify \textit{RiskDemo.cpp} to accept a third command line argument with the name of a file containing some historical fixings. The file should have the same format of the one used for risk factors and its should be loaded in a map of type\\
+$typedef\; map<string,map<Date,double>>\&\; fixings\_t;$
+
+Filter out all unnecessary fixings, based on the requirements previously collected.
+
+Modify the \textit{IPricer::price} method to take an extra argument of type\\ $const\; fixings\_t\&\; fixings$\\ and use it in pricers to retrieve necessary fixings. In particular: fixings occurring in the past should be obtained from this argument and if not available an exception should be thrown; fixings occurring exactly on the pricing date should be taken from this argument if available, resolved through the Market otherwise; fixings occurring in the future should be resolved through the Market (e.g. forward prices).
 
 \subsection{Add pricer configuration}
 Modify the function \textit{ITrade::Pricer} adding an argument \textit{configuration} of type \textit{string}. In a real risk management system the configuration argument could be very complex and allow for instance to select a pricing model (e.g. Black Scholes or Heston) or a numerical framework (e.g. PDE or Monte Carlo). In this project the configuration string is simply the base currency in which all risk is to be computed. At the moment, by default everything is computed in USD. After your changes, \textit{pricer("EUR")} should return a pricer that computes the price in EUR.\\
