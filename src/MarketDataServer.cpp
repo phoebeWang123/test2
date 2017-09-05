@@ -65,10 +65,9 @@ double MarketDataServer::get(const string& name) const
 std::pair<double, bool> MarketDataServer::lookup(const string& name) const
 {
     auto iter = m_data.find(name);
-    if (iter != m_data.end()) // found?
-        return std::make_pair(iter->second, true);
-    else
-        return std::make_pair(std::numeric_limits<double>::quiet_NaN(), false);
+    return (iter != m_data.end())  // found?
+            ? std::make_pair(iter->second, true)
+            : std::make_pair(std::numeric_limits<double>::quiet_NaN(), false);
 }
 
 std::vector<std::pair<double, bool>> MarketDataServer::match(const std::string& expr) const
