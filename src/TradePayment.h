@@ -52,8 +52,8 @@ private:
 
     virtual void print_details(std::ostream& os) const
     {
-        os << "Currency:      " << m_ccy << std::endl;
-        os << "Delivery Date: " << m_delivery_date << std::endl;
+        os << format_label("Currency") << m_ccy << std::endl;
+        os << format_label("Delivery Date") << m_delivery_date << std::endl;
     }
 
 private:
