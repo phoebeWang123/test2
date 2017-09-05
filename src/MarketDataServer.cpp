@@ -70,4 +70,11 @@ std::pair<double, bool> MarketDataServer::lookup(const string& name) const
     else
         return std::make_pair(std::numeric_limits<double>::quiet_NaN(), false);
 }
+
+std::vector<std::pair<double, bool>> MarketDataServer::match(const std::string& expr) const
+{
+    std::regex r(expr);
+    NOT_IMPLEMENTED;
+}
+
 }
