@@ -49,7 +49,8 @@ int main(int argc, const char **argv)
     {
         std::cout << "Risk factors: ";
         auto tmp = mkt.get_risk_factors(".+");
-        std::for_each(tmp.begin(), tmp.end(), [](auto& iter) {std::cout << iter.first << ", "; });
+        for (const auto& iter : tmp)
+            std::cout << iter.first << ", ";
         std::cout << "\n\n";
     }
 
@@ -58,8 +59,8 @@ int main(int argc, const char **argv)
 
         // display cumulated PV01 per currency
         std::cout << "PV01 (exposure per IR risk factor):\n";
-        for (auto g = pv01.begin(); g != pv01.end(); ++g)
-            std::cout << g->first << ": " << portfolio_total(g->second) << " USD\n";
+        for (const auto& g : pv01)
+            std::cout << g.first << ": " << portfolio_total(g.second) << " USD\n";
         std::cout << "\n";
     }
 

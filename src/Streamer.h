@@ -91,7 +91,8 @@ inline my_ofstream& operator<<(my_ofstream& os, const T& v)
 template <typename T, typename A>
 inline std::ostream& operator<<(std::ostream& os, const std::vector<T, A>& v)
 {
-    std::for_each(v.begin(), v.end(), [&os](auto i) { os << i << " "; });
+    for (const T& i : v)
+        os << i << " ";
     return os;
 }
 
@@ -99,7 +100,8 @@ template <typename T>
 inline my_ofstream& operator<<(my_ofstream& os, const std::vector<T>& v)
 {
     os << v.size();
-    std::for_each(v.begin(), v.end(), [&os](auto i) { os << i; });
+    for (const T& i : v)
+        os << i;
     return os;
 }
 

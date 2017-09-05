@@ -35,10 +35,10 @@ const double Market::get_fx_spot(const string& name)
 void Market::set_data_points(const vec_risk_factor_t& data_points)
 {
     clear();
-    for (auto d = data_points.begin(); d != data_points.end(); ++d) {
-        auto i = m_data_points.find(d->first);
-        MYASSERT((i != m_data_points.end()), "Risk factor not found " << d->first);
-        i->second = d->second;
+    for (const auto& d : data_points) {
+        auto i = m_data_points.find(d.first);
+        MYASSERT((i != m_data_points.end()), "Risk factor not found " << d.first);
+        i->second = d.second;
     }
 }
 

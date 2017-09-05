@@ -46,18 +46,18 @@ std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vecto
 
     // compute prices for perturbated markets and aggregate results
     pv01.reserve(base.size());
-    for (auto d = base.begin(); d != base.end(); ++d) {
+    for (const auto& d : base) {
         std::vector<double> pv_up, pv_dn;
-        std::vector<std::pair<string, double>> bumped(1, *d);
-        pv01.push_back(std::make_pair(d->first, std::vector<double>(pricers.size())));
+        std::vector<std::pair<string, double>> bumped(1, d);
+        pv01.push_back(std::make_pair(d.first, std::vector<double>(pricers.size())));
 
         // bump down and price
-        bumped[0].second = d->second - bump_size;
+        bumped[0].second = d.second - bump_size;
         tmpmkt.set_data_points(bumped);
         pv_dn = compute_prices(pricers, tmpmkt);
 
         // bump up and price
-        bumped[0].second = d->second + bump_size; // bump up
+        bumped[0].second = d.second + bump_size; // bump up
         tmpmkt.set_data_points(bumped);
         pv_up = compute_prices(pricers, tmpmkt);
 
@@ -94,12 +94,10 @@ void save_portfolio(const string& filename, const std::vector<ptrade_t>& portfol
 {
     // test saving to file
     my_ofstream of(filename);
-    std::for_each(portfolio.begin(), portfolio.end(),
-        [&of](auto &pt)
-        {
-            pt->save(of);
-            of.endl();
-        });
+    for( const auto& pt : portfolio) {
+        pt->save(of);
+        of.endl();
+    }
     of.close();
 }
 
