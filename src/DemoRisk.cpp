@@ -20,6 +20,10 @@ int main(int argc, const char **argv)
 
     // load the portfolio from file
     portfolio_t portfolio = load_portfolio(portfolio_file);
+    // save and reload portfolio to implicitly test round trip serialization
+    save_portfolio("portfolio.tmp", portfolio);
+    portfolio.clear();
+    portfolio = load_portfolio("portfolio.tmp");
 
     // display portfolio
     print_portfolio(portfolio);
