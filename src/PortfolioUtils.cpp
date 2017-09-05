@@ -35,7 +35,6 @@ std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vecto
     std::vector<std::pair<string, portfolio_values_t>> pv01;  // PV01 per trade
 
     const double bump_size = 0.01 / 100;
-    const double scaler = 0.01 / 100;
 
     // filter risk factors related to IR
     auto base = mkt.get_risk_factors(ir_rate_prefix + "[A-Z]{3}");
@@ -62,9 +61,9 @@ std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vecto
         pv_up = compute_prices(pricers, tmpmkt);
 
         // compute estimator of the derivative via central finite differences
+        double dr = 2.0 * bump_size;
         std::transform(pv_up.begin(), pv_up.end(), pv_dn.begin(), pv01.back().second.begin()
-            , [bump_size, scaler](double hi, double lo)
-            -> double { return (hi - lo) / (2.0 * bump_size) * scaler; });
+            , [dr](double hi, double lo) -> double { return (hi - lo) / dr; });
     }
 
     return pv01;
