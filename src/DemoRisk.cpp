@@ -48,7 +48,7 @@ int main(int argc, const char **argv)
     // display all relevant risk factors
     {
         std::cout << "Risk factors: ";
-        auto tmp = mkt.get_risk_factors("");
+        auto tmp = mkt.get_risk_factors(".+");
         std::for_each(tmp.begin(), tmp.end(), [](auto& iter) {std::cout << iter.first << ", "; });
         std::cout << "\n\n";
     }

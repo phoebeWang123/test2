@@ -4,15 +4,6 @@
 #include <vector>
 
 namespace minirisk {
-static bool is_prefix(const string& s1, const string& s2)
-{
-    const char*p = s1.c_str();
-    const char*q = s2.c_str();
-    while (*p && *q)
-        if (*p++ != *q++)
-            return false;
-    return true;
-}
 
 
 ptr_curve_t Market::build_discount_curve(const string& ccy)
@@ -51,12 +42,13 @@ void Market::set_data_points(const vec_risk_factor_t& data_points)
     }
 }
 
-Market::vec_risk_factor_t Market::get_risk_factors(const std::string& prefix) const
+Market::vec_risk_factor_t Market::get_risk_factors(const std::string& expr) const
 {
     vec_risk_factor_t result;
-    for (auto d = m_data_points.begin(), e = m_data_points.end(); d != e; ++d)
-        if (is_prefix(prefix, d->first))
-            result.push_back(*d);
+    std::regex r(expr);
+    for (const auto& d : m_data_points)
+        if (std::regex_match(d.first, r))
+            result.push_back(d);
     return result;
 }
 }

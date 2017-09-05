@@ -38,7 +38,7 @@ std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vecto
     const double scaler = 0.01 / 100;
 
     // filter risk factors related to IR
-    auto base = mkt.get_risk_factors(ir_rate_prefix);
+    auto base = mkt.get_risk_factors(ir_rate_prefix + "[A-Z]{3}");
 
     // Make a local copy of the Market object, because we will modify it applying bumps
     // Note that the actual market objects are shared, as they are referred to via pointers

@@ -5,6 +5,7 @@
 #include "ICurve.h"
 #include "MarketDataServer.h"
 #include <vector>
+#include <regex>
 
 namespace minirisk {
 struct Market : IObject
@@ -57,9 +58,8 @@ public:
         m_mds.reset();
     }
 
-    // returns risk factor with a specified prefix and their value
-    // (if the prefix is "" all risk factor are returned)
-    vec_risk_factor_t get_risk_factors(const std::string& prefix) const;
+    // returns risk factors matching a regular expression
+    vec_risk_factor_t get_risk_factors(const std::string& expr) const;
 
     // clear all market curves execpt for the data points
     void clear()
