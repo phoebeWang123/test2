@@ -38,22 +38,24 @@ To run the program type from the command line:\\
 To run the program directly from inside Visual Studio, you can specify the working directory where your txt files are located and the command line arguments (\textit{portfolio.txt risk\_factors.txt}) in the \textit{Debugging} section of the project configuration.
 
 \section{What to do}
-You have to complete sequentially all tasks mentioned in the section \ref{sec:task}. After completing each task you should be able to succesfully run the command\\
-\textit{DemoRisk portfolio\_i.txt risk\_factors\_i.txt}
+You have to complete sequentially all tasks mentioned in the section \ref{sec:task}. After completing each task you should test correctness of your work by succesfully running the command \\
+\textit{DemoRisk portfolio\_i.txt risk\_factors\_i.txt}\\
+and comparing your results with those given in \textit{output\_i.txt}.
 
 After completing all tasks you need to zip and submit all files with extension *.h and *.cpp. Do not submit any other file (e.g. txt files, project files, object files, executable files).
 
 \section{Marking criteria}
-Correctness
-indentation
-style
-comments
-minimal changes (git diff)
+\begin{itemize}
+\item Correctness: I will run your DemoRisk with my trade portfolio and my market data and I will compare your results with mine.
+\item Indentation: I will mark correct use of indentation (configure your editor to convert tab to spaces and to use tab of 4 characters)
+\item Style: proper choices of variable names, use of source code comments
+\item minimal diff: only modify the lines of code strictly necessary, do not insert unnecessary whitespaces
+\end{itemize}
 
 \section{Tasks}
 \label{sec:task}
 
-\subsection{Improving the \textit{Date} class}
+\subsection{Improve the \textit{Date} class}
 The most common operations performed with the \textit{Date} class when pricing are comparison (e.g. $<$, ==, $>$) and computation of distance between two dates. The current internal representation of the date class is not optimal for these operations.
 
 Refactor the \textit{Date} class by modifying the current internal representation, which entails of the 4 data members \textit{day}, \textit{month}, \textit{year} and \textit{is\_leap}, to a single data member of type \textit{unsigned} with name \textit{serial}, representing the number of days elapsed since 1-Jan-1900. This allows to speed up the operations mentioned above and reduce memory footprint.
@@ -94,6 +96,8 @@ The interpolation scheme requires computation of the local rates. If $r_i$ and $
  $$e^{-r_iT_i-r_{i,i+1}(T_{i+1}-T_i)}=e^{-r_{i+1}T_{i+1}}$$
 Then the discount factor for any date $t \in [T_i,T_{i+1}]$ is $$e^{-r_i T_i-r_{i,i+1}(t-T_i)}$$
 
+\subsubsection{PV01 with tenors}
+\label{sec:pv01}
 The \textit{PV01} risk function needs to be modified into 2 different risk functions: \textit{PV01Parallel} that computes risk with respect to parallel shift of the yield curve (all risk factor move simultaneously); and \textit{PV01Bucketed} that computes risk with respect to individual yield curves (the yield curve for each tenor $T_i$ change, with all the rest remaining constant). In both cases use central differences, with the same bump size as currently defined in \textit{Demo.cpp}. The 2 new functions must have the same signature as the existing one. \\
 
 To test, you can use the file of risk factors provided: \textit{risk-factors-tenors.txt}.
@@ -141,6 +145,7 @@ price=B_{T_2,2}[F_{T_1}-K]
 $$
 where $B_{T,2}$ is the discount factor in currency 2 for settlement date $T$ and $F_T$ is the currency forward price for date $T$. Do not forget to convert this price into USD.\\
 
+\subsubsection{Historical fixings}
 Note that when the pricing date $T$ is between $T_1$ and $T_2$, you need to know the value of $S_{T_1}$, which is in the past, i.e. you need to know its fixed value. To achieve that, add to \textit{ITrade} a method\\
 \textit{vector$<$pair$<$string,Date$>>$ required\_fixings(condt Date$\&$ until)},\\
 which returns the fixings needed by the trade to price on pricing date \textit{until}. If a trade has no fixings, this should return an empty vector.
@@ -158,18 +163,18 @@ Modify the typedef \textit{portfolio\_values\_t} to \textit{vector$<$pair$<$doub
 
 When computing thet total for the book (function \textit{portfolio\_total}), you should return a tuple containing the total for trades which price succesfully and an array of pairs with the index of the trades which price to fail and the associated error message. To identify trades which fail check is the value is a NaN, not if the error message string is empty, as a trade could potentially fail and still have an ampty error message.
 
-
 \subsection{Add FX Spot Greek function}
+\label{sec:fxdelta}
+Add another function for Greeks calculation, named \textit{fx\_delta}, which computes the risk of the book with respect to each of the FX spot rate quoted against USD in the market data server. It should use central difference with a relative bump of 0.1%.
+
+Add calculation of FXDelta at thhe end of \textit{RiskDemo.cpp} and display the cumlative book value for each fx spot rate.
 
 \subsection{Customize bumps in Greeks}
 
-Add to the 2 functions constructed in section \ref{sec:}
+Add to the 2 functions for risk computation implemented in section \ref{sec:pv01} and the one implemented in section \ref{sec:fxdelta} adding an optional extra argument with type\\
+\textit{struct GreekConfig \{ double bumpsize; \}}\\
+to allow the caller to control the bump size. When this optional extra argument is not explicitly passed by the caller, it should take the current hardcoded bump size as default value.
 
-\subsection{Minimize market objects recalculations}
-
-\subsection{Implement query which returns risk factor for a trade}
-
-\subsection{Minimize trade price recomputations}
 
 \end{document}
 
