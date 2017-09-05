@@ -24,9 +24,9 @@ private:
 protected:
     virtual void print(std::ostream& os) const
     {
-        os << "Id:         " << id() << std::endl;
-        os << "Name:       " << idname() << std::endl;
-        os << "Quantity:   " << quantity() << std::endl;
+        os << format_label("Id") << id() << std::endl;
+        os << format_label("Name") << idname() << std::endl;
+        os << format_label("Quantity") << quantity() << std::endl;
         print_details(os);
         os << std::endl;
     }
