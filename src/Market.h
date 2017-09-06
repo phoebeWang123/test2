@@ -68,7 +68,7 @@ public:
     }
 
     // destroy all existing objects and modify a selected number of data points
-    void set_data_points(const vec_risk_factor_t& data_points);
+    void set_risk_factors(const vec_risk_factor_t& risk_factors);
 
 private:
     Date m_today;
@@ -78,7 +78,7 @@ private:
     std::map<string, ptr_curve_t> m_curves;
 
     // raw risk factors
-    std::map<string, double> m_data_points;
+    std::map<string, double> m_risk_factors;
 };
 }
 

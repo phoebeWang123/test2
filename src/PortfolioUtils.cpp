@@ -52,12 +52,12 @@ std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vecto
 
         // bump down and price
         bumped[0].second = d.second - bump_size;
-        tmpmkt.set_data_points(bumped);
+        tmpmkt.set_risk_factors(bumped);
         pv_dn = compute_prices(pricers, tmpmkt);
 
         // bump up and price
         bumped[0].second = d.second + bump_size; // bump up
-        tmpmkt.set_data_points(bumped);
+        tmpmkt.set_risk_factors(bumped);
         pv_up = compute_prices(pricers, tmpmkt);
 
         // compute estimator of the derivative via central finite differences

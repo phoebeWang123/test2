@@ -13,7 +13,7 @@ ptr_curve_t Market::build_discount_curve(const string& ccy)
 
 double Market::from_mds(const string& objtype, const string& name)
 {
-    auto ins = m_data_points.emplace(name, std::numeric_limits<double>::quiet_NaN());
+    auto ins = m_risk_factors.emplace(name, std::numeric_limits<double>::quiet_NaN());
     if (ins.second) { // just inserted, need to be populated
         MYASSERT(m_mds, "Cannot fetch " << objtype << " " << name << " because the market data server has been disconnnected");
         ins.first->second = m_mds->get(name);
@@ -32,12 +32,12 @@ const double Market::get_fx_spot(const string& name)
     return from_mds("fx spot", mds_spot_name(name));
 }
 
-void Market::set_data_points(const vec_risk_factor_t& data_points)
+void Market::set_risk_factors(const vec_risk_factor_t& risk_factors)
 {
     clear();
-    for (const auto& d : data_points) {
-        auto i = m_data_points.find(d.first);
-        MYASSERT((i != m_data_points.end()), "Risk factor not found " << d.first);
+    for (const auto& d : risk_factors) {
+        auto i = m_risk_factors.find(d.first);
+        MYASSERT((i != m_risk_factors.end()), "Risk factor not found " << d.first);
         i->second = d.second;
     }
 }
@@ -46,7 +46,7 @@ Market::vec_risk_factor_t Market::get_risk_factors(const std::string& expr) cons
 {
     vec_risk_factor_t result;
     std::regex r(expr);
-    for (const auto& d : m_data_points)
+    for (const auto& d : m_risk_factors)
         if (std::regex_match(d.first, r))
             result.push_back(d);
     return result;
