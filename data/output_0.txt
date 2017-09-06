@@ -1,0 +1,20 @@
+Id                  0
+Name                Payment
+Quantity            10
+Currency            USD
+Delivery Date       1-2-2020
+
+Id                  0
+Name                Payment
+Quantity            20
+Currency            EUR
+Delivery Date       2-2-2020
+
+Total book PV: 28.564 USD
+
+Risk factors: FX.SPOT.EUR, IR.EUR, IR.USD, 
+
+PV01 (exposure per IR risk factor):
+IR.EUR: -48.1323 USD
+IR.USD: -23.1348 USD
+
