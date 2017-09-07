@@ -80,5 +80,6 @@ private:
     // raw risk factors
     std::map<string, double> m_risk_factors;
 };
-}
+
+} // namespace minirisk
 

@@ -8,6 +8,7 @@
 #include "Streamer.h"
 
 namespace minirisk {
+
 // FIXME: introduce a proper serializable guid class
 typedef unsigned guid_t;
 
@@ -35,5 +36,6 @@ struct ITrade : IObject
 
 typedef std::shared_ptr<ITrade> ptrade_t;
 typedef std::vector<ptrade_t> portfolio_t;
-}
+
+} // namespace minirisk
 

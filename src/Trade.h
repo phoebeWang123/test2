@@ -4,6 +4,7 @@
 #include "Streamer.h"
 
 namespace minirisk {
+
 struct Trade : ITrade
 {
     virtual double quantity() const
@@ -48,4 +49,5 @@ protected:
 private:
     double m_quantity;
 };
-}
+
+} // namespace minirisk

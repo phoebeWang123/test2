@@ -6,6 +6,7 @@
 #include "Market.h"
 
 namespace minirisk {
+
 struct IPricer : IObject
 {
     virtual double price(Market& m) const = 0;
@@ -13,4 +14,5 @@ struct IPricer : IObject
 
 
 typedef std::shared_ptr<const IPricer> ppricer_t;
-}
+
+} // namespace minirisk

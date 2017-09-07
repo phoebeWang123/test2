@@ -3,6 +3,7 @@
 #include "Date.h"
 
 namespace minirisk {
+
 struct DateInitializer : std::array<unsigned, Date::n_years>
 {
     DateInitializer()
@@ -58,5 +59,6 @@ long operator-(const Date& d1, const Date& d2)
     unsigned s2 = d2.serial();
     return static_cast<long>(s1) - static_cast<long>(s2);
 }
-}
+
+} // namespace minirisk
 

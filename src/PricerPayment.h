@@ -4,6 +4,7 @@
 #include "TradePayment.h"
 
 namespace minirisk {
+
 struct PaymentPricer : IPricer
 {
     PaymentPricer(const TradePayment& trd);
@@ -16,5 +17,6 @@ private:
     string m_ir_curve;
     string m_fx_ccy;
 };
-}
+
+} // namespace minirisk
 

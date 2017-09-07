@@ -12,6 +12,7 @@
 #include "Macros.h"
 
 namespace minirisk {
+
 // streaming separator
 const char separator = ';';
 
@@ -144,5 +145,6 @@ inline my_ifstream& operator>>(my_ifstream& is, Date& v)
     v.init(y, m, d);
     return is;
 }
-}
+
+} // namespace minirisk
 

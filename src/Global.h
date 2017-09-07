@@ -24,4 +24,4 @@ inline string fx_spot_name(const string& ccy1, const string& ccy2)
 
 string format_label(const string& s);
 
-}
+} // namespace minirisk

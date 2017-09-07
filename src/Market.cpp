@@ -51,4 +51,5 @@ Market::vec_risk_factor_t Market::get_risk_factors(const std::string& expr) cons
             result.push_back(d);
     return result;
 }
-}
+
+} // namespace minirisk

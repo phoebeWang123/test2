@@ -7,6 +7,7 @@
 #include "Streamer.h"
 
 namespace minirisk {
+
 struct CurveDiscount : ICurveDiscount
 {
     virtual string name() const { return m_name; }
@@ -33,4 +34,5 @@ private:
     string m_name;
     double m_rate;
 };
-}
+
+} // namespace minirisk

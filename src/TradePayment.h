@@ -3,6 +3,7 @@
 #include "Trade.h"
 
 namespace minirisk {
+
 struct TradePayment : Trade
 {
     static const guid_t m_id;
@@ -60,4 +61,5 @@ private:
     string m_ccy;
     Date m_delivery_date;
 };
-}
+
+} // namespace minirisk
