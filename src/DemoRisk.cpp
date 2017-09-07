@@ -5,19 +5,9 @@
 #include "PortfolioUtils.h"
 
 using namespace::minirisk;
-int main(int argc, const char **argv)
+
+void run(const string& portfolio_file, const string& risk_factors_file)
 {
-    if(argc != 3) {
-        std::cout << "This demo requires the name of the file where the portfolio is to read from and the name of the file containing market data.\n"
-                  << "Example:\n"
-                  << "DemoRisk portfolio.txt risk_factors.txt\n";
-        return -1;
-    }
-
-    // filenames
-    const char *portfolio_file    = argv[1];
-    const char *risk_factors_file = argv[2];
-
     // load the portfolio from file
     portfolio_t portfolio = load_portfolio(portfolio_file);
     // save and reload portfolio to implicitly test round trip serialization
@@ -66,7 +56,28 @@ int main(int argc, const char **argv)
             std::cout << g.first << ": " << portfolio_total(g.second) << " USD\n";
         std::cout << "\n";
     }
-
-    return 0;
 }
 
+int main(int argc, const char **argv)
+{
+    if (argc != 3) {
+        std::cout << "This demo requires the name of the file where the portfolio is to read from and the name of the file containing market data.\n"
+            << "Example:\n"
+            << "DemoRisk portfolio.txt risk_factors.txt\n";
+        return -1; // report an error to the caller
+    }
+    try {
+        run(argv[1], argv[2]);
+        return 0;  // report success to the caller
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << "\n";
+        return -1; // report an error to the caller
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown exception occurred\n";
+        return -1; // report an error to the caller
+    }
+}
