@@ -22,7 +22,7 @@ MarketDataServer::MarketDataServer(const string& filename)
         string name;
         double value;
         is >> name >> value;
-        std::cout << name << " " << value << "\n";
+        //std::cout << name << " " << value << "\n";
         auto ins = m_data.emplace(name, value);
         MYASSERT(ins.second, "Duplicated risk factor: " << name);
     } while (is);

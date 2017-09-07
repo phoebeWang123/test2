@@ -33,7 +33,6 @@ int main(int argc, const char **argv)
 
     // initialize market data server
     std::shared_ptr<const MarketDataServer> mds(new MarketDataServer(risk_factors_file));
-    //std::cout << "FX.SPOT.EUR.USD: " << mkt->get("FX.SPOT.EUR.USD") << "\n";
 
     // Init market object
     Date today(2017,8,5);
