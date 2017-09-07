@@ -48,7 +48,7 @@ After completing all tasks you need to zip and submit all files with extension *
 \begin{itemize}
 \item Correctness: I will run your DemoRisk with my trade portfolio and my market data and I will compare your results with mine.
 \item Indentation: I will mark correct use of indentation (configure your editor to convert tab to spaces and to use tab of 4 characters)
-\item Style: proper choices of variable names, use of source code comments
+\item Style: proper choices of variable names, use of source code comments, avoid code duplication, code robustness (assert function arguments are valid), concise (do not do in 10 lines what you can do in one line)
 \item minimal diff: only modify the lines of code strictly necessary, do not insert unnecessary whitespaces
 \end{itemize}
 
@@ -74,12 +74,13 @@ Complete the program in \textit{TestDate.cpp}, so that it tests the correctness 
 \end{enumerate}
 At the begin of the test, randomize the random number generator. If the test fails, the program should throw an exception, if it succeeds it should just print the message "SUCCESS".
 
-\subsection{Remove streaming inaccuracy for type \textit{double}}
-Currently when a floating point number in double precision saved to a file it is transformed from IEEE-754 format to a decimal representation with a finite number of decimals in scientific notation. The conversion from IEEE-754 to decimal (when saving) and then back to IEEE-754 (when reading) involves rounding and can cause accuracy loss.
+\subsection{Perfect streaming for type \textit{double}}
+Currently when a floating point number in double precision is saved to a file it is transformed from IEEE-754 format to a decimal representation with a finite number of decimals in scientific notation. The conversion from IEEE-754 to decimal (when saving) and then back to IEEE-754 (when reading) involves rounding and can cause accuracy loss. In other words, if we start from a value of type $double$, we save it as a $string$ in decimal format, then we read back the $string$ and convert it to $double$, we may not get back exactly the same value we started with.
 
-Change the streaming representation of a \textit{double} to the hexadecimal image of its binary representation with letters in lowercase.
+To overcome the problem, change the streaming representation of a \textit{double} to the integer interpretation of its binary representation in hexadecimal format with letters in lowercase.
 
-If $x$ is a variable of type $double$, then \textit{reinterpret\_cast$<$unsigned char*$>$}(\&$x$) returns a pointer of type \textit{unsigned char*} to the individual bytes of $x$. This allows to read (or write) the bytes composing the double one by one. So you can take each byte, convert it to its hexadecimal representation. For example, the double number -0.15625 should be saved to file as the sequence of 16 characters 000000000000c4bf (see \textit{DemoHex.cpp}). When reading, you can take each pair of characters, convert each into a char and write it into the corresponding byte in the memory space allocated to the variable of type double.
+If $x$ is a variable of type $double$, it binary representation can be re-interpreted as a 64 bits integer, which can be represented exactly. To do that, Y
+you can either get the memory address to the variable of type $double$ and \textit{reinterpret\_cast} it to a 64-bit $int$ pointer or use a \textit{union}. To make the textual representation more compact, we use base 16 (hexadecimal). For example, the double number -0.15625 should be saved to file as the sequence of 16 characters bfc4000000000000 (see \textit{DemoHex.cpp}, which use a \textit{union}). When reading, you need to read the integer number saved in hexadecimal format and re-interpret it as a double.
 
 You need to modify the implementation of the \textit{operator$<<$} for \textit{double} and implement the overload of the \textit{operator$>>$} (you may draw inspiration from the ones implemented for the \textit{Date} class).
 
@@ -167,15 +168,15 @@ You need to modify all pricers accordingly.
 \subsection{Recover from pricing failures}
 The function \textit{IPricer::price} fails and throws an exception when an error occurs. For instance, if the settlement date of a \textit{Payment} is in the past, pricing of the entire portfolio to fails. We would like instead that only problematic trades to fail to price and all remaining trades to price succesfully.
 
-Modify the typedef \textit{portfolio\_values\_t} to \textit{vector$<$pair$<$double,string$>>$}. In the \textit{compute\_prices} function use \textit{try\{\}catch\{\}} to catch exceptions. If there is no error set the double to the price and the string to an empty string. If there is an error set the double to NaN (see header $<$numeric\_limits$>$) and the string to the error message embedded in the exception.
+Modify the typedef \textit{portfolio\_values\_t} to \textit{vector$<$pair$<$double,string$>>$}. In the \textit{compute\_prices} function use \textit{try\{\}catch\{\}} to catch exceptions. If there is no error set the double to the price and the string to an empty string. If there is an error set the double to NaN (see header $<limits>$) and the string to the error message embedded in the exception.
 
-When computing thet total for the book (function \textit{portfolio\_total}), you should return a tuple containing the total for trades which price succesfully and an array of pairs with the index of the trades which price to fail and the associated error message. To identify trades which fail check is the value is a NaN, not if the error message string is empty, as a trade could potentially fail and still have an ampty error message.
+When computing thet total for the book (function \textit{portfolio\_total}), you should return a tuple containing the total for trades which price succesfully and an array of pairs with the index of the trades which price to fail and the associated error message. To identify trades with errors, check if the value is a NaN, not if the error message string is empty, because a trade could potentially fail and still have an empty error message.
 
 \subsection{Add FX Spot Greek function}
 \label{sec:fxdelta}
 Add another function for Greeks calculation, named \textit{fx\_delta}, which computes the risk of the book with respect to each of the FX spot rate quoted against USD in the market data server. It should use central difference with a relative bump of 0.1%.
 
-Add calculation of FXDelta at thhe end of \textit{RiskDemo.cpp} and display the cumlative book value for each fx spot rate.
+Add calculation of FXDelta at the end of \textit{RiskDemo.cpp} and display the cumulative book value for each fx spot rate.
 
 \subsection{Customize bumps in Greeks}
 
