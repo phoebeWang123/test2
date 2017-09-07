@@ -9,7 +9,6 @@ namespace minirisk {
 struct Date
 {
 public:
-    static const unsigned days_in_normal_year = 365;
     static const unsigned first_year = 1900;
     static const unsigned last_year = 2200;
     static const unsigned n_years = last_year - first_year;
@@ -89,7 +88,7 @@ long operator-(const Date& d1, const Date& d2);
 
 inline double time_frac(const Date& d1, const Date& d2)
 {
-    return static_cast<double>(d2 - d1) / Date::days_in_normal_year;
+    return (d2 - d1) / 365.0;
 }
 
 } // namespace minirisk
