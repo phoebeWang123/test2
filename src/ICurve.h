@@ -1,9 +1,12 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include "IObject.h"
 #include "Date.h"
+
+using std::string;
 
 namespace minirisk {
 

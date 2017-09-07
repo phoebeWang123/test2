@@ -12,20 +12,10 @@ struct CurveDiscount : ICurveDiscount
 {
     virtual string name() const { return m_name; }
 
-    CurveDiscount(Market *mkt, const Date& today, const string& curve_name)
-        : m_today(today)
-        , m_name(curve_name)
-        , m_rate(mkt->get_yield(curve_name.substr(ir_curve_discount_prefix.length(),3)))
-    {
-    }
+    CurveDiscount(Market *mkt, const Date& today, const string& curve_name);
 
     // compute the discount factor
-    double df(const Date& t) const
-    {
-        MYASSERT((!(t < m_today)), "cannot get discount factor for date in the past: " << t);
-        double dt = time_frac(m_today, t);
-        return std::exp(-m_rate * dt);
-    }
+    double df(const Date& t) const;
 
     virtual Date today() const { return m_today; }
 
