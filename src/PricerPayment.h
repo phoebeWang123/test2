@@ -5,9 +5,9 @@
 
 namespace minirisk {
 
-struct PaymentPricer : IPricer
+struct PricerPayment : IPricer
 {
-    PaymentPricer(const TradePayment& trd);
+    PricerPayment(const TradePayment& trd);
 
     virtual double price(Market& m) const;
 
