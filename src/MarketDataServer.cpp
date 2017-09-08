@@ -49,4 +49,5 @@ std::vector<std::pair<double, bool>> MarketDataServer::match(const std::string& 
     NOT_IMPLEMENTED;
 }
 
-}
+} // namespace minirisk
+

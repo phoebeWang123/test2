@@ -3,7 +3,9 @@
 #include "TradePayment.h"
 
 #include <numeric>
+
 namespace minirisk {
+
 void print_portfolio(const portfolio_t& portfolio)
 {
     std::for_each(portfolio.begin(), portfolio.end(), [](auto& pt){ pt->print(std::cout); });
@@ -111,4 +113,5 @@ std::vector<ptrade_t> load_portfolio(const string& filename)
 
     return portfolio;
 }
-}
+
+} // namespace minirisk

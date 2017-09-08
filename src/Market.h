@@ -8,6 +8,7 @@
 #include <regex>
 
 namespace minirisk {
+
 struct Market : IObject
 {
 private:

@@ -2,6 +2,7 @@
 #include "PortfolioUtils.h"
 
 using namespace minirisk;
+
 int main(int argc, const char **argv)
 {
     if(argc != 2) {

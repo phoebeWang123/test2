@@ -3,6 +3,7 @@
 #include "CurveDiscount.h"
 
 namespace minirisk {
+
 PaymentPricer::PaymentPricer(const TradePayment& trd)
     : m_amt(trd.quantity())
     , m_dt(trd.delivery_date())
@@ -22,5 +23,7 @@ double PaymentPricer::price(Market& mkt) const
 
     return m_amt * df;
 }
-}
+
+} // namespace minirisk
+
 
