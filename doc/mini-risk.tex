@@ -68,7 +68,7 @@ Marking is going to be based on the following criterias.
 \item code robustness (e.g. assert function arguments are valid)
 \item code conciseness (do not do in 10 lines what you could do in one line)
 \item do not reinvent the weel (use library functions when available)
-\item minimal diff: only modify the lines of code strictly necessary, do not insert unnecessary whitespaces (you can use \textit{WinMerge} to view the differenece between your files and the original ones, or use \textit{git}, which is excellent for this)
+\item minimal diff: only modify the lines of code strictly necessary, do not insert unnecessary whitespaces (you can use \textit{WinMerge} to view the difference between your files and the original ones, or use \textit{git}, which is excellent for checking differences)
 \end{itemize}
 \end{itemize}
 
@@ -105,6 +105,48 @@ If $x$ is a variable of type $double$, it binary representation can be re-interp
 you can either get the memory address to the variable of type $double$ and \textit{reinterpret\_cast} it to a 64-bit $int$ pointer or use a \textit{union}. To make the textual representation more compact, we use base 16 (hexadecimal). For example, the double number -0.15625 should be saved to file as the sequence of 16 characters bfc4000000000000 (see example in \textit{DemoHex.cpp}, which use a \textit{union}). When reading, you need to read the integer number saved in hexadecimal format and re-interpret it as a double.
 
 You need to modify the implementation of the \textit{operator$<<$} for \textit{double} and implement the overload of the \textit{operator$>>$} (you may draw inspiration from the ones implemented for the \textit{Date} class).
+
+\subsection{Improve the \textit{CurveDiscount} class}
+The current \textit{CurveDiscount} curve assumes that the interest rate curve is constant.
+
+Modify it so that it takes a set of rates related to different tenors and modify it so that when querying for a discount factor, the value returned is correctly interpolated.
+
+For example, given the data points {IR.1W.USD, IR.2W.USD, IR.1M.USD, IR.2M.USD, IR.3M.USD, IR.6M.USD, IR.9M.USD, IR.1Y.USD, IR.18M.USD, IR.2Y.USD, ...}, you need to resolve each of them to an actual date with respect to the anchor date, construct a stepwise constant interpolation scheme, modify the function which returns discount factor. For sake of clarity, D, W, M and Y mean respectively days, weeks, months and years. Although this is not consistent with market conventions, for simplicity assumes that 1M=30 days and 1Y=365 days, and ignore the distinction between weekdays and weekends when computing tenor dates.
+
+Since you do not know in advance which points are available in the market data server, if you want all the available points for the currency EUR, you need to modify the market data server to be able to return the array of risk factors with pattern IR.*.EUR. Use the $<$regex$>$ STL library to search for a string pattern and implement the method \textit{MarketDataServer::matching}, whose header is already defined in \textit{MarketDataServer.h}. Note that "IR.*.EUR" is not the correct regular expression string to be used here, you need to read about regular expressions and figure out what is the most appropriate string to use, i.e. it should match "just" what needed. For instance, "IR.*EUR" would match "IR.1W.EUR", but also "IRwhateverEUR", which is undesirable.
+
+The interpolation scheme requires computation of the local rates. If $r_i$ and $r_{i+1}$ are the absolute rates for tenor $T_i$ and $T_{i+1}$, as returned from the market data server, the local rate $r_{i,i+1}$ is the one that solves the following equation:
+$$e^{-r_iT_i-r_{i,i+1}(T_{i+1}-T_i)}=e^{-r_{i+1}T_{i+1}}$$
+Then the discount factor for any date $t \in [T_i,T_{i+1}]$ is $$df(t)=e^{-r_i T_i-r_{i,i+1}(t-T_i)}$$
+
+If the function $df$ is called with a date beyond the last tenor, it should generate an error.
+
+\subsubsection{PV01 with tenors}
+\label{sec:pv01}
+The \textit{PV01} risk function needs to be modified into 2 different risk functions: \textit{PV01Parallel} that computes risk with respect to parallel shift of the yield curve (all risk factor move simultaneously); and \textit{PV01Bucketed} that computes risk with respect to individual yield curves (the yield curve for each tenor $T_i$ change, with all the rest remaining constant). In both cases use central differences, with the same bump size as currently defined in \textit{Demo.cpp}. The 2 new functions must have the same arguments and return type as the existing one. \\
+
+\subsection{Recover from pricing failures}
+The function \textit{IPricer::price} fails and throws an exception when an error occurs. For instance, if the settlement date of a \textit{Payment} is in the past, pricing of the entire portfolio fails. We would like instead that only problematic trades fail to price while all remaining trades price succesfully.
+
+Modify the typedef \textit{portfolio\_values\_t} to \textit{vector$<$pair$<$double,string$>>$}. In the \textit{compute\_prices} function use \textit{try\{\}catch\{\}} to catch exceptions. If there is no error set the double to the price and the string to an empty string. If there is an error set the double to NaN (see header $<limits>$) and the string to the error message embedded in the exception.
+
+When computing thet total for the book (function \textit{portfolio\_total}), you should return a tuple containing the total for trades which price succesfully and an array of pairs with the index of the trades which price to fail and the associated error message. To identify trades with errors, check if the value is a NaN, not if the error message string is empty, because a trade could potentially fail and still have an empty error message.
+
+Modify \textit{DemoRisk} to display both the total for the book and the number of trades which fail to price.
+
+
+\subsection{Add pricer configuration}
+Modify \textit{DemoRisk} to read another argument form the command line, the base currency (arhument name \textit{baseccy}). Pass this to the \textit{run} function.
+Modify the function \textit{ITrade::Pricer} adding an argument \textit{configuration} of type \textit{string}. In a real risk management system the configuration argument could be very complex and allow for instance to select a pricing model (e.g. Black Scholes or Heston) or a numerical framework (e.g. PDE or Monte Carlo). In this project the configuration string is simply the base currency in which all risk is to be computed. At the moment, by default everything is computed in USD. After your changes, \textit{pricer("EUR")} should return a pricer that computes the price in EUR.\\
+
+You need to modify all pricers accordingly.
+
+\subsection{Add FX Spot Greek function}
+\label{sec:fxdelta}
+Add another function for Greeks calculation, named \textit{fx\_delta}, which computes the risk of the book with respect to each of the FX spot rates quoted against USD in the market data server. It should use central difference with a relative bump of 0.1%.
+
+Add calculation of FXDelta at the end of \textit{DemoRisk.cpp} and display the cumulative book value for each fx spot rate.
+
 
 \subsection{Add a new market object \textit{CurveFXSpot}}
 The new market object should implement the interface \textit{ICurveFXSpot}.
@@ -173,45 +215,6 @@ Note that there can be various situations with respect to the pricing date $T_0$
 	\item $T_0 = T_2$: no delta or PV01 risk
 	\item $T_0 > T_2$: trades is expired, an error should be generated
 \end{itemize}
-
-\subsection{Add pricer configuration}
-Modify the function \textit{ITrade::Pricer} adding an argument \textit{configuration} of type \textit{string}. In a real risk management system the configuration argument could be very complex and allow for instance to select a pricing model (e.g. Black Scholes or Heston) or a numerical framework (e.g. PDE or Monte Carlo). In this project the configuration string is simply the base currency in which all risk is to be computed. At the moment, by default everything is computed in USD. After your changes, \textit{pricer("EUR")} should return a pricer that computes the price in EUR.\\
-
-You need to modify all pricers accordingly.
-
-\subsection{Recover from pricing failures}
-The function \textit{IPricer::price} fails and throws an exception when an error occurs. For instance, if the settlement date of a \textit{Payment} is in the past, pricing of the entire portfolio fails. We would like instead that only problematic trades fail to price while all remaining trades price succesfully.
-
-Modify the typedef \textit{portfolio\_values\_t} to \textit{vector$<$pair$<$double,string$>>$}. In the \textit{compute\_prices} function use \textit{try\{\}catch\{\}} to catch exceptions. If there is no error set the double to the price and the string to an empty string. If there is an error set the double to NaN (see header $<limits>$) and the string to the error message embedded in the exception.
-
-When computing thet total for the book (function \textit{portfolio\_total}), you should return a tuple containing the total for trades which price succesfully and an array of pairs with the index of the trades which price to fail and the associated error message. To identify trades with errors, check if the value is a NaN, not if the error message string is empty, because a trade could potentially fail and still have an empty error message.
-
-Modify \textit{DemoRisk} to display both the total for the book and the number of trades which fail to price.
-
-\subsection{Add FX Spot Greek function}
-\label{sec:fxdelta}
-Add another function for Greeks calculation, named \textit{fx\_delta}, which computes the risk of the book with respect to each of the FX spot rates quoted against USD in the market data server. It should use central difference with a relative bump of 0.1%.
-
-Add calculation of FXDelta at the end of \textit{DemoRisk.cpp} and display the cumulative book value for each fx spot rate.
-
-\subsection{Improve the \textit{CurveDiscount} class}
-The current \textit{CurveDiscount} curve assumes that the interest rate curve is constant.
-
-Modify it so that it takes a set of rates related to different tenors and modify it so that when querying for a discount factor, the value returned is correctly interpolated.
-
-For example, given the data points {IR.1W.USD, IR.2W.USD, IR.1M.USD, IR.2M.USD, IR.3M.USD, IR.6M.USD, IR.9M.USD, IR.1Y.USD, IR.18M.USD, IR.2Y.USD, ...}, you need to resolve each of them to an actual date with respect to the anchor date, construct a stepwise constant interpolation scheme, modify the function which returns discount factor. For sake of clarity, D, W, M and Y mean respectively days, weeks, months and years. Although this is not consistent with market conventions, for simplicity assumes that 1M=30 days and 1Y=365 days, and ignore the distinction between weekdays and weekends when computing tenor dates.
-
-Since you do not know in advance which points are available in the market data server, if you want all the available points for the currency EUR, you need to modify the market data server to be able to return the array of risk factors with pattern IR.*.EUR. Use the $<$regex$>$ STL library to search for a string pattern and implement the method \textit{MarketDataServer::matching}, whose header is already defined in \textit{MarketDataServer.h}. Note that "IR.*.EUR" is not the correct regular expression string to be used here, you need to read about regular expressions and figure out what is the most appropriate string to use, i.e. it should match "just" what needed. For instance, "IR.*EUR" would match "IR.1W.EUR", but also "IRwhateverEUR", which is undesirable.
-
-The interpolation scheme requires computation of the local rates. If $r_i$ and $r_{i+1}$ are the absolute rates for tenor $T_i$ and $T_{i+1}$, as returned from the market data server, the local rate $r_{i,i+1}$ is the one that solves the following equation:
-$$e^{-r_iT_i-r_{i,i+1}(T_{i+1}-T_i)}=e^{-r_{i+1}T_{i+1}}$$
-Then the discount factor for any date $t \in [T_i,T_{i+1}]$ is $$df(t)=e^{-r_i T_i-r_{i,i+1}(t-T_i)}$$
-
-If the function $df$ is called with a date beyond the last tenor, it should generate an error.
-
-\subsubsection{PV01 with tenors}
-\label{sec:pv01}
-The \textit{PV01} risk function needs to be modified into 2 different risk functions: \textit{PV01Parallel} that computes risk with respect to parallel shift of the yield curve (all risk factor move simultaneously); and \textit{PV01Bucketed} that computes risk with respect to individual yield curves (the yield curve for each tenor $T_i$ change, with all the rest remaining constant). In both cases use central differences, with the same bump size as currently defined in \textit{Demo.cpp}. The 2 new functions must have the same arguments and return type as the existing one. \\
 
 \end{document}
 
