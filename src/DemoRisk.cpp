@@ -32,7 +32,7 @@ void run(const string& portfolio_file, const string& risk_factors_file)
     // fetching data as needed from the market data server.
     {
         auto prices = compute_prices(pricers, mkt);
-        std::cout << "Total book PV: " << portfolio_total(prices) << " USD\n\n";
+        print_price_vector("PV", prices);
     }
 
     // disconnect the market (no more fetching from the market data server allowed)
@@ -40,21 +40,19 @@ void run(const string& portfolio_file, const string& risk_factors_file)
 
     // display all relevant risk factors
     {
-        std::cout << "Risk factors: ";
+        std::cout << "Risk factors:\n";
         auto tmp = mkt.get_risk_factors(".+");
         for (const auto& iter : tmp)
-            std::cout << iter.first << ", ";
-        std::cout << "\n\n";
+            std::cout << iter.first << "\n";
+        std::cout << "\n";
     }
 
     {   // Compute PV01 (i.e. sensitivity with respect to interest rate dV/dr)
         std::vector<std::pair<string, portfolio_values_t>> pv01(compute_pv01(pricers,mkt));  // PV01 per trade
 
-        // display cumulated PV01 per currency
-        std::cout << "PV01 (exposure per IR risk factor):\n";
+        // display PV01 per currency
         for (const auto& g : pv01)
-            std::cout << g.first << ": " << portfolio_total(g.second) << " USD\n";
-        std::cout << "\n";
+            print_price_vector("PV01 " + g.first, g.second);
     }
 }
 

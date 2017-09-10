@@ -114,4 +114,19 @@ std::vector<ptrade_t> load_portfolio(const string& filename)
     return portfolio;
 }
 
+void print_price_vector(const string& name, const portfolio_values_t& values)
+{
+    std::cout
+        << "========================\n"
+        << name << ":\n"
+        << "========================\n"
+        << "Total: " << portfolio_total(values)
+        << "\n========================\n";
+
+    for (size_t i = 0, n = values.size(); i < n; ++i)
+        std::cout << std::setw(5) << i << ": " << values[i] << "\n";
+
+    std::cout << "========================\n\n";
+}
+
 } // namespace minirisk

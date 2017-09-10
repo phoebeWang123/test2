@@ -33,5 +33,9 @@ std::vector<ptrade_t>  load_portfolio(const string& filename);
 // print portfolio to cout
 void print_portfolio(const portfolio_t& portfolio);
 
+// print portfolio to cout
+void print_price_vector(const string& name, const portfolio_values_t& values);
+
+
 } // namespace minirisk
 
