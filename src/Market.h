@@ -4,7 +4,6 @@
 #include "IObject.h"
 #include "ICurve.h"
 #include "MarketDataServer.h"
-#include "CurveDiscount.h"
 #include <vector>
 #include <regex>
 
@@ -15,15 +14,7 @@ struct Market : IObject
 private:
     // NOTE: this function is not thread safe
     template <typename I, typename T>
-    std::shared_ptr<const I> get_curve(const string& name)
-    {
-        ptr_curve_t& curve_ptr = m_curves.emplace(name, ptr_curve_t()).first->second;
-        if (!curve_ptr.get())
-            curve_ptr.reset(new T(this, m_today, name));
-        std::shared_ptr<const I> res = std::dynamic_pointer_cast<const I>(curve_ptr);
-        MYASSERT(res, "Cannot cast object with name " << name << " to type " << typeid(I).name());
-        return res;
-    }
+    std::shared_ptr<const I> get_curve(const string& name);
 
     double from_mds(const string& objtype, const string& name);
 
@@ -40,10 +31,8 @@ public:
 
     virtual Date today() const { return m_today; }
 
-    const ptr_disc_curve_t get_discount_curve(const string& name)
-    {
-        return get_curve<ICurveDiscount, CurveDiscount>(name);
-    }
+    // get an object of type ICurveDisocunt
+    const ptr_disc_curve_t get_discount_curve(const string& name);
 
     // yield rate for currency name
     const double get_yield(const string& name);

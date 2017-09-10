@@ -5,6 +5,22 @@
 
 namespace minirisk {
 
+template <typename I, typename T>
+std::shared_ptr<const I> Market::get_curve(const string& name)
+{
+    ptr_curve_t& curve_ptr = m_curves.emplace(name, ptr_curve_t()).first->second;
+    if (!curve_ptr.get())
+        curve_ptr.reset(new T(this, m_today, name));
+    std::shared_ptr<const I> res = std::dynamic_pointer_cast<const I>(curve_ptr);
+    MYASSERT(res, "Cannot cast object with name " << name << " to type " << typeid(I).name());
+    return res;
+}
+
+const ptr_disc_curve_t Market::get_discount_curve(const string& name)
+{
+    return get_curve<ICurveDiscount, CurveDiscount>(name);
+}
+
 double Market::from_mds(const string& objtype, const string& name)
 {
     auto ins = m_risk_factors.emplace(name, std::numeric_limits<double>::quiet_NaN());
