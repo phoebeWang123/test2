@@ -4,6 +4,7 @@
 #include "IObject.h"
 #include "ICurve.h"
 #include "MarketDataServer.h"
+#include "CurveDiscount.h"
 #include <vector>
 #include <regex>
 
@@ -12,15 +13,13 @@ namespace minirisk {
 struct Market : IObject
 {
 private:
-    ptr_curve_t build_discount_curve(const string& name);
-
     // NOTE: this function is not thread safe
-    template <typename I>
-    std::shared_ptr<const I> get_curve(const string& name, ptr_curve_t(Market::*fun)(const string&))
+    template <typename I, typename T>
+    std::shared_ptr<const I> get_curve(const string& name)
     {
         ptr_curve_t& curve_ptr = m_curves.emplace(name, ptr_curve_t()).first->second;
         if (!curve_ptr.get())
-            curve_ptr = (this->*fun)(name);
+            curve_ptr.reset(new T(this, m_today, name));
         std::shared_ptr<const I> res = std::dynamic_pointer_cast<const I>(curve_ptr);
         MYASSERT(res, "Cannot cast object with name " << name << " to type " << typeid(I).name());
         return res;
@@ -43,7 +42,7 @@ public:
 
     const ptr_disc_curve_t get_discount_curve(const string& name)
     {
-        return get_curve<ICurveDiscount>(name, &Market::build_discount_curve);
+        return get_curve<ICurveDiscount, CurveDiscount>(name);
     }
 
     // yield rate for currency name

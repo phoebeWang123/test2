@@ -5,12 +5,6 @@
 
 namespace minirisk {
 
-
-ptr_curve_t Market::build_discount_curve(const string& name)
-{
-    return ptr_curve_t(new CurveDiscount(this, m_today, name));
-}
-
 double Market::from_mds(const string& objtype, const string& name)
 {
     auto ins = m_risk_factors.emplace(name, std::numeric_limits<double>::quiet_NaN());
