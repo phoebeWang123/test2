@@ -2,9 +2,9 @@
 %\usepackage{listings}
 %\usepackage{fontspec}
 %\setmainfont{Linux Libertine O}
-%\usepackage{amsfonts}
+\usepackage{amsfonts}
 %\usepackage{multirow}
-%\usepackage{amsmath, amssymb}
+\usepackage{amsmath, amssymb}
 %\usepackage[T1]{fontenc}
 %\usepackage[utf8]{inputenc}
 %\usepackage[english]{babel}
@@ -106,26 +106,6 @@ you can either get the memory address to the variable of type $double$ and \text
 
 You need to modify the implementation of the \textit{operator$<<$} for \textit{double} and implement the overload of the \textit{operator$>>$} (you may draw inspiration from the ones implemented for the \textit{Date} class).
 
-\subsection{Improve the \textit{CurveDiscount} class}
-The current \textit{CurveDiscount} curve assumes that the interest rate curve is constant.
-
-Modify it so that it takes a set of rates related to different tenors and modify it so that when querying for a discount factor, the value returned is correctly interpolated.
-
-For example, given the data points {IR.1W.USD, IR.2W.USD, IR.1M.USD, IR.2M.USD, IR.3M.USD, IR.6M.USD, IR.9M.USD, IR.1Y.USD, IR.18M.USD, IR.2Y.USD, ...}, you need to resolve each of them to an actual date with respect to the anchor date, construct a stepwise constant interpolation scheme, modify the function which returns discount factor. For sake of clarity, 1W, 1M and 1Y mean respectively 1 week, 1 months and 1 year. For simplicity, you can ignore the distinction between weekdays and weekends when computing tenor dates.
-
-Since you do not know in advance which points are available in the market data server, if you want all the available points for the currency EUR, you need to modify the market data server to be able to return the array of risk factors with pattern IR.*.EUR. Use the $<$regex$>$ STL library to search for a string pattern and implement the method \textit{MarketDataServer::matching}, whose header is already defined in \textit{MarketDataServer.h}. Note that "IR.*.EUR" is not the correct regular expression string to be used here, you need to read about regular expressions and figure out what is the most appropriate string to use, i.e. it should match "just" what needed. For instance, "IR.*EUR" would match "IR.1W.EUR", but also "IRwhateverEUR", which is undesirable.
-
-The interpolation scheme requires computation of the local rates. If $r_i$ and $r_{i+1}$ are the absolute rates for tenor $T_i$ and $T_{i+1}$, as returned from the market data server, the local rate $r_{i,i+1}$ is the one that solves the following equation:
- $$e^{-r_iT_i-r_{i,i+1}(T_{i+1}-T_i)}=e^{-r_{i+1}T_{i+1}}$$
-Then the discount factor for any date $t \in [T_i,T_{i+1}]$ is $$df(t)=e^{-r_i T_i-r_{i,i+1}(t-T_i)}$$
-
-If the function $df$ is called with a date beyond the last tenor, it should generate an error.
-
-\subsubsection{PV01 with tenors}
-\label{sec:pv01}
-The \textit{PV01} risk function needs to be modified into 2 different risk functions: \textit{PV01Parallel} that computes risk with respect to parallel shift of the yield curve (all risk factor move simultaneously); and \textit{PV01Bucketed} that computes risk with respect to individual yield curves (the yield curve for each tenor $T_i$ change, with all the rest remaining constant). In both cases use central differences, with the same bump size as currently defined in \textit{Demo.cpp}. The 2 new functions must have the same arguments and return type as the existing one. \\
-
-
 \subsection{Add a new market object \textit{CurveFXSpot}}
 The new market object should implement the interface \textit{ICurveFXSpot}.
 
@@ -133,14 +113,16 @@ Note that the risk factors contained in the market data server only include spot
 
 You need to modity the \textit{Market} class as appropriate.\\
 
+In the real world the spot price observed at time $T$ is the forward price for delivery at $T+2$. Ignore this difference and assume that the spot price observed at time $T$ is defined as the exchange rate for an instantaneous exchange of money at time $T$.\\
+
 Modify the \textit{PricerPayment} class to use the new class \textit{CurveFXSpot}.
 
 \subsection{Add a new market object \textit{CurveFXForward}}
 The new market object should implement the interface \textit{ICurveFXForward}.\\
 
 The forward price of currency $ccy_1$ expressed in currency $ccy_2$ for delivery at time $T$ can be computed as
-$$F_T=S_t \frac{B_{T,1}}{B_{T,2}}$$
-where $S_t$ is the spot price of currency $ccy_1$ expressed in currency $ccy_2$, $B_{T,i}$ is the discount factor in currency $ccy_i$ for time $T$.\\
+$$F_T=\mathbb{E}[S_T|\mathcal{F}_{T_0}]=S_{T_0} \frac{B_{T,1}}{B_{T,2}}$$
+where $S_{T_0}$ is the current spot price of currency $ccy_1$ expressed in currency $ccy_2$, $B_{T,i}$ is the discount factor in currency $ccy_i$ for time $T$.\\
 
 This class should use the \textit{CurveFXSpot} and \textit{CurveDiscount} classes.\\
 
@@ -154,7 +136,7 @@ $$
 where $S_{T_1}$ is the spot price of currency $ccy_1$ expressed in currency $ccy_2$  observed at the fixing date $T_1$, $K$ is a predefined strike price, $N$ is the notional amount and $T_2$ is the settlement date (it must be $T_1<T_2$ for the trade to be valid).\\
 
 Assign to the trade ID=3 (arbitrarily chosen) and the following serialized representation:\\
-ID;CCY1;CCY2;NOTIONAL;STRIKE;FIXINGDATE;SETTLEDATE;
+ID;NOTIONAL;CCY1;CCY2;STRIKE;FIXINGDATE;SETTLEDATE;
 
 \noindent Example:\\
 3;EUR;USD;notional in hex;strike in hex;date in serial;date in serial;\\
@@ -165,10 +147,10 @@ Implement the corresponding pricer object. The price in $ccy_2$ can be computed 
 $$
 price=B_{T_2,2}[F_{T_1}-K]
 $$
-where $B_{T,2}$ is the discount factor in currency 2 for settlement date $T$ and $F_{T_1}$ is the currency forward price for date $T_1$. Do not forget to convert this price into USD.\\
+where $B_{T_2,2}$ is the discount factor in currency 2 for settlement date $T_2$ and $F_{T_1}$ is the currency forward price for date $T_1$. Do not forget to convert this price into USD.\\
 
 \subsubsection{Historical fixings}
-Note that when the pricing date $T$ is between $T_1$ and $T_2$, you need to know the value of $S_{T_1}$, which is in the past, i.e. you need to know its fixed value. To achieve that, add to \textit{ITrade} a method\\
+Note that when the pricing date $T_0$ is between $T_1$ and $T_2$, you need to know the value of $S_{T_1}$, which is in the past, i.e. you need to know its fixed value. To achieve that, add to \textit{ITrade} a method\\
 \textit{vector$<$pair$<$string,Date$>>$ required\_fixings(const Date$\&$ until)},\\
 which returns the fixings needed by the trade to price on pricing date \textit{until}. If a trade has no fixings, this should return an empty vector.
 
@@ -182,6 +164,15 @@ $typedef\; map<string,map<Date,double>>\&\; fixings\_t;$
 In \textit{DemoRisk}, collect all fixing requirements from trades, then load the fixings discarding any unnecessary fixings.
 
 Modify the \textit{IPricer::price} method to take an extra argument of type\\ $const\; fixings\_t\&\; fixings$\\ and use it in pricers to retrieve necessary fixings. In particular: fixings occurring in the past should be obtained from this argument and if not available an exception should be thrown; fixings occurring exactly on the pricing date should be taken from this argument if available, resolved through the Market otherwise; fixings occurring in the future should be resolved through the Market (e.g. forward prices).
+
+Note that there can be various situations with respect to the pricing date $T_0$:
+\begin{itemize}
+	\item $T_0< T_1$: both fixing and settlement are in the future
+	\item $T_0 = T_1$ and fixing for $T_1$ not available: there is still full delta risk and PV01 risk
+	\item $ T_1 \leq T_0 < T_2$ and fixing for $T_1$ available: there is no more delta risk, but we still have PV01 risk
+	\item $T_0 = T_2$: no delta or PV01 risk
+	\item $T_0 > T_2$: trades is expired, an error should be generated
+\end{itemize}
 
 \subsection{Add pricer configuration}
 Modify the function \textit{ITrade::Pricer} adding an argument \textit{configuration} of type \textit{string}. In a real risk management system the configuration argument could be very complex and allow for instance to select a pricing model (e.g. Black Scholes or Heston) or a numerical framework (e.g. PDE or Monte Carlo). In this project the configuration string is simply the base currency in which all risk is to be computed. At the moment, by default everything is computed in USD. After your changes, \textit{pricer("EUR")} should return a pricer that computes the price in EUR.\\
@@ -203,12 +194,24 @@ Add another function for Greeks calculation, named \textit{fx\_delta}, which com
 
 Add calculation of FXDelta at the end of \textit{DemoRisk.cpp} and display the cumulative book value for each fx spot rate.
 
-\subsection{Customize bumps in Greeks}
+\subsection{Improve the \textit{CurveDiscount} class}
+The current \textit{CurveDiscount} curve assumes that the interest rate curve is constant.
 
-Add to the 2 functions for risk computation implemented in section \ref{sec:pv01} and the one implemented in section \ref{sec:fxdelta} adding an optional extra argument with type\\
-\textit{struct GreekConfig \{ double bumpsize; \}}\\
-to allow the caller to control the bump size. When this optional extra argument is not explicitly passed by the caller, it should take the current hardcoded bump size as default value.
+Modify it so that it takes a set of rates related to different tenors and modify it so that when querying for a discount factor, the value returned is correctly interpolated.
 
+For example, given the data points {IR.1W.USD, IR.2W.USD, IR.1M.USD, IR.2M.USD, IR.3M.USD, IR.6M.USD, IR.9M.USD, IR.1Y.USD, IR.18M.USD, IR.2Y.USD, ...}, you need to resolve each of them to an actual date with respect to the anchor date, construct a stepwise constant interpolation scheme, modify the function which returns discount factor. For sake of clarity, D, W, M and Y mean respectively days, weeks, months and years. Although this is not consistent with market conventions, for simplicity assumes that 1M=30 days and 1Y=365 days, and ignore the distinction between weekdays and weekends when computing tenor dates.
+
+Since you do not know in advance which points are available in the market data server, if you want all the available points for the currency EUR, you need to modify the market data server to be able to return the array of risk factors with pattern IR.*.EUR. Use the $<$regex$>$ STL library to search for a string pattern and implement the method \textit{MarketDataServer::matching}, whose header is already defined in \textit{MarketDataServer.h}. Note that "IR.*.EUR" is not the correct regular expression string to be used here, you need to read about regular expressions and figure out what is the most appropriate string to use, i.e. it should match "just" what needed. For instance, "IR.*EUR" would match "IR.1W.EUR", but also "IRwhateverEUR", which is undesirable.
+
+The interpolation scheme requires computation of the local rates. If $r_i$ and $r_{i+1}$ are the absolute rates for tenor $T_i$ and $T_{i+1}$, as returned from the market data server, the local rate $r_{i,i+1}$ is the one that solves the following equation:
+$$e^{-r_iT_i-r_{i,i+1}(T_{i+1}-T_i)}=e^{-r_{i+1}T_{i+1}}$$
+Then the discount factor for any date $t \in [T_i,T_{i+1}]$ is $$df(t)=e^{-r_i T_i-r_{i,i+1}(t-T_i)}$$
+
+If the function $df$ is called with a date beyond the last tenor, it should generate an error.
+
+\subsubsection{PV01 with tenors}
+\label{sec:pv01}
+The \textit{PV01} risk function needs to be modified into 2 different risk functions: \textit{PV01Parallel} that computes risk with respect to parallel shift of the yield curve (all risk factor move simultaneously); and \textit{PV01Bucketed} that computes risk with respect to individual yield curves (the yield curve for each tenor $T_i$ change, with all the rest remaining constant). In both cases use central differences, with the same bump size as currently defined in \textit{Demo.cpp}. The 2 new functions must have the same arguments and return type as the existing one. \\
 
 \end{document}
 
