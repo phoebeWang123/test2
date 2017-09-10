@@ -1,12 +1,9 @@
 #pragma once
-
-#include <cmath>
-
 #include "ICurve.h"
-#include "MarketDataServer.h"
-#include "Streamer.h"
 
 namespace minirisk {
+
+struct Market;
 
 struct CurveDiscount : ICurveDiscount
 {

@@ -1,5 +1,6 @@
 #include "CurveDiscount.h"
 #include "Market.h"
+#include "Streamer.h"
 
 #include <cmath>
 
