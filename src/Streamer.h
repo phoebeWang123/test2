@@ -36,6 +36,7 @@ struct my_ifstream
     my_ifstream(const string& fn)
         : m_if(fn)
     {
+        MYASSERT(!m_if.fail(), "Could not open file " << fn);
     }
 
     bool read_line()

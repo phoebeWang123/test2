@@ -18,6 +18,7 @@ string mds_spot_name(const string& name)
 MarketDataServer::MarketDataServer(const string& filename)
 {
     std::ifstream is(filename);
+    MYASSERT(!is.fail(), "Could not open file " << filename);
     do {
         string name;
         double value;
