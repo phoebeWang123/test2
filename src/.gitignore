@@ -3,7 +3,8 @@
 *.obj
 *.exe
 *.bak
-portfolio.txt
+portfolio.tmp
+*.txt
 *.exe
 *.stackdump
 
