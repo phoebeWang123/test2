@@ -71,6 +71,17 @@ inline my_ifstream& operator>>(my_ifstream& is, T& v)
     return is;
 }
 
+template <typename T>
+inline my_ofstream& operator<<(my_ofstream& os, const T& v)
+{
+    os.m_of << v << separator;
+    return os;
+}
+
+//
+// Double streamer overloads
+//
+
 
 // when saving a double to a file in text format, use the meximum possible precision
 inline my_ofstream& operator<<(my_ofstream& os, double v)
@@ -79,12 +90,6 @@ inline my_ofstream& operator<<(my_ofstream& os, double v)
     return os;
 }
 
-template <typename T>
-inline my_ofstream& operator<<(my_ofstream& os, const T& v)
-{
-    os.m_of << v << separator;
-    return os;
-}
 
 //
 // Vector streamer overloads
