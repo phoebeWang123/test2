@@ -58,16 +58,34 @@ void run(const string& portfolio_file, const string& risk_factors_file)
     }
 }
 
+void usage()
+{
+    std::cerr
+        << "Invalid command line arguments\n"
+        << "Example:\n"
+        << "DemoRisk portfolio=portfolio.txt riskfactors=risk_factors.txt\n";
+    std::exit(-1);
+}
+
 int main(int argc, const char **argv)
 {
-    if (argc != 3) {
-        std::cout << "This demo requires the name of the file where the portfolio is to read from and the name of the file containing market data.\n"
-            << "Example:\n"
-            << "DemoRisk portfolio.txt risk_factors.txt\n";
-        return -1; // report an error to the caller
+    // parse command line arguments
+    string portfolio, riskfactors;
+    if (argc % 2 == 0)
+        usage();
+    for (int i = 1; i < argc; i += 2) {
+        string key(argv[i]);
+        string value(argv[i+1]);
+        if (key == "-p")
+            portfolio = value;
+        else if (key == "-f")
+            riskfactors = value;
+        else
+            usage();
     }
+
     try {
-        run(argv[1], argv[2]);
+        run(portfolio, riskfactors);
         return 0;  // report success to the caller
     }
     catch (const std::exception& e)
