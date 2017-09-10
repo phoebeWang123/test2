@@ -46,7 +46,7 @@ public:
         return get_curve<ICurveDiscount>(name, &Market::build_discount_curve);
     }
 
-    // yeild rate for currency name
+    // yield rate for currency name
     const double get_yield(const string& name);
 
     // fx exchange rate to convert 1 unit of ccy1 into USD
