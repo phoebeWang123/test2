@@ -9,9 +9,9 @@
         std::string str; \
         { \
             std::ostringstream os; \
-            os  << "\nError: " << __FILE__ << ":" \
-                << __LINE__ << "\n" \
-                << msg << "\n"; \
+            os  << "Error: " << __FILE__ << ":" \
+                << __LINE__ << "; " \
+                << msg; \
             str = os.str(); \
         }
 
