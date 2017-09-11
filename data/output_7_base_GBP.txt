@@ -31,8 +31,8 @@ Errors: 2
 ========================
     0: 3.60957
     1: 9.76737
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 Risk factors:
@@ -68,8 +68,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -81,8 +81,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -94,8 +94,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -107,8 +107,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -120,8 +120,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -133,8 +133,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -146,8 +146,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -159,8 +159,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -172,8 +172,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -185,8 +185,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -198,8 +198,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -211,8 +211,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -224,8 +224,8 @@ Errors: 2
 ========================
     0: 0
     1: -45.6078
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -237,8 +237,8 @@ Errors: 2
 ========================
     0: -16.8612
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -250,8 +250,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -263,8 +263,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -276,8 +276,8 @@ Errors: 2
 ========================
     0: 0
     1: -8.06881
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -289,8 +289,8 @@ Errors: 2
 ========================
     0: -2.96539
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -302,8 +302,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -315,8 +315,8 @@ Errors: 2
 ========================
     0: 0
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -328,8 +328,8 @@ Errors: 2
 ========================
     0: 0
     1: -53.6804
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
 ========================
@@ -341,7 +341,7 @@ Errors: 2
 ========================
     0: -19.8279
     1: 0
-    2: Error: CurveDiscount.cpp:90; Curve IR.DISCOUNT.EUR not available beyond date 3-8-2027, requested 5-11-2074; 
-    3: Error: CurveDiscount.cpp:81; cannot get discount factor for date in the past: 8-7-2009; 
+    2: Error: CurveDiscount.cpp:91; Curve IR.DISCOUNT.EUR, DF not available beyond last tenor date 3-8-2027, requested 5-11-2074
+    3: Error: CurveDiscount.cpp:82; Curve IR.DISCOUNT.EUR, DF not available before anchor date 5-8-2017, requested 8-7-2009
 ========================
 
