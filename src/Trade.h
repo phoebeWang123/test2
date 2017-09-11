@@ -5,6 +5,7 @@
 
 namespace minirisk {
 
+template <typename T>
 struct Trade : ITrade
 {
     virtual double quantity() const
@@ -17,10 +18,15 @@ struct Trade : ITrade
         m_quantity = quantity;
     }
 
-private:
-    virtual void print_details(std::ostream& os) const = 0;
-    virtual void save_details(my_ofstream& os) const = 0;
-    virtual void load_details(my_ifstream& is) = 0;
+    virtual const guid_t& id() const
+    {
+        return T::m_id;
+    }
+
+    virtual const std::string& idname() const
+    {
+        return T::m_name;
+    }
 
 protected:
     virtual void print(std::ostream& os) const
@@ -28,7 +34,7 @@ protected:
         os << format_label("Id") << id() << std::endl;
         os << format_label("Name") << idname() << std::endl;
         os << format_label("Quantity") << quantity() << std::endl;
-        print_details(os);
+        static_cast<const T*>(this)->print_details(os);
         os << std::endl;
     }
 
@@ -36,14 +42,14 @@ protected:
     {
         os << id()
             << quantity();
-        save_details(os);
+        static_cast<const T*>(this)->save_details(os);
     }
 
     virtual void load(my_ifstream& is)
     {
         // read everything but id
         is >> m_quantity;
-        load_details(is);
+        static_cast<T*>(this)->load_details(is);
     }
 
 private:
