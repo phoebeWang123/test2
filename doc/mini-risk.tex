@@ -32,12 +32,12 @@ The license for the source code is in the main directory. Please read the licens
 \section{Source code organization}
 All source code files are in the subdirectory \textit{src}. Source files with names matching the patterns \textit{Demo*.cpp} or \textit{Test*.cpp} contain the \textit{main} routine for separate programs. The other cpp files are library components used by the various programs.
 
-The \textit{src} subdirectory also contains a \textit{Makefile} for \textit{gcc} compilation. If you use Visual Studio, you need to: create a new solution; in the solution add one console project for each cpp file with name \textit{Demo*.cpp} or \textit{Test*.cpp}; in each project also add all other cpp files (except the ones with name \textit{Demo*.cpp} or \textit{Test*.cpp}), so that in each project you have one and only one file containing the function \textit{main}.
+The \textit{src} subdirectory also contains a \textit{Makefile} for \textit{gcc} compilation. If you use Visual Studio, you need to: create a new solution; in the solution add one console project for each cpp file with name \textit{Demo*.cpp} or \textit{Test*.cpp}; in each project also add all other cpp files (except the ones with name \textit{Demo*.cpp} or \textit{Test*.cpp}), so that in each project you have one and only one cpp file containing the function \textit{main}.
 
-A number of txt files are given. \textit{portfolio\_0.txt} and \textit{risk\_factors\_0.txt} work with the program in its current state. \textit{portfolio\_$i$.txt} and \textit{risk\_factors\_$i$.txt} work after completion of the first $i$ tasks.
+A number of txt files are given. \textit{portfolio\_0.txt} and \textit{risk\_factors\_0.txt} work with the program in its current state. \textit{portfolio\_$i$.txt} and \textit{risk\_factors\_$i$.txt} work after completion of the first $i$ tasks. If a file with appropriate numeration is missing, you can use the last one available (e.g. in task 11, you can use \textit{risk\_factors\_5.txt})
 
 To run the program type from the command line:\\
-\textit{DemoRisk portfolio.txt risk\_factors.txt}
+\textit{DemoRisk -p portfolio.txt -f risk\_factors.txt}
 
 To run the program directly from inside Visual Studio, you can specify the working directory where your txt files are located and the command line arguments (\textit{portfolio.txt risk\_factors.txt}) in the \textit{Debugging} section of the project configuration.
 
@@ -45,7 +45,7 @@ To run the program directly from inside Visual Studio, you can specify the worki
 You have to complete sequentially all tasks mentioned in section \ref{sec:task}. After completing each task you should test correctness of your work by succesfully running the command \\
 \textit{DemoRisk portfolio\_i.txt risk\_factors\_i.txt}\\
 and comparing the output of your program with the output given in \textit{output\_i.txt}.
-To compare files you can use the free program \textit{WinMerge}, or \textit{sdiff} on Linux.
+To compare files you can use the free program \textit{WinMerge}, or \textit{sdiff} on Linux. Your goal is to generate an identical output. To compare if files are identical, on Windows you can use WinMerge.
 
 After completing all tasks you need to zip and submit all files with extension *.h and *.cpp. Do not submit any other file (e.g. txt files, project files, object files, executable files).
 
@@ -57,18 +57,18 @@ Marking is going to be based on the following criterias.
 \item I will run your \textit{DemoRisk} with my trade portfolio and market data files and compare your output with mine. This may include expired trades (i.e. trades where the last payment date is before the pricing date, which should generate an error), missing market data (e.g. a missing FX spot), missing fixings.
 \item I will run my \textit{TestDate} program against your \textit{Date} class.
 \item I will run your \textit{DemoRisk} with my trade portfolio and market data files and compare your output with mine, using a base currency different from USD.
-\item I will run your \textit{DemoRisk} with my trade portfolio and market data files and compare your output with mine, using a different Greeks bump size, passed to the Greeks function as a configuration parameter.
+\item I will run your \textit{DemoRisk} with my trade portfolio and market data files and compare your output with mine.
 \end{itemize}
 \item Style (40\%):
 \begin{itemize}
-\item correct use of indentation (configure your editor to convert tab to spaces and to use tab of 4 characters)
+\item correct use of indentation (configure your editor to convert tab to spaces and to use tabs of 4 characters)
 \item proper choices of variable and function names
 \item appropriate use of source code comments
 \item avoid code duplication (do not copy and paste, introduce new functions as appropriate)
 \item code robustness (e.g. assert function arguments are valid)
 \item code conciseness (do not do in 10 lines what you could do in one line)
 \item do not reinvent the weel (use library functions when available)
-\item minimal diff: only modify the lines of code strictly necessary, do not insert unnecessary whitespaces (you can use \textit{WinMerge} to view the difference between your files and the original ones, or use \textit{git}, which is excellent for checking differences)
+\item minimal diff: only modify the lines of code strictly necessary, do not insert unnecessary whitespaces (you can use \textit{WinMerge} to view the difference between your files and the original ones, or use \textit{git}, which is excellent for checking differences). I will use git to check differences.
 \end{itemize}
 \end{itemize}
 
@@ -127,7 +127,7 @@ If the function $df$ is called with a date beyond the last tenor or before the a
 
 \subsubsection{PV01 with tenors}
 \label{sec:pv01}
-The \textit{PV01} risk function needs to be modified into 2 different risk functions: \textit{PV01Parallel} that computes risk with respect to parallel shift of the yield curve (all risk factor move simultaneously); and \textit{PV01Bucketed} that computes risk with respect to individual yield curves (the yield curve for each tenor $T_i$ change, with all the rest remaining constant). In both cases use central differences, with the same bump size as currently defined in \textit{Demo.cpp}. The 2 new functions must have the same arguments and return type as the existing one. \\
+The \textit{PV01} risk function needs to be modified into 2 different risk functions: \textit{PV01Parallel} that computes risk with respect to parallel shift of the yield curve (all risk factor move simultaneously); and \textit{PV01Bucketed} that computes risk with respect to individual yield curves (the yield curve for each tenor $T_i$ change, with all the rest remaining constant). In both cases use central differences, with the same bump size as currently defined in \textit{Demo.cpp}. The 2 new functions must have the same arguments and return type as the existing one.
 
 \subsection{Recover from pricing failures}
 The function \textit{IPricer::price} fails and throws an exception when an error occurs. For instance, if the settlement date of a \textit{Payment} is in the past, pricing of the entire portfolio fails. We would like instead that only problematic trades fail to price while all remaining trades price succesfully.
@@ -164,13 +164,6 @@ In a real risk management system the configuration argument could be very comple
 
 You need to modify all pricers accordingly. It may be convenient adding a base class \textit{Pricer} which all pricers inherit from and take care of this conversion.
 
-\subsection{Add FX Spot Greek function}
-\label{sec:fxdelta}
-Add another function for Greeks calculation, named \textit{fx\_delta}, which computes the risk of the book with respect to each of the FX spot rates quoted against USD in the market data server. It should use central difference with a relative bump of 0.1%.
-
-Add calculation of FXDelta at the end of \textit{DemoRisk.cpp} and display the cumulative book value for each fx spot rate.
-
-
 \subsection{Add a new market object \textit{CurveFXForward}}
 The new market object should implement the interface \textit{ICurveFXForward}.\\
 
@@ -182,12 +175,38 @@ This class should use the \textit{CurveFXSpot} class to get $S(T_0)$ and the \te
 
 Modify the \textit{Market} class as appropriate.
 
+\subsection{Add fixing data server}
+To compute the price of some trades we need information in the past as well as in the future. For example, if today is the 15th of November and we want to compute the price of an Asian option that pays the average of the daily closing price in the month of November, some of these closing prices are in the past and need to be accounted for.\\
+
+Past observations are called fixings. Introduce a \textit{FixingDataServer} class, which implements the following methods:\\
+\textit{// return the fixing if available, otherwise trigger an error}\\
+$\quad double\; get(const\; string\&\; name,\; const\; Date\&\; t)\; const;$\\
+\textit{// return the fixing if available, NaN otherwise, and set the flag if found}\\
+$\quad pair<double, bool>\; lookup(const\; string\&\; name,\; const\; Date\&\; t)\; const;$\\
+
+Populate the fixing data server with the data provided in the file \textit{fixings.txt}.\\
+
+Add an extra command line argument (\textit{-x}) to \textit{DemoRisk.cpp} and use it to communicate to the program the name of the data file containing the fixings.\\
+
+Create a \textit{FixingDataServer} object in \textit{DemoRisk.cpp} and pass it as an extra argument to the \textit{IPricer::price} function. Only the pricers of trades requiring fixings will do something with it, other pricers will ignore it (note that \textit{TradePayment} does not have any fixing, hence it will not use it).
+In particular: fixings occurring in the past should be obtained from this argument and if not available an exception should be thrown; fixings occurring exactly on the pricing date should be taken from this argument if available, resolved through the Market otherwise; fixings occurring in the future should be resolved through the Market (e.g. forward prices).
+
+Do not change the format of dates to serial and of double to hexadecimal in the data file.
+
+\subsection{Add FX Spot Greek function}
+\label{sec:fxdelta}
+Add another function for Greeks calculation, named \textit{fx\_delta}, which computes the risk of the book with respect to each of the FX spot rates quoted against USD in the market data server. It should use central difference with a relative bump of 0.1%.
+
+It should have the same return value and argument types as the PV01 functions.
+
+Add calculation of FXDelta at the end of \textit{DemoRisk.cpp} and display the cumulative book value for each fx spot rate.
+
 \subsection{Add new trade type \textit{TradeFXForward}}
 Given two dates $T_1$ and $T_2$, at time $T_2$ it pays the following amount of $ccy_2$
 $$
-payoff=N[S_{T_1}-K]
+payoff=N[S(T_1)-K]
 $$
-where $S_{T_1}$ is the spot price of currency $ccy_1$ expressed in currency $ccy_2$  observed at the fixing date $T_1$, $K$ is a predefined strike price, $N$ is the notional amount and $T_2$ is the settlement date (it must be $T_1<T_2$ for the trade to be valid).\\
+where $S(T_1)$ is the spot price of currency $ccy_1$ expressed in currency $ccy_2$  observed at the fixing date $T_1$, $K$ is a predefined strike price, $N$ is the notional amount and $T_2$ is the settlement date (it must be $T_1<T_2$ for the trade to be valid).\\
 
 Assign to the trade ID=3 (arbitrarily chosen) and the following serialized representation:\\
 ID;NOTIONAL;CCY1;CCY2;STRIKE;FIXINGDATE;SETTLEDATE;
@@ -199,33 +218,20 @@ The currency pair $ccy_1ccy_2$ can be any direct, inverse or cross pair.\\
 
 Implement the corresponding pricer object. The price in $ccy_2$ can be computed as:
 $$
-price=B_{T_2,2}[F_{T_1}-K]
+price=B_2(T_0, T_2)[F(T_0,T_1)-K]
 $$
-where $B_{T_2,2}$ is the discount factor in currency 2 for settlement date $T_2$ and $F_{T_1}$ is the currency forward price for date $T_1$. Do not forget to convert this price into USD.\\
+where $B_2(T_0,T_2)$ is the discount factor in currency 2 for settlement date $T_2$ and $F(T_0,T_1)$ is the currency forward price for date $T_1$. Do not forget to convert this price into USD (or any other specified base currency).
 
 \subsubsection{Historical fixings}
-Note that when the pricing date $T_0$ is between $T_1$ and $T_2$, you need to know the value of $S_{T_1}$, which is in the past, i.e. you need to know its fixed value. To achieve that, add to \textit{ITrade} a method\\
-\textit{vector$<$pair$<$string,Date$>>$ required\_fixings(const Date$\&$ until)},\\
-which returns the fixings needed by the trade to price on pricing date \textit{until}. If a trade has no fixings, this should return an empty vector.
-
-Run this function and collect fixing requirements before any pricing is done.
-
-Modify \textit{DemoRisk.cpp} to accept a third command line argument with the name of a file containing some historical fixings. The file should have the format (see \textit{fixings.txt})\\
-\textit{fixing\_name date\_in\_serial value\_in\_decimal\_text}\\
-and it should be loaded in a map of type\\
-$typedef\; map<string,map<Date,double>>\&\; fixings\_t;$
-
-In \textit{DemoRisk}, collect all fixing requirements from trades, then load the fixings discarding any unnecessary fixings.
-
-Modify the \textit{IPricer::price} method to take an extra argument of type\\ $const\; fixings\_t\&\; fixings$\\ and use it in pricers to retrieve necessary fixings. In particular: fixings occurring in the past should be obtained from this argument and if not available an exception should be thrown; fixings occurring exactly on the pricing date should be taken from this argument if available, resolved through the Market otherwise; fixings occurring in the future should be resolved through the Market (e.g. forward prices).
+Note that when the pricing date $T_0$ is between $T_1$ and $T_2$, you need to know the value of $S_{T_1}$, which is in the past, i.e. you need to know its fixed value. 
 
 Note that there can be various situations with respect to the pricing date $T_0$:
 \begin{itemize}
 	\item $T_0< T_1$: both fixing and settlement are in the future
 	\item $T_0 = T_1$ and fixing for $T_1$ not available: there is still full delta risk and PV01 risk
-	\item $ T_1 \leq T_0 < T_2$ and fixing for $T_1$ available: there is no more delta risk, but we still have PV01 risk
-	\item $T_0 = T_2$: no delta or PV01 risk
-	\item $T_0 > T_2$: trades is expired, an error should be generated
+	\item $ T_1 \leq T_0 < T_2$ and fixing for $T_1$ available: there is no more delta risk with respect to the underlying, but we still have PV01 risk and there may be delta risk for conversion to base currency
+	\item $T_0 = T_2$: no delta with respect to the underlying or PV01 risk, we assume the payment has not been settled yet, hence we can still have a non-zero price, there may be still delta risk with respect to conversion to base currency.
+	\item $T_0 > T_2$: trade is expired, an error should be generated
 \end{itemize}
 
 \end{document}
