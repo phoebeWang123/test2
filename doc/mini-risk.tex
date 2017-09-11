@@ -130,9 +130,15 @@ The function \textit{IPricer::price} fails and throws an exception when an error
 
 Modify the typedef \textit{portfolio\_values\_t} to \textit{vector$<$pair$<$double,string$>>$}. In the \textit{compute\_prices} function use \textit{try\{\}catch\{\}} to catch exceptions. If there is no error set the double to the price and the string to an empty string. If there is an error set the double to NaN (see header $<limits>$) and the string to the error message embedded in the exception.
 
-When computing thet total for the book (function \textit{portfolio\_total}), you should return a tuple containing the total for trades which price succesfully and an array of pairs with the index of the trades which price to fail and the associated error message. To identify trades with errors, check if the value is a NaN, not if the error message string is empty, because a trade could potentially fail and still have an empty error message.
+When computing thet total for the book (function \textit{portfolio\_total}), you should return a pair containing the total for trades which price succesfully and an array of pairs with the index of the trades which price to fail and the associated error message.\\
+$pair<double,vector<pair<size\_t,string>>>$\\
+To identify trades with errors, check if the value is a NaN, not if the error message string is empty, because a trade could potentially fail and still have an empty error message.
+
+When computing finite differences, if either the up or down bump are NaN, then set the result to NaN and set the error message to the correspnding error message (if both up and down states have error, you can ignore one of the two error messages).
 
 Modify \textit{DemoRisk} to display both the total for the book and the number of trades which fail to price.
+
+Compare the output of your program with the one given.
 
 
 \subsection{Add pricer configuration}
