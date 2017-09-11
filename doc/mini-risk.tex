@@ -119,7 +119,11 @@ The interpolation scheme requires computation of the local rates. If $r_i$ and $
 $$e^{-r_iT_i-r_{i,i+1}(T_{i+1}-T_i)}=e^{-r_{i+1}T_{i+1}}$$
 Then the discount factor for any date $t \in [T_i,T_{i+1}]$ is $$df(t)=e^{-r_i T_i-r_{i,i+1}(t-T_i)}$$
 
-If the function $df$ is called with a date beyond the last tenor, it should generate an error.
+In an efficient implementation as much calculation as possible should be done in the constructor, so that the function $df$, which will be invoked millions of times, is as fast as possible. For instance, the values of the products $r_iT_i$ could be precomputed for all $i$ and cached in a data member of the class.\\
+
+In the $df$ function use binary search (see $lower\_bound$) to determine the interval $i$ such that $T_i \leq t < T_{i+1}$.\\
+
+If the function $df$ is called with a date beyond the last tenor or before the anchor date (today), it should generate an error.
 
 \subsubsection{PV01 with tenors}
 \label{sec:pv01}
@@ -140,12 +144,25 @@ Modify \textit{DemoRisk} to display both the total for the book and the number o
 
 Compare the output of your program with the one given.
 
+\subsection{Add a new market object \textit{CurveFXSpot}}
+\label{sec:fxspot}
+The new market object should implement the interface \textit{ICurveFXSpot}.
+
+Note that the risk factors contained in the market data server only include spot currencies in the format CCYUSD, i.e. the prices of CCY in USD. The class must support direct, inverse and cross currency pairs (e.g. EURUSD, USDJPY, EURGBP). It is up to you to make the correct queries to the market data server and construct the \textit{CurveFXSpot} appropriately.\\
+
+You need to modity the \textit{Market} class as appropriate.\\
+
+Note that according with market conventions the spot price observed at time $T$ is the forward price for an exchange of money at $T+2$. Ignore this difference and assume that the spot price observed at time $T$ is defined as the exchange rate for an instantaneous exchange of money at time $T$. Thanks to this simplification we can simply use the spot directly to convert the present value of a trade price from one currency to another. A real risk management system however, should take this difference into account.\\
+
+Modify the \textit{PricerPayment} class to use the new class \textit{CurveFXSpot}.
 
 \subsection{Add pricer configuration}
-Modify \textit{DemoRisk} to read another argument form the command line, the base currency (arhument name \textit{baseccy}). Pass this to the \textit{run} function.
-Modify the function \textit{ITrade::Pricer} adding an argument \textit{configuration} of type \textit{string}. In a real risk management system the configuration argument could be very complex and allow for instance to select a pricing model (e.g. Black Scholes or Heston) or a numerical framework (e.g. PDE or Monte Carlo). In this project the configuration string is simply the base currency in which all risk is to be computed. At the moment, by default everything is computed in USD. After your changes, \textit{pricer("EUR")} should return a pricer that computes the price in EUR.\\
+Modify \textit{DemoRisk} to read another optional argument form the command line, the base currency (argument name \textit{-b CCY}). If not explicitly passed, this argument takes the value USD. Pass this to the \textit{run} function.
+Modify the function \textit{ITrade::Pricer} adding an argument \textit{configuration} of type \textit{string}.
 
-You need to modify all pricers accordingly.
+In a real risk management system the configuration argument could be very complex and allow for instance to select a pricing model (e.g. Black Scholes or Heston) or a numerical framework (e.g. PDE or Monte Carlo). In this project the configuration string is simply the base currency in which all risk is to be computed. At the moment, by default everything is computed in USD. After your changes, \textit{pricer("EUR")} should return a pricer that computes the price in EUR.\\
+
+You need to modify all pricers accordingly. It may be convenient adding a base class \textit{Pricer} which all pricers inherit from and take care of this conversion.
 
 \subsection{Add FX Spot Greek function}
 \label{sec:fxdelta}
@@ -154,25 +171,14 @@ Add another function for Greeks calculation, named \textit{fx\_delta}, which com
 Add calculation of FXDelta at the end of \textit{DemoRisk.cpp} and display the cumulative book value for each fx spot rate.
 
 
-\subsection{Add a new market object \textit{CurveFXSpot}}
-The new market object should implement the interface \textit{ICurveFXSpot}.
-
-Note that the risk factors contained in the market data server only include spot currencies in the format CCYUSD, i.e. the prices of CCY in USD. The class must support direct, inverse and cross currency pairs (e.g. EURUSD, USDJPY, EURGBP). It is up to you to make the correct queries to the market data server and construct the \textit{CurveFXSpot} appropriately.\\
-
-You need to modity the \textit{Market} class as appropriate.\\
-
-In the real world the spot price observed at time $T$ is the forward price for delivery at $T+2$. Ignore this difference and assume that the spot price observed at time $T$ is defined as the exchange rate for an instantaneous exchange of money at time $T$.\\
-
-Modify the \textit{PricerPayment} class to use the new class \textit{CurveFXSpot}.
-
 \subsection{Add a new market object \textit{CurveFXForward}}
 The new market object should implement the interface \textit{ICurveFXForward}.\\
 
-The forward price of currency $ccy_1$ expressed in currency $ccy_2$ for delivery at time $T$ can be computed as
-$$F_T=\mathbb{E}[S_T|\mathcal{F}_{T_0}]=S_{T_0} \frac{B_{T,1}}{B_{T,2}}$$
-where $S_{T_0}$ is the current spot price of currency $ccy_1$ expressed in currency $ccy_2$, $B_{T,i}$ is the discount factor in currency $ccy_i$ for time $T$.\\
+The forward price observed at time $T_0$ of currency $ccy_1$ expressed in currency $ccy_2$ for delivery at time $T$ can be computed as
+$$F(T_0,T)=\mathbb{E}[S(T)|\mathcal{F}_{T_0}]=S(T_0) \frac{B_1(T_0,T)}{B_2(T_0,T)}$$
+where $T_0$ is the pricing date, $S(T_0)$ is the current spot price of currency $ccy_1$ expressed in currency $ccy_2$, $B_i(T_0,T)$ is the discount factor in currency $ccy_i$ for time $T$ observed at time $T_0$.\\
 
-This class should use the \textit{CurveFXSpot} and \textit{CurveDiscount} classes.\\
+This class should use the \textit{CurveFXSpot} class to get $S(T_0)$ and the \textit{CurveDiscount} classes to get the discount factors.\\
 
 Modify the \textit{Market} class as appropriate.
 
