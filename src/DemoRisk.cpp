@@ -61,7 +61,7 @@ void usage()
     std::cerr
         << "Invalid command line arguments\n"
         << "Example:\n"
-        << "DemoRisk portfolio=portfolio.txt riskfactors=risk_factors.txt\n";
+        << "DemoRisk -p portfolio.txt -f risk_factors.txt\n";
     std::exit(-1);
 }
 
