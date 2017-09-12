@@ -8,7 +8,7 @@ namespace minirisk {
 template <typename I, typename T>
 std::shared_ptr<const I> Market::get_curve(const string& name)
 {
-    ptr_curve_t& curve_ptr = m_curves.emplace(name, ptr_curve_t()).first->second;
+    ptr_curve_t& curve_ptr = m_curves[name];
     if (!curve_ptr.get())
         curve_ptr.reset(new T(this, m_today, name));
     std::shared_ptr<const I> res = std::dynamic_pointer_cast<const I>(curve_ptr);
