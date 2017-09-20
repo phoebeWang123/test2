@@ -30,21 +30,21 @@ public:
     Date() : m_y(1970), m_m(1), m_d(1), m_is_leap(false) {}
 
     // Constructor where the input value is checked.
-    Date(unsigned short year, unsigned short month, unsigned short day)
-        : m_y(year), m_m(month), m_d(day), m_is_leap(is_leap_year(year))
+    Date(unsigned year, unsigned month, unsigned day)
     {
-        check_valid();
+        init(year, month, day);
     }
 
-    void init(unsigned short year, unsigned short month, unsigned short day)
+    void init(unsigned year, unsigned month, unsigned day)
     {
-        m_y = year;
-        m_m = month;
-        m_d = day;
-        check_valid();
+        check_valid(year, month, day);
+        m_y = (unsigned short) year;
+        m_m = (unsigned char) month;
+        m_d = (unsigned char) day;
+        m_is_leap = is_leap_year(year);
     }
 
-    void check_valid();
+    static void check_valid(unsigned y, unsigned m, unsigned d);
 
     bool operator<(const Date& d) const
     {
@@ -73,14 +73,14 @@ public:
     std::string to_string(bool pretty = true) const
     {
         return pretty
-            ? std::to_string(m_d) + "-" + std::to_string(m_m) + "-" + std::to_string(m_y)
-            : std::to_string(m_y) + padding_dates(m_m) + padding_dates(m_d);
+            ? std::to_string((int)m_d) + "-" + std::to_string((int)m_m) + "-" + std::to_string(m_y)
+            : std::to_string(m_y) + padding_dates((int)m_m) + padding_dates((int)m_d);
     }
 
 private:
     unsigned short m_y;
-    unsigned short m_m;
-    unsigned short m_d;
+    unsigned char m_m;
+    unsigned char m_d;
     bool m_is_leap;
 };
 
@@ -88,7 +88,7 @@ long operator-(const Date& d1, const Date& d2);
 
 inline double time_frac(const Date& d1, const Date& d2)
 {
-    return (d2 - d1) / 365.0;
+    return static_cast<double>(d2 - d1) / 365.0;
 }
 
 } // namespace minirisk

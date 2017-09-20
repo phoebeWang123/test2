@@ -8,7 +8,7 @@ struct DateInitializer : std::array<unsigned, Date::n_years>
 {
     DateInitializer()
     {
-        for (size_t i = 0, s = 0, y = Date::first_year; i < size(); ++i, ++y) {
+        for (unsigned i = 0, s = 0, y = Date::first_year; i < size(); ++i, ++y) {
             (*this)[i] = s;
             s += 365 + (Date::is_leap_year(y) ? 1 : 0);
         }
@@ -35,13 +35,13 @@ std::string Date::padding_dates(unsigned month_or_day)
     return os.str();
 }
 
-void Date::check_valid()
+void Date::check_valid(unsigned y, unsigned m, unsigned d)
 {
-    MYASSERT(m_y >= first_year, "The year must be no earlier than year " << first_year << ", got " << m_y);
-    MYASSERT(m_y < last_year, "The year must be smaller than year " << last_year << ", got " << m_y);
-    MYASSERT(m_m >= 1 && m_m <= 12, "The month must be a integer between 1 and 12, got " << m_m);
-    unsigned dmax = days_in_month[m_m - 1] + ((m_m == 2 && m_is_leap) ? 1 : 0);
-    MYASSERT(m_d >= 1 && m_d <= dmax, "The day must be a integer between 1 and " << dmax << ", got " << m_d);
+    MYASSERT(y >= first_year, "The year must be no earlier than year " << first_year << ", got " << y);
+    MYASSERT(y < last_year, "The year must be smaller than year " << last_year << ", got " << y);
+    MYASSERT(m >= 1 && m <= 12, "The month must be a integer between 1 and 12, got " << m);
+    unsigned dmax = days_in_month[m - 1] + ((m == 2 && is_leap_year(y)) ? 1 : 0);
+    MYASSERT(d >= 1 && d <= dmax, "The day must be a integer between 1 and " << dmax << ", got " << d);
 }
 
 unsigned Date::day_of_year() const
