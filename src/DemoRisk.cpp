@@ -81,6 +81,8 @@ int main(int argc, const char **argv)
         else
             usage();
     }
+    if (portfolio == "" || riskfactors == "")
+        usage();
 
     try {
         run(portfolio, riskfactors);
