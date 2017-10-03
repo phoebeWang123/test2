@@ -5,7 +5,8 @@
 #include <sstream>
 
     // store the message in str
-#define BUILDMSG(msg) \
+#ifdef VERBOSE
+#    define BUILDMSG(msg) \
         std::string str; \
         { \
             std::ostringstream os; \
@@ -14,6 +15,15 @@
                 << msg; \
             str = os.str(); \
         }
+#else
+#    define BUILDMSG(msg) \
+        std::string str; \
+        { \
+            std::ostringstream os; \
+            os  << msg; \
+            str = os.str(); \
+        }
+#endif
 
 #define MYASSERT(cond, msg) \
     { \
