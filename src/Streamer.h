@@ -83,7 +83,7 @@ inline my_ofstream& operator<<(my_ofstream& os, const T& v)
 //
 
 
-// when saving a double to a file in text format, use the meximum possible precision
+// when saving a double to a file in text format, use the maximum possible precision
 inline my_ofstream& operator<<(my_ofstream& os, double v)
 {
     os.m_of << std::scientific << std::setprecision(16) << v << separator;
