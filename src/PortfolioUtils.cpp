@@ -62,6 +62,12 @@ std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vecto
         tmpmkt.set_risk_factors(bumped);
         pv_up = compute_prices(pricers, tmpmkt);
 
+
+        // restore original market state for next iteration
+        // (more efficient than creating a new copy of the market at every iteration)
+        bumped[0].second = d.second;
+        tmpmkt.set_risk_factors(bumped);
+
         // compute estimator of the derivative via central finite differences
         double dr = 2.0 * bump_size;
         std::transform(pv_up.begin(), pv_up.end(), pv_dn.begin(), pv01.back().second.begin()
