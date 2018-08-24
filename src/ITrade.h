@@ -9,7 +9,7 @@
 
 namespace minirisk {
 
-// FIXME: introduce a proper serializable guid class
+// NOTE: in a real world system this should be a proper serializable guid class
 typedef unsigned guid_t;
 
 struct ITrade : IObject

@@ -9,7 +9,7 @@ namespace minirisk {
 // transforms FX.SPOT.EUR.USD into FX.SPOT.EUR
 string mds_spot_name(const string& name)
 {
-    // FIXME: error checks should be stricter, not just on the last 3 characters
+    // NOTE: in a real system error checks should be stricter, not just on the last 3 characters
     MYASSERT((name.substr(name.length() - 3, 3) == "USD"),
         "Only FX pairs in the format FX.SPOT.CCY.USD can be queried. Got " << name);
     return name.substr(0, name.length() - 4);
