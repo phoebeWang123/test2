@@ -93,7 +93,7 @@ int main(int argc, const char **argv)
         std::cerr << e.what() << "\n";
         return -1; // report an error to the caller
     }
-    catch (...)
+    catch (...) 
     {
         std::cerr << "Unknown exception occurred\n";
         return -1; // report an error to the caller
