@@ -15,7 +15,7 @@ string mds_spot_name(const string& name)
     return name.substr(0, name.length() - 4);
 }
 
-MarketDataServer::MarketDataServer(const string& filename)
+MarketDataServer::MarketDataServer(const string& filename) 
 {
     std::ifstream is(filename);
     MYASSERT(!is.fail(), "Could not open file " << filename);
@@ -47,7 +47,16 @@ std::pair<double, bool> MarketDataServer::lookup(const string& name) const
 std::vector<std::string> MarketDataServer::match(const std::string& expr) const
 {
     std::regex r(expr);
-    NOT_IMPLEMENTED;
+	std::vector<std::string> result;
+	for (auto it = m_data.begin(); it != m_data.end(); ++it) {
+		string name = it->first;
+		if (std::regex_match(name, r)) {
+			result.push_back(name);
+		}
+	}
+
+	
+	return result;
 }
 
 } // namespace minirisk
