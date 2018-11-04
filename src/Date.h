@@ -12,7 +12,7 @@ public:
     static const unsigned first_year = 1900;
     static const unsigned last_year = 2200;
     static const unsigned n_years = last_year - first_year;
-
+	int getNumDays(std::string numDay);
 private:
     static std::string padding_dates(unsigned);
 
@@ -77,6 +77,7 @@ public:
             : std::to_string(m_y) + padding_dates((int)m_m) + padding_dates((int)m_d);
     }
 
+
 private:
     unsigned short m_y;
     unsigned char m_m;
@@ -85,6 +86,8 @@ private:
 };
 
 long operator-(const Date& d1, const Date& d2);
+
+
 
 inline double time_frac(const Date& d1, const Date& d2)
 {

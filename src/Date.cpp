@@ -60,5 +60,27 @@ long operator-(const Date& d1, const Date& d2)
     return static_cast<long>(s1) - static_cast<long>(s2);
 }
 
+int Date::getNumDays(std::string numDay) {
+	char unit = numDay.back();
+	int unitDay;
+	if (unit = 'Y'){
+		unitDay = 365;
+	}
+	else if (unit = 'M') {
+		unitDay = 30;
+	}
+	else if (unit = 'W') {
+		unitDay = 7;
+	}
+	else if (unit = 'D') {
+		unitDay = 1;
+	}
+	else {
+		//exception
+	}
+	int numOfUnit = std::stoi(numDay.substr(0, numDay.length() - 1));
+	return unitDay * numOfUnit;
+}
+
 } // namespace minirisk
 
