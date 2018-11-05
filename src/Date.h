@@ -12,7 +12,7 @@ public:
     static const unsigned first_year = 1900;
     static const unsigned last_year = 2200;
     static const unsigned n_years = last_year - first_year;
-	int getNumDays(std::string numDay);
+
 private:
     static std::string padding_dates(unsigned);
 

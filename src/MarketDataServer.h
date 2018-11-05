@@ -18,7 +18,10 @@ public:
     double get(const string& name) const;
     std::pair<double, bool> lookup(const string& name) const;
     std::vector<std::string> match(const std::string& expr) const;
-
+	//check below
+	//bool sortTenor(std::string &tenor1, std::string &tenor2);
+	//std::string extractTenor(std::string tenor);
+	//int getNumDays(std::string numDay);
 private:
     // for simplicity, assumes market data can only have type double
     std::map<string, double> m_data;
