@@ -62,4 +62,7 @@ Market::vec_risk_factor_t Market::get_risk_factors(const std::string& expr) cons
     return result;
 }
 
+std::vector<std::string> Market::getTenors(const std::string& expr) {
+	return(m_mds->match(expr));
+}
 } // namespace minirisk

@@ -1,5 +1,7 @@
 #pragma once
 #include "ICurve.h"
+#include <map>
+#include <vector>
 
 namespace minirisk {
 
@@ -20,6 +22,8 @@ private:
     Date   m_today;
     string m_name;
     double m_rate;
+	std::vector<std::tuple<string, double, double, double, double>> m_rateMap;
+	string test;
 };
 
 } // namespace minirisk

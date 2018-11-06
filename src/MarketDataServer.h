@@ -4,7 +4,9 @@
 #include <regex>
 #include "Global.h"
 
-namespace minirisk {
+
+
+namespace minirisk { 
 
 // This is a dummy object that in a real system should be replaced by a server providing
 // with real time (or historical) market data on demand and capable to produce snapshots of data.

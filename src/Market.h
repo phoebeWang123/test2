@@ -59,6 +59,8 @@ public:
     // destroy all existing objects and modify a selected number of data points
     void set_risk_factors(const vec_risk_factor_t& risk_factors);
 
+	std::vector<std::string> getTenors(const std::string& expr);
+
 private:
     Date m_today;
     std::shared_ptr<const MarketDataServer> m_mds;
