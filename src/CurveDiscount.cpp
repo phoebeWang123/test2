@@ -9,10 +9,16 @@ namespace minirisk {
 	std::string extractTenors(std::string tenor) {
 		unsigned first = tenor.find('.');
 		unsigned last = tenor.find_last_of('.');
+		if (first == last) {
+			return "";
+		}
 		std::string revisedTenor = tenor.substr(first + 1, last - first - 1);
 		return revisedTenor;
 	}
 	int getNumDay(std::string numDay) {
+		if (numDay == "") {
+			return 0;
+		}
 		char unit = numDay.back();
 		int unitDay;
 		if (unit == 'Y') {
@@ -37,11 +43,23 @@ namespace minirisk {
 	std::vector<std::tuple<string, double, double, double, double>> getRateMap(Market *mkt, const string& curve_name) {
 		string curr = curve_name.substr(ir_curve_discount_prefix.length(), 3);
 		string expr = "IR.[[:digit:]]+[A-Z]." + curr;
-		std::vector<std::string> tenorVector = mkt->getTenors(expr);
+		std::vector<std::string> tenorVector = mkt->getTenors("IR." + curr);
+		
+		std::vector<std::string> irRate = mkt->getTenors(expr);
+		for (std::vector<std::string>::iterator it = irRate.begin(); it != irRate.end(); ++it) {
+			std::string irRateTenor = *it;
+			tenorVector.push_back(irRateTenor);
+		}
 		std::vector<std::tuple<string, double, double, double, double>> tenorMap;
 		for (std::vector<std::string>::iterator it = tenorVector.begin(); it != tenorVector.end(); ++it) {
-			std::string tenor = *it;			
-			tenor = extractTenors(tenor) + "." + curr;
+			std::string tenor = *it;
+			std::string extractedTenor = extractTenors(tenor);
+			if (extractedTenor == "") {
+				tenor = curr;
+			}
+			else {
+				tenor = extractTenors(tenor) + "." + curr;
+			}
 			double tenorRate = mkt->get_yield(tenor);
 			double date = 1.0*getNumDay(extractTenors(*it));
 			if (it != tenorVector.end() - 1) {
@@ -73,7 +91,9 @@ namespace minirisk {
 				return mid;
 			}
 		}
-
+		if (left == sorted_vec.size()) {
+			return sorted_vec.size()-1;
+		}
 		return left;
 	}
 
@@ -97,6 +117,13 @@ double  CurveDiscount::df(const Date& t) const
 	double ri = std::get<2>(m_rateMap[leftIndex]);
 	double ti_plus_1 = std::get<3>(m_rateMap[leftIndex]);
 	double ri_plus_1 = std::get<4>(m_rateMap[leftIndex]);
+	//case t > all the tenors
+	// NOT IMPLEMENTED
+	if (ti_plus_1 == 0){
+		std::cout << "t>all the tenors!!!";
+		return std::exp(-m_rate * dt);
+		
+	}
 	double ri_to_ri_plus_1 = (ri_plus_1 * ti_plus_1 - ri * ti)/(ti_plus_1-ti);
    // return std::exp(-m_rate * dt);
 	double df = std::exp(-ri * ti - ri_to_ri_plus_1 * (dt - ti));
