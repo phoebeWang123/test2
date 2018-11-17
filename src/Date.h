@@ -37,6 +37,21 @@ namespace minirisk {
 		{
 			init(year, month, day);
 		}
+		// To identify date input in form of yyyymmdd string
+		Date(std::string yyyymmdd)
+		{
+			if (yyyymmdd.length() == 8)
+			{
+				unsigned y = std::atoi(yyyymmdd.substr(0, 4).c_str());
+				unsigned m = std::atoi(yyyymmdd.substr(4, 2).c_str());
+				unsigned d = std::atoi(yyyymmdd.substr(6, 2).c_str());
+				init(y, m, d);
+			}
+			else
+			{
+				MYASSERT(false, "Incorrect Date Format!");
+			}
+		}
 
 		void init(unsigned year, unsigned month, unsigned day)
 		{
