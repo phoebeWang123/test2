@@ -37,7 +37,6 @@ void run(const string& portfolio_file, const string& risk_factors_file)
     }
 
     // disconnect the market (no more fetching from the market data server allowed)
-    mkt.disconnect();
     //mkt.disconnect();
 
     // display all relevant risk factors
