@@ -230,6 +230,47 @@ std::vector<std::pair<string, portfolio_values_tpairs>> compute_pv01_parallel(co
 	return pv01;
 }
 
+// Add another function for Greeks calculation
+std::vector<std::pair<string, portfolio_values_tpairs>> fx_delta(const std::vector<ppricer_t>& pricers, const Market& mkt, FixingDataServer& fds)
+{
+	std::vector<std::pair<string, portfolio_values_tpairs>> fxdelta;
+	const double rel_bump_size = 0.1 / 100; // use bump size of 0.1/100
+
+	auto base = mkt.get_risk_factors(fx_spot_prefix + "[A-Z]{3}");
+
+	Market tmpmkt(mkt);
+	fxdelta.reserve(base.size());
+
+	for (size_t i = 0; i < base.size(); i++)
+	{
+		portfolio_values_tpairs fx_up, fx_dn;
+		std::vector<std::pair<string, double>> bumped_up = base, bumped_down = base;
+		fxdelta.push_back(std::make_pair(string("FX delta ") + base[i].first, portfolio_values_tpairs(pricers.size())));
+
+		const double bump_size = base[i].second * rel_bump_size;
+		bumped_up[i] = std::make_pair(base[i].first, base[i].second + bump_size);
+		bumped_down[i] = std::make_pair(base[i].first, base[i].second - bump_size);
+
+		tmpmkt.set_risk_factors(bumped_up);
+		fx_up = compute_prices(pricers, tmpmkt, fds);
+		tmpmkt.set_risk_factors(bumped_down);
+		fx_dn = compute_prices(pricers, tmpmkt, fds);
+		tmpmkt = mkt;
+
+		// use central difference with a relative bump of 0.1
+		double dr = 2.0 * bump_size;
+		for (size_t j = 0; j < pricers.size(); j++)
+		{
+			if (isnan(fx_up[j].first) || isnan(fx_dn[j].first)) {
+				fxdelta.back().second[j] = std::make_pair(std::numeric_limits<double>::quiet_NaN(), isnan(fx_up[j].first) ? fx_up[j].second : fx_dn[j].second);
+			}
+			else {
+				fxdelta.back().second[j] = std::make_pair((fx_up[j].first - fx_dn[j].first) / dr, string(""));
+			}
+		}
+	}
+	return fxdelta;
+}
 
 ptrade_t load_trade(my_ifstream& is)
 {

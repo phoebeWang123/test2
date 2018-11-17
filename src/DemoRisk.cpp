@@ -75,6 +75,12 @@ void run(const string& portfolio_file, const string& risk_factors_file, const st
 		for (const auto& g : pv01)
 			print_price_vector("PV01 " + g.first, g.second);
 	}
+	{   // Compute FX Greek DELTA
+		std::vector<std::pair<string, portfolio_values_tpairs>> fxdelta(fx_delta(pricers, mkt, fds));
+		// display FX Greek DELTA
+		for (const auto& g : fxdelta)
+			print_price_vector(g.first, g.second);
+	}
 }
 
 void usage()

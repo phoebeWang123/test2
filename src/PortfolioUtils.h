@@ -33,6 +33,8 @@ std::vector<std::pair<string, portfolio_values_t>> compute_pv01(const std::vecto
 std::vector<std::pair<string, portfolio_values_tpairs>> compute_pv01_parallel(const std::vector<ppricer_t>& pricers, const Market& mkt, FixingDataServer& fds);
 std::vector<std::pair<string, portfolio_values_tpairs>> compute_pv01_bucketed(const std::vector<ppricer_t>& pricers, const Market& mkt, FixingDataServer& fds);
 
+// Compute Forex Greek factor
+std::vector<std::pair<string, portfolio_values_tpairs>> fx_delta(const std::vector<ppricer_t>& pricers, const Market& mkt, FixingDataServer& fds);
 
 // save portfolio to file
 void save_portfolio(const string& filename, const std::vector<ptrade_t>& portfolio);
