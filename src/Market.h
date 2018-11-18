@@ -15,7 +15,6 @@ private:
     // NOTE: this function is not thread safe
     template <typename I, typename T>
     std::shared_ptr<const I> get_curve(const string& name);
-
     double from_mds(const string& objtype, const string& name);
 
 public:

@@ -120,7 +120,7 @@ double  CurveDiscount::df(const Date& t) const
 	//case t > all the tenors
 	// NOT IMPLEMENTED
 	if (ti_plus_1 == 0){
-		std::cout << "t>all the tenors!!!";
+		std::cout << "t is beyond input tenor range";
 		return std::exp(-m_rate * dt);
 		
 	}
